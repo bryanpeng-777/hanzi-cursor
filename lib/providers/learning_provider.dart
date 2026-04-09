@@ -9,11 +9,13 @@ class LearningProvider extends ChangeNotifier {
   int _totalStars = 0;
   int _currentStreak = 0;
   bool _isLoaded = false;
+  Set<String> _pinyinMistakes = {};
 
   Map<String, LearningProgress> get progressMap => _progressMap;
   int get totalStars => _totalStars;
   int get currentStreak => _currentStreak;
   bool get isLoaded => _isLoaded;
+  Set<String> get pinyinMistakes => Set.unmodifiable(_pinyinMistakes);
 
   List<HanziCharacter> get learnedCharacters =>
       allHanzi.where((h) => _progressMap[h.character]?.isLearned == true).toList();
@@ -41,6 +43,10 @@ class LearningProvider extends ChangeNotifier {
     }
     _totalStars = prefs.getInt('total_stars') ?? 0;
     _currentStreak = prefs.getInt('current_streak') ?? 0;
+    final mistakesStr = prefs.getString('pinyin_mistakes') ?? '';
+    _pinyinMistakes = mistakesStr.isEmpty
+        ? {}
+        : Set<String>.from(mistakesStr.split(','));
     _isLoaded = true;
     notifyListeners();
   }
@@ -53,6 +59,29 @@ class LearningProvider extends ChangeNotifier {
     await prefs.setString('learning_progress', encoded);
     await prefs.setInt('total_stars', _totalStars);
     await prefs.setInt('current_streak', _currentStreak);
+    await prefs.setString('pinyin_mistakes', _pinyinMistakes.join(','));
+  }
+
+  Future<void> addPinyinMistake(String initial) async {
+    if (_pinyinMistakes.add(initial)) {
+      notifyListeners();
+      await _saveProgress();
+    }
+  }
+
+  Future<void> removePinyinMistake(String initial) async {
+    if (_pinyinMistakes.remove(initial)) {
+      notifyListeners();
+      await _saveProgress();
+    }
+  }
+
+  Future<void> clearPinyinMistakes() async {
+    if (_pinyinMistakes.isNotEmpty) {
+      _pinyinMistakes.clear();
+      notifyListeners();
+      await _saveProgress();
+    }
   }
 
   Future<void> markAsLearned(String character, {int starsEarned = 1}) async {

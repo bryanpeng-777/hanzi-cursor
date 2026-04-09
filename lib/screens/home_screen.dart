@@ -7,6 +7,7 @@ import '../data/hanzi_data.dart';
 import 'learn_screen.dart';
 import 'game_screen.dart';
 import 'vocabulary_screen.dart';
+import 'pinyin_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     const LearnScreen(),
     const GameScreen(),
     const VocabularyScreen(),
+    const PinyinScreen(),
   ];
 
   @override
@@ -50,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _NavItem(icon: '📖', label: '识字', index: 1, current: _currentIndex, onTap: _onTap),
                 _NavItem(icon: '🎮', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap),
                 _NavItem(icon: '⭐', label: '生字本', index: 3, current: _currentIndex, onTap: _onTap),
+                _NavItem(icon: '🔤', label: '拼音', index: 4, current: _currentIndex, onTap: _onTap),
               ],
             ),
           ),
