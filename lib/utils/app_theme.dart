@@ -27,7 +27,7 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: fontFamily,
       scaffoldBackgroundColor: backgroundPeach,
-      cardTheme: const CardThemeData(
+      cardTheme: const CardTheme(
         color: cardWhite,
         elevation: 4,
         shape: RoundedRectangleBorder(
