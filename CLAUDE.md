@@ -15,26 +15,33 @@
 
 ```
 lib/
-├── main.dart                        # App 入口 + SplashScreen（2秒启动页）
+├── main.dart                          # App 入口 + SplashScreen（2秒启动页）
 ├── data/
-│   └── hanzi_data.dart              # 所有汉字数据（22个，3关卡）
+│   ├── hanzi_data.dart                # 所有汉字数据（68个，10关卡）
+│   └── pinyin_data.dart               # 拼音声母/韵母数据
 ├── models/
-│   └── hanzi_model.dart             # 数据模型定义
+│   └── hanzi_model.dart               # 数据模型定义
 ├── providers/
-│   └── learning_provider.dart       # 全局状态管理（Provider）
+│   └── learning_provider.dart         # 全局状态管理（Provider）
 ├── screens/
-│   ├── home_screen.dart             # 首页（进度卡 + 每日一字 + 功能入口）
-│   ├── learn_screen.dart            # 识字列表（按关卡筛选的网格）
-│   ├── hanzi_detail_screen.dart     # 汉字详情（大字 + 笔画 + 例词 + 收藏）
-│   ├── game_screen.dart             # 游戏大厅（选择游戏模式）
-│   ├── match_game_screen.dart       # 图字配对游戏
-│   ├── listen_game_screen.dart      # 听音选字游戏（8题）
-│   └── vocabulary_screen.dart       # 生字本（已学 + 收藏 双标签）
+│   ├── home_screen.dart               # 首页（进度卡 + 每日一字 + 功能入口）
+│   ├── learn_screen.dart              # 识字 Hub（学习/测验/错题重练 三入口）
+│   ├── hanzi_learn_grid_screen.dart   # 识字学习网格（按关卡筛选，动态适配关卡数）
+│   ├── hanzi_detail_screen.dart       # 汉字详情（大字 + 笔画 + 例词 + 收藏）
+│   ├── hanzi_quiz_level_screen.dart   # 识字测验选关（10关，渐进解锁）
+│   ├── hanzi_quiz_screen.dart         # 识字测验（拼音+含义→选汉字，6秒限时）
+│   ├── game_screen.dart               # 游戏大厅（选择游戏模式）
+│   ├── match_game_screen.dart         # 图字配对游戏
+│   ├── listen_game_screen.dart        # 听音选字游戏（8题）
+│   ├── vocabulary_screen.dart         # 生字本（已学 + 收藏 双标签）
+│   ├── pinyin_screen.dart             # 拼音 Hub（学习/测验/错题重练 三入口）
+│   ├── pinyin_learn_screen.dart       # 拼音学习
+│   └── pinyin_exercise_screen.dart    # 拼音测验 + 错题重练
 ├── utils/
-│   └── app_theme.dart               # 全局主题（颜色、字体、组件样式）
+│   └── app_theme.dart                 # 全局主题（颜色、字体、组件样式）
 └── widgets/
-    ├── star_reward_widget.dart       # 星星奖励弹窗（学会汉字后触发）
-    └── stroke_animation_widget.dart  # 米字格笔画动画组件
+    ├── star_reward_widget.dart         # 星星奖励弹窗（学会汉字后触发）
+    └── stroke_animation_widget.dart    # 米字格笔画动画组件
 ```
 
 ---
@@ -91,26 +98,46 @@ provider.isFavorite(char)    // 是否已收藏
 provider.markAsLearned(char, starsEarned: 3)  // 标记已学，+星星
 provider.addStars(char, count)                 // 增加星星
 provider.toggleFavorite(char)                  // 收藏/取消收藏
+
+// 识字测验相关
+provider.hanziQuizMistakes                     // 测验错题集 Set<String>
+provider.isHanziLevelUnlocked(level)           // 关卡是否已解锁
+provider.isHanziLevelPassed(level)             // 关卡是否已通关（≥70%）
+provider.getHanziQuizBestScore(level)          // 某关卡历史最高分（百分比）
+provider.addHanziMistake(char)                 // 加入错题集
+provider.removeHanziMistake(char)              // 从错题集移除
+provider.markHanziLevelPassed(level, score)    // 记录通关 + 更新最高分
 ```
 
 ### 持久化
 
-SharedPreferences 存储两个 key：
+SharedPreferences 存储的 key：
 - `learning_progress`：JSON 格式的 `Map<String, LearningProgress>`
 - `total_stars`：int，总星星数
 - `current_streak`：int，连续学习天数（暂未在 UI 展示）
+- `pinyin_mistakes`：逗号分隔字符串，拼音错题集
+- `hanzi_quiz_mistakes`：逗号分隔字符串，汉字测验错题集
+- `hanzi_quiz_passed_levels`：逗号分隔 int，已通关的关卡
+- `hanzi_quiz_best_scores`：JSON，各关卡历史最高分
 
 ---
 
 ## 汉字数据（`lib/data/hanzi_data.dart`）
 
-当前共 **22 个汉字**，分 3 关卡：
+当前共 **68 个汉字**，分 10 关卡：
 
-| 关卡 | 汉字 | 数量 |
-|------|------|------|
-| Level 1（初级） | 一、二、三、人、口、手、目、日、月、山 | 10 |
-| Level 2（中级） | 大、小、火、水、木、土 | 6 |
-| Level 3（高级） | 天、地、心、书、鱼、花 | 6 |
+| 关卡 | 主题 | 汉字示例 | 数量 |
+|------|------|------|------|
+| Level 1 | 数字&基础 | 一二三人口手目日月山 | 10 |
+| Level 2 | 大小&五行 | 大小火水木土 | 6 |
+| Level 3 | 天地&日常 | 天地心书鱼花 | 6 |
+| Level 4 | 动物 | 猫狗鸟虫马牛羊兔 | 8 |
+| Level 5 | 颜色 | 红黄蓝绿白黑 | 6 |
+| Level 6 | 食物 | 饭米面包果菜 | 6 |
+| Level 7 | 身体 | 头耳鼻足发眼 | 6 |
+| Level 8 | 家庭 | 爸妈哥姐弟妹 | 6 |
+| Level 9 | 方位 | 上下左右前后 | 6 |
+| Level 10 | 自然 | 风雨雪云雷电 | 6 |
 
 ### 新增汉字
 
@@ -172,13 +199,19 @@ App 采用底部 Tab 导航，4 个一级页面：
 
 ```
 HomeScreen（底部 Tab 容器）
-├── Tab 0: _HomePage        → 首页
-├── Tab 1: LearnScreen       → 识字列表
-├── Tab 2: GameScreen        → 游戏大厅
-└── Tab 3: VocabularyScreen  → 生字本
-
-LearnScreen → HanziDetailScreen（Push 跳转）
-GameScreen  → MatchGameScreen / ListenGameScreen（Push 跳转）
+├── Tab 0: _HomePage          → 首页
+├── Tab 1: LearnScreen         → 识字 Hub
+│          ├── HanziLearnGridScreen      → 识字学习网格
+│          ├── HanziQuizLevelScreen      → 测验选关（10关渐进解锁）
+│          │    └── HanziQuizScreen       → 测验（拼音+含义→选汉字）
+│          └── HanziQuizScreen(mistake)  → 错题重练
+├── Tab 2: GameScreen          → 游戏大厅
+│          ├── MatchGameScreen           → 图字配对
+│          └── ListenGameScreen          → 听音选字
+├── Tab 3: VocabularyScreen    → 生字本
+└── Tab 4: PinyinScreen        → 拼音 Hub
+           ├── PinyinLearnScreen         → 拼音学习
+           └── PinyinExerciseScreen      → 声母测验 + 错题重练
 ```
 
 ### 从首页跳转到子 Tab
@@ -203,11 +236,22 @@ final todayChar = allHanzi[DateTime.now().day % allHanzi.length];
 
 展示内容：汉字大字、拼音、含义、emoji、笔画数、前2个例词。
 
-### 识字卡片
+### 识字 Tab（三入口 Hub）
 
-- 按关卡（全部/1/2/3）筛选，网格展示
-- 已学汉字显示绿色角标 ✅
+`learn_screen.dart` 为入口 Hub，包含三个功能卡片：
+
+**识字学习**（`hanzi_learn_grid_screen.dart`）：
+- 横向滚动的关卡选择器，动态适配关卡数量（无需硬编码）
+- 网格展示当前关卡汉字，已学显示绿色角标 ✅
 - 点击进入 `HanziDetailScreen`
+
+**识字测验**（`hanzi_quiz_level_screen.dart` + `hanzi_quiz_screen.dart`）：
+- 关卡选择界面：10关列表，展示解锁状态和历史最高分
+- 未解锁关卡点击弹 SnackBar 提示「请先通过第X关测验」
+- 题型：显示拼音（大字）+ 含义文字（无 emoji），4选1正确汉字
+- 每题限时 6 秒，答错进错题集，≥70% 正确率通关并解锁下一关
+
+**错题重练**：错题集有内容时激活，进入 `HanziQuizScreen(mistakeMode: true)`
 
 ### 汉字详情
 
@@ -288,6 +332,6 @@ python3 -m http.server 8091 --directory build/web
 - [ ] 笔顺动画（接入真实笔顺数据，逐笔动态展示）
 - [ ] 更多游戏模式（组词游戏、默写游戏）
 - [ ] 家长控制面板（学习报告、时间限制）
-- [ ] 汉字库扩展（目前 22 字，目标 100+）
+- [ ] 汉字库扩展（目前 68 字 10 关，可继续追加 level 11+）
 - [ ] 连续打卡奖励（`currentStreak` 已有字段，UI 待接入）
 - [ ] 多人对战模式
