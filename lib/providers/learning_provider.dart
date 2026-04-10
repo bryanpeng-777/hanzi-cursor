@@ -10,12 +10,24 @@ class LearningProvider extends ChangeNotifier {
   int _currentStreak = 0;
   bool _isLoaded = false;
   Set<String> _pinyinMistakes = {};
+  Set<String> _hanziQuizMistakes = {};
+  Set<int> _hanziQuizPassedLevels = {};
+  Map<int, int> _hanziQuizBestScores = {};
 
   Map<String, LearningProgress> get progressMap => _progressMap;
   int get totalStars => _totalStars;
   int get currentStreak => _currentStreak;
   bool get isLoaded => _isLoaded;
   Set<String> get pinyinMistakes => Set.unmodifiable(_pinyinMistakes);
+  Set<String> get hanziQuizMistakes => Set.unmodifiable(_hanziQuizMistakes);
+
+  bool isHanziLevelUnlocked(int level) =>
+      level == 1 || _hanziQuizPassedLevels.contains(level - 1);
+
+  bool isHanziLevelPassed(int level) =>
+      _hanziQuizPassedLevels.contains(level);
+
+  int getHanziQuizBestScore(int level) => _hanziQuizBestScores[level] ?? 0;
 
   List<HanziCharacter> get learnedCharacters =>
       allHanzi.where((h) => _progressMap[h.character]?.isLearned == true).toList();
@@ -47,6 +59,18 @@ class LearningProvider extends ChangeNotifier {
     _pinyinMistakes = mistakesStr.isEmpty
         ? {}
         : Set<String>.from(mistakesStr.split(','));
+    final hanziMistakesStr = prefs.getString('hanzi_quiz_mistakes') ?? '';
+    _hanziQuizMistakes = hanziMistakesStr.isEmpty
+        ? {}
+        : Set<String>.from(hanziMistakesStr.split(','));
+    final passedStr = prefs.getString('hanzi_quiz_passed_levels') ?? '';
+    _hanziQuizPassedLevels = passedStr.isEmpty
+        ? {}
+        : Set<int>.from(passedStr.split(',').map(int.parse));
+    final bestScoresStr = prefs.getString('hanzi_quiz_best_scores') ?? '{}';
+    final bestScoresJson = json.decode(bestScoresStr) as Map<String, dynamic>;
+    _hanziQuizBestScores = bestScoresJson
+        .map((k, v) => MapEntry(int.parse(k), v as int));
     _isLoaded = true;
     notifyListeners();
   }
@@ -60,6 +84,14 @@ class LearningProvider extends ChangeNotifier {
     await prefs.setInt('total_stars', _totalStars);
     await prefs.setInt('current_streak', _currentStreak);
     await prefs.setString('pinyin_mistakes', _pinyinMistakes.join(','));
+    await prefs.setString('hanzi_quiz_mistakes', _hanziQuizMistakes.join(','));
+    await prefs.setString(
+        'hanzi_quiz_passed_levels',
+        _hanziQuizPassedLevels.map((e) => e.toString()).join(','));
+    await prefs.setString(
+        'hanzi_quiz_best_scores',
+        json.encode(_hanziQuizBestScores
+            .map((k, v) => MapEntry(k.toString(), v))));
   }
 
   Future<void> addPinyinMistake(String initial) async {
@@ -82,6 +114,29 @@ class LearningProvider extends ChangeNotifier {
       notifyListeners();
       await _saveProgress();
     }
+  }
+
+  Future<void> addHanziMistake(String character) async {
+    if (_hanziQuizMistakes.add(character)) {
+      notifyListeners();
+      await _saveProgress();
+    }
+  }
+
+  Future<void> removeHanziMistake(String character) async {
+    if (_hanziQuizMistakes.remove(character)) {
+      notifyListeners();
+      await _saveProgress();
+    }
+  }
+
+  Future<void> markHanziLevelPassed(int level, int scorePercent) async {
+    _hanziQuizPassedLevels.add(level);
+    if (scorePercent > (_hanziQuizBestScores[level] ?? 0)) {
+      _hanziQuizBestScores[level] = scorePercent;
+    }
+    notifyListeners();
+    await _saveProgress();
   }
 
   Future<void> markAsLearned(String character, {int starsEarned = 1}) async {

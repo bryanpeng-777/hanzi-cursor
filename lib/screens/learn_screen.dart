@@ -1,213 +1,272 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
-import '../data/hanzi_data.dart';
-import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'hanzi_detail_screen.dart';
+import 'hanzi_learn_grid_screen.dart';
+import 'hanzi_quiz_level_screen.dart';
+import 'hanzi_quiz_screen.dart';
 
-class LearnScreen extends StatefulWidget {
+class LearnScreen extends StatelessWidget {
   const LearnScreen({super.key});
 
   @override
-  State<LearnScreen> createState() => _LearnScreenState();
-}
-
-class _LearnScreenState extends State<LearnScreen> {
-  int _selectedLevel = 1;
-
-  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          _buildHeader(),
-          _buildLevelSelector(),
-          Expanded(child: _buildHanziGrid()),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      child: Row(
-        children: [
-          Text(
-            '识字卡片 📖',
-            style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: AppTheme.primaryOrange,
-                  fontSize: 26,
-                ),
-          ).animate().fadeIn(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLevelSelector() {
-    return Padding(
-      padding: const EdgeInsets.all(16),
-      child: Row(
-        children: [1, 2, 3].map((level) {
-          final isSelected = _selectedLevel == level;
-          final color = AppColors.getLevelColor(level);
-          final labels = ['第一关', '第二关', '第三关'];
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => setState(() => _selectedLevel = level),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                decoration: BoxDecoration(
-                  color: isSelected ? color : color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: color, width: 2),
-                ),
-                child: Center(
-                  child: Text(
-                    labels[level - 1],
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : color,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildHanziGrid() {
-    final characters = getHanziByLevel(_selectedLevel);
     return Consumer<LearningProvider>(
-      builder: (context, provider, child) {
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.85,
+      builder: (context, provider, _) {
+        final mistakeCount = provider.hanziQuizMistakes.length;
+        return SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(context),
+                const SizedBox(height: 28),
+                _buildLearnCard(context),
+                const SizedBox(height: 16),
+                _buildQuizCard(context),
+                const SizedBox(height: 16),
+                _buildMistakeCard(context, mistakeCount),
+                const SizedBox(height: 24),
+                _buildTip(),
+              ],
+            ),
           ),
-          itemCount: characters.length,
-          itemBuilder: (context, index) {
-            final hanzi = characters[index];
-            final isLearned = provider.isLearned(hanzi.character);
-            final isFavorite = provider.isFavorite(hanzi.character);
-            return _HanziCard(
-              hanzi: hanzi,
-              isLearned: isLearned,
-              isFavorite: isFavorite,
-              index: index,
-            );
-          },
         );
       },
     );
   }
+
+  Widget _buildHeader(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '识字 📖',
+          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                color: AppTheme.primaryOrange,
+                fontSize: 28,
+              ),
+        ).animate().fadeIn(duration: 500.ms).slideX(begin: -0.2),
+        const SizedBox(height: 4),
+        Text(
+          '学汉字，认汉字，练汉字！',
+          style: Theme.of(context)
+              .textTheme
+              .bodyLarge
+              ?.copyWith(color: Colors.grey[600]),
+        ).animate(delay: 200.ms).fadeIn(),
+      ],
+    );
+  }
+
+  Widget _buildLearnCard(BuildContext context) {
+    return _EntryCard(
+      emoji: '📚',
+      title: '识字学习',
+      subtitle: '图文并貌·分关卡认字',
+      gradient: const LinearGradient(
+        colors: [Color(0xFF4CAF50), Color(0xFF66BB6A)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      shadowColor: AppTheme.primaryGreen,
+      badge: null,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const HanziLearnGridScreen()),
+      ),
+      delay: 0,
+    );
+  }
+
+  Widget _buildQuizCard(BuildContext context) {
+    return _EntryCard(
+      emoji: '✏️',
+      title: '识字测验',
+      subtitle: '纯文字考验·逐关解锁',
+      gradient: const LinearGradient(
+        colors: [Color(0xFFFF6B35), Color(0xFFFF9A5C)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ),
+      shadowColor: AppTheme.primaryOrange,
+      badge: null,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const HanziQuizLevelScreen()),
+      ),
+      delay: 100,
+    );
+  }
+
+  Widget _buildMistakeCard(BuildContext context, int mistakeCount) {
+    final hasMistakes = mistakeCount > 0;
+    return _EntryCard(
+      emoji: hasMistakes ? '🔴' : '✅',
+      title: '错题重练',
+      subtitle: hasMistakes ? '共 $mistakeCount 个汉字需要复习' : '太棒了！暂无错题',
+      gradient: hasMistakes
+          ? const LinearGradient(
+              colors: [Color(0xFFE53935), Color(0xFFEF9A9A)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            )
+          : LinearGradient(
+              colors: [Colors.grey.shade400, Colors.grey.shade300],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+      shadowColor: hasMistakes ? Colors.redAccent : Colors.grey,
+      badge: hasMistakes ? '$mistakeCount' : null,
+      onTap: hasMistakes
+          ? () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const HanziQuizScreen(mistakeMode: true),
+                ),
+              )
+          : null,
+      delay: 200,
+    );
+  }
+
+  Widget _buildTip() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppTheme.primaryYellow.withOpacity(0.15),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+            color: AppTheme.primaryYellow.withOpacity(0.4), width: 1.5),
+      ),
+      child: Row(
+        children: [
+          const Text('💡', style: TextStyle(fontSize: 24)),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              '先用学习模式认识汉字，再做测验！通过第一关可以解锁下一关，答错的字会进入错题集。',
+              style: TextStyle(color: Colors.grey[700], fontSize: 14),
+            ),
+          ),
+        ],
+      ),
+    ).animate(delay: 400.ms).fadeIn();
+  }
 }
 
-class _HanziCard extends StatelessWidget {
-  final HanziCharacter hanzi;
-  final bool isLearned;
-  final bool isFavorite;
-  final int index;
+class _EntryCard extends StatelessWidget {
+  final String emoji;
+  final String title;
+  final String subtitle;
+  final Gradient gradient;
+  final Color shadowColor;
+  final String? badge;
+  final VoidCallback? onTap;
+  final int delay;
 
-  const _HanziCard({
-    required this.hanzi,
-    required this.isLearned,
-    required this.isFavorite,
-    required this.index,
+  const _EntryCard({
+    required this.emoji,
+    required this.title,
+    required this.subtitle,
+    required this.gradient,
+    required this.shadowColor,
+    required this.badge,
+    required this.onTap,
+    required this.delay,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HanziDetailScreen(hanzi: hanzi),
-          ),
-        );
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: isLearned
-              ? Border.all(color: AppTheme.primaryGreen, width: 2)
-              : null,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.06),
-              blurRadius: 8,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
+      onTap: onTap,
+      child: Opacity(
+        opacity: onTap == null ? 0.6 : 1.0,
         child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(hanzi.emoji, style: const TextStyle(fontSize: 28)),
-                  const SizedBox(height: 6),
-                  Text(
-                    hanzi.character,
-                    style: const TextStyle(
-                      fontSize: 36,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF333333),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    hanzi.pinyin,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.primaryBlue,
-                      fontStyle: FontStyle.italic,
-                    ),
+            Container(
+              width: double.infinity,
+              height: 100,
+              decoration: BoxDecoration(
+                gradient: gradient,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: shadowColor.withOpacity(0.35),
+                    blurRadius: 12,
+                    offset: const Offset(0, 6),
                   ),
                 ],
               ),
-            ),
-            if (isLearned)
-              Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  width: 20,
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    color: AppTheme.primaryGreen,
-                    shape: BoxShape.circle,
+              child: Row(
+                children: [
+                  const SizedBox(width: 24),
+                  Text(emoji, style: const TextStyle(fontSize: 44)),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          subtitle,
+                          style: const TextStyle(
+                              color: Colors.white70, fontSize: 13),
+                        ),
+                      ],
+                    ),
                   ),
-                  child: const Icon(Icons.check, size: 14, color: Colors.white),
-                ),
+                  if (onTap != null)
+                    const Padding(
+                      padding: EdgeInsets.only(right: 20),
+                      child: Icon(Icons.arrow_forward_ios_rounded,
+                          color: Colors.white70, size: 18),
+                    ),
+                ],
               ),
-            if (isFavorite)
+            ),
+            if (badge != null)
               Positioned(
-                top: 6,
-                left: 6,
-                child: const Text('⭐', style: TextStyle(fontSize: 14)),
+                top: -8,
+                right: 12,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.12),
+                        blurRadius: 6,
+                      )
+                    ],
+                  ),
+                  child: Text(
+                    badge!,
+                    style: const TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
               ),
           ],
         ),
-      ).animate(delay: (index * 50).ms).fadeIn().scale(
-            begin: const Offset(0.8, 0.8),
-          ),
-    );
+      ),
+    ).animate(delay: delay.ms).fadeIn().scale(begin: const Offset(0.94, 0.94));
   }
 }
