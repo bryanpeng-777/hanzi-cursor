@@ -6,8 +6,37 @@
 通过卡片、游戏、积分等儿童友好的交互方式，帮助孩子认识常用汉字。
 
 - **GitHub**: https://github.com/bryanpeng-777/hanzi-cursor
-- **本地路径**: `/Users/bryanpeng/work3/cursorAGIProject/hanzi`
+- **本地路径**: `/Users/pengchao/cursorBiz/hanzi-cursor`
 - **Flutter SDK**: ^3.6.2 | **Dart SDK**: ^3.6.2
+
+---
+
+## 大仓可用积木
+
+本 App 目前独立运行，如需引入后端/云同步能力，可复用大仓中的基础模块：
+
+| 积木 | 本地路径 | 提供能力 |
+|------|---------|---------|
+| cs_framework | `../cs_framework` | 认证、配置下发、用户数据存储、推送通知 |
+| cs_ui | `../cs_ui` | shadcn_ui 统一主题（4 套配色方案） |
+
+**本地接入方式**（不修改 pubspec.yaml，使用 override）：
+```yaml
+# hanzi-cursor/pubspec_overrides.yaml（已加入 .gitignore，不会提交）
+dependency_overrides:
+  cs_framework:
+    path: ../cs_framework
+  cs_ui:
+    path: ../cs_ui
+```
+
+**发布引用方式**（pubspec.yaml 中）：
+```yaml
+cs_framework:
+  git:
+    url: https://github.com/bryanpeng-777/cs_framework.git
+    ref: main
+```
 
 ---
 
