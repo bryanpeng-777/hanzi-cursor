@@ -71,11 +71,24 @@ class HanziQuizLevelScreen extends StatelessWidget {
                     ? () => Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                                HanziQuizScreen(level: level),
+                            builder: (_) => HanziQuizScreen(level: level),
                           ),
                         )
-                    : null,
+                    : () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              '🔒 请先通过第${level - 1}关测验来解锁',
+                              style: const TextStyle(fontSize: 15),
+                            ),
+                            behavior: SnackBarBehavior.floating,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
               );
             },
           );
@@ -120,7 +133,7 @@ class _LevelCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Opacity(
-        opacity: isUnlocked ? 1.0 : 0.55,
+        opacity: isUnlocked ? 1.0 : 0.6,
         child: Container(
           margin: const EdgeInsets.only(bottom: 12),
           decoration: BoxDecoration(
