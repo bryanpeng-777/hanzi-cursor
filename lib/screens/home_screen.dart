@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _NavItem(icon: '🔤', label: '拼音', index: 0, current: _currentIndex, onTap: _onTap),
                 _NavItem(icon: '📖', label: '识字', index: 1, current: _currentIndex, onTap: _onTap),
                 _NavItem(icon: '🎮', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap),
-                _NavItem(icon: '⭐', label: '生字本', index: 3, current: _currentIndex, onTap: _onTap),
+                _NavItem(icon: '🎓', label: '我的学习', index: 3, current: _currentIndex, onTap: _onTap),
               ],
             ),
           ),
