@@ -228,7 +228,9 @@ App 采用底部 Tab 导航，4 个一级页面：
 
 ```
 HomeScreen（底部 Tab 容器）
-├── Tab 0: _HomePage          → 首页
+├── Tab 0: PinyinScreen        → 拼音 Hub
+│          ├── PinyinLearnScreen         → 拼音学习
+│          └── PinyinExerciseScreen      → 声母测验 + 错题重练
 ├── Tab 1: LearnScreen         → 识字 Hub
 │          ├── HanziLearnGridScreen      → 识字学习网格
 │          ├── HanziQuizLevelScreen      → 测验选关（10关渐进解锁）
@@ -237,18 +239,15 @@ HomeScreen（底部 Tab 容器）
 ├── Tab 2: GameScreen          → 游戏大厅
 │          ├── MatchGameScreen           → 图字配对
 │          └── ListenGameScreen          → 听音选字
-├── Tab 3: VocabularyScreen    → 生字本
-└── Tab 4: PinyinScreen        → 拼音 Hub
-           ├── PinyinLearnScreen         → 拼音学习
-           └── PinyinExerciseScreen      → 声母测验 + 错题重练
+└── Tab 3: VocabularyScreen    → 生字本
 ```
 
-### 从首页跳转到子 Tab
+### 从子页面跳转到指定 Tab
 
 ```dart
 // 在子 Widget 中跳转到特定 Tab
 final homeState = context.findAncestorStateOfType<_HomeScreenState>();
-homeState?._onTap(tabIndex);  // 0=首页 1=识字 2=游戏 3=生字本
+homeState?._onTap(tabIndex);  // 0=拼音 1=识字 2=游戏 3=生字本
 ```
 
 ---
