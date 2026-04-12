@@ -197,9 +197,11 @@ packages:
   cs_ui:
     dependency: "direct main"
     description:
-      path: "../cs_ui"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: f2357cdf7e6dc977f58770a63c2de49b48c12bab
+      url: "https://github.com/bryanpeng-777/cs_ui.git"
+    source: git
     version: "1.0.0"
   cupertino_icons:
     dependency: "direct main"
@@ -409,10 +411,10 @@ packages:
     dependency: "direct main"
     description:
       name: google_fonts
-      sha256: df9763500dadba0155373e9cb44e202ce21bd9ed5de6bdbd05c5854e86839cb8
+      sha256: ba03d03bcaa2f6cb7bd920e3b5027181db75ab524f8891c8bc3aa603885b8055
       url: "https://mirrors.tencent.com/dart-pub/"
     source: hosted
-    version: "6.3.0"
+    version: "6.3.3"
   gotrue:
     dependency: transitive
     description:
