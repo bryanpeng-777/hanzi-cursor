@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_framework/cs_framework.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
@@ -23,16 +24,23 @@ class _MatchGameScreenState extends State<MatchGameScreen> {
   int _score = 0;
   int _errors = 0;
   bool _gameComplete = false;
+  int _wordCount = 5;
 
   @override
   void initState() {
     super.initState();
+    _loadConfig();
     _initGame();
+  }
+
+  Future<void> _loadConfig() async {
+    final count = await ConfigManager.getInt('match_game_word_count') ?? 5;
+    if (mounted) setState(() => _wordCount = count);
   }
 
   void _initGame() {
     final allChars = allHanzi.toList()..shuffle();
-    _gameCharacters = allChars.take(5).toList();
+    _gameCharacters = allChars.take(_wordCount).toList();
     _leftItems = _gameCharacters
         .map((h) => _MatchItem(id: h.character, display: h.emoji, isEmoji: true))
         .toList()

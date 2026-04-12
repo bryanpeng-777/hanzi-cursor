@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_framework/cs_framework.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
@@ -43,7 +44,8 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
 
-  static const double _timeLimit = 6.0;
+  double _timeLimit = 6.0;
+  int _passThreshold = 70;
 
   @override
   void initState() {
@@ -57,6 +59,21 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
 
     _buildCandidateList();
     _nextQuestion();
+    _loadConfigs();
+  }
+
+  Future<void> _loadConfigs() async {
+    final timeLimit = await ConfigManager.getInt('quiz_time_limit_seconds');
+    final passThreshold = await ConfigManager.getInt('quiz_pass_threshold');
+    if (!mounted) return;
+    setState(() {
+      if (timeLimit != null) {
+        _timeLimit = timeLimit.toDouble();
+        _timerController.duration =
+            Duration(milliseconds: (timeLimit * 1000));
+      }
+      if (passThreshold != null) _passThreshold = passThreshold;
+    });
   }
 
   void _buildCandidateList() {
@@ -113,7 +130,7 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
   void _handleCompletion() {
     if (!widget.mistakeMode && widget.level != null) {
       final scorePercent = (_score / _totalQuestions * 100).round();
-      if (scorePercent >= 70) {
+      if (scorePercent >= _passThreshold) {
         context
             .read<LearningProvider>()
             .markHanziLevelPassed(widget.level!, scorePercent);

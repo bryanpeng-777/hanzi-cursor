@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cs_framework/cs_framework.dart';
 import '../models/hanzi_model.dart';
 import '../data/hanzi_data.dart';
 
@@ -46,6 +47,34 @@ class LearningProvider extends ChangeNotifier {
 
   Future<void> loadProgress() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // 优先从云端加载；云端为空且本地有数据则一次性迁移上传
+    try {
+      final cloudRow = await DataManager.selectOne('hanzi_cursor_user_progress');
+      if (cloudRow != null) {
+        _restoreFromMap(cloudRow);
+        _isLoaded = true;
+        notifyListeners();
+        return;
+      }
+    } catch (e) {
+      if (kDebugMode) debugPrint('[LearningProvider] 云端读取失败，回退到本地: $e');
+    }
+
+    // 从本地 SharedPreferences 读取
+    _loadFromPrefs(prefs);
+    _isLoaded = true;
+    notifyListeners();
+
+    // 本地有数据则迁移到云端（一次性）
+    if (_progressMap.isNotEmpty || _totalStars > 0) {
+      _saveToCloud().catchError((e) {
+        if (kDebugMode) debugPrint('[LearningProvider] 本地数据迁移云端失败: $e');
+      });
+    }
+  }
+
+  void _loadFromPrefs(SharedPreferences prefs) {
     final data = prefs.getString('learning_progress');
     if (data != null) {
       final decoded = json.decode(data) as Map<String, dynamic>;
@@ -71,11 +100,42 @@ class LearningProvider extends ChangeNotifier {
     final bestScoresJson = json.decode(bestScoresStr) as Map<String, dynamic>;
     _hanziQuizBestScores = bestScoresJson
         .map((k, v) => MapEntry(int.parse(k), v as int));
-    _isLoaded = true;
-    notifyListeners();
+  }
+
+  void _restoreFromMap(Map<String, dynamic> row) {
+    final lpStr = row['learning_progress'];
+    if (lpStr != null && lpStr is String && lpStr.isNotEmpty) {
+      final decoded = json.decode(lpStr) as Map<String, dynamic>;
+      _progressMap = decoded.map(
+        (k, v) => MapEntry(k, LearningProgress.fromJson(v as Map<String, dynamic>)),
+      );
+    }
+    _totalStars = (row['total_stars'] as num?)?.toInt() ?? 0;
+    _currentStreak = (row['current_streak'] as num?)?.toInt() ?? 0;
+    final mistakesStr = row['pinyin_mistakes'] as String? ?? '';
+    _pinyinMistakes = mistakesStr.isEmpty
+        ? {}
+        : Set<String>.from(mistakesStr.split(','));
+    final hanziMistakesStr = row['hanzi_quiz_mistakes'] as String? ?? '';
+    _hanziQuizMistakes = hanziMistakesStr.isEmpty
+        ? {}
+        : Set<String>.from(hanziMistakesStr.split(','));
+    final passedStr = row['hanzi_quiz_passed_levels'] as String? ?? '';
+    _hanziQuizPassedLevels = passedStr.isEmpty
+        ? {}
+        : Set<int>.from(passedStr.split(',').map(int.parse));
+    final bestScoresRaw = row['hanzi_quiz_best_scores'];
+    if (bestScoresRaw != null) {
+      final Map<String, dynamic> bestScoresJson = bestScoresRaw is String
+          ? json.decode(bestScoresRaw) as Map<String, dynamic>
+          : Map<String, dynamic>.from(bestScoresRaw as Map);
+      _hanziQuizBestScores =
+          bestScoresJson.map((k, v) => MapEntry(int.parse(k), (v as num).toInt()));
+    }
   }
 
   Future<void> _saveProgress() async {
+    // 双写：本地 SharedPreferences + 云端 DataManager
     final prefs = await SharedPreferences.getInstance();
     final encoded = json.encode(
       _progressMap.map((k, v) => MapEntry(k, v.toJson())),
@@ -92,6 +152,36 @@ class LearningProvider extends ChangeNotifier {
         'hanzi_quiz_best_scores',
         json.encode(_hanziQuizBestScores
             .map((k, v) => MapEntry(k.toString(), v))));
+
+    _saveToCloud().catchError((e) {
+      if (kDebugMode) debugPrint('[LearningProvider] 云端保存失败: $e');
+    });
+  }
+
+  Future<void> _saveToCloud() async {
+    final userId = CsClient.supabase.auth.currentUser?.id;
+    if (userId == null) return;
+
+    await DataManager.upsert(
+      'hanzi_cursor_user_progress',
+      {
+        'user_id': userId,
+        'learning_progress': json.encode(
+          _progressMap.map((k, v) => MapEntry(k, v.toJson())),
+        ),
+        'total_stars': _totalStars,
+        'current_streak': _currentStreak,
+        'pinyin_mistakes': _pinyinMistakes.join(','),
+        'hanzi_quiz_mistakes': _hanziQuizMistakes.join(','),
+        'hanzi_quiz_passed_levels':
+            _hanziQuizPassedLevels.map((e) => e.toString()).join(','),
+        'hanzi_quiz_best_scores': json.encode(
+          _hanziQuizBestScores.map((k, v) => MapEntry(k.toString(), v)),
+        ),
+        'updated_at': DateTime.now().toIso8601String(),
+      },
+      onConflict: 'user_id',
+    );
   }
 
   Future<void> addPinyinMistake(String initial) async {

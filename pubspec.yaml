@@ -11,6 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  cs_framework:
+    git:
+      url: https://github.com/bryanpeng-777/cs_framework.git
+      ref: main
   provider: ^6.1.2
   shared_preferences: ^2.3.3
   flutter_animate: ^4.5.2

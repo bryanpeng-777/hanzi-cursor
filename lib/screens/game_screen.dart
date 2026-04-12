@@ -1,11 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cs_framework/cs_framework.dart';
 import '../utils/app_theme.dart';
 import 'match_game_screen.dart';
 import 'listen_game_screen.dart';
 
-class GameScreen extends StatelessWidget {
+class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
+
+  @override
+  State<GameScreen> createState() => _GameScreenState();
+}
+
+class _GameScreenState extends State<GameScreen> {
+  bool _spellGameEnabled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConfig();
+  }
+
+  Future<void> _loadConfig() async {
+    final enabled = await ConfigManager.getBool('enable_spell_game') ?? false;
+    if (mounted) setState(() => _spellGameEnabled = enabled);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +83,8 @@ class GameScreen extends StatelessWidget {
               gradient: const [Color(0xFF667EEA), Color(0xFF764BA2)],
               difficulty: '困难',
               stars: 1,
-              isComingSoon: true,
-              onTap: () {},
+              isComingSoon: !_spellGameEnabled,
+              onTap: _spellGameEnabled ? () {} : () {},
             ).animate(delay: 300.ms).fadeIn().slideX(begin: -0.2),
           ],
         ),

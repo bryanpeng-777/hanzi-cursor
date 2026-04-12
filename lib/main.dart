@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_framework/cs_framework.dart';
 import 'providers/learning_provider.dart';
 import 'screens/home_screen.dart';
 import 'utils/app_theme.dart';
@@ -11,6 +13,13 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  await CsClient.initialize(
+    supabaseUrl: 'https://ljmkxoptnzimpompabsq.supabase.co',
+    supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbWt4b3B0bnppbXBvbXBhYnNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MzgxMzIsImV4cCI6MjA5MTIxNDEzMn0.CUbc6E49wyt-9WV2978T5kvMsW7CkqUwKn1o_1xBrZw',
+    appId: 'hanzi-cursor',
+    environment: kReleaseMode ? CsEnvironment.prod : CsEnvironment.dev,
+    enablePushNotifications: false,
+  );
   runApp(const HanziApp());
 }
 

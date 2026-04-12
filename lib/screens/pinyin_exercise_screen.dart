@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_framework/cs_framework.dart';
 import '../data/hanzi_data.dart';
 import '../data/pinyin_data.dart';
 import '../models/hanzi_model.dart';
@@ -48,7 +49,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
 
-  static const double _timeLimit = 6.0;
+  double _timeLimit = 6.0;
 
   @override
   void initState() {
@@ -62,6 +63,23 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
 
     _buildCandidateList();
     _nextQuestion();
+    _loadConfigs();
+  }
+
+  Future<void> _loadConfigs() async {
+    final timeLimit = await ConfigManager.getInt('quiz_time_limit_seconds');
+    final questionsCount = await ConfigManager.getInt('quiz_questions_count');
+    if (!mounted) return;
+    setState(() {
+      if (timeLimit != null) {
+        _timeLimit = timeLimit.toDouble();
+        _timerController.duration =
+            Duration(milliseconds: (timeLimit * 1000));
+      }
+      if (questionsCount != null && !widget.mistakeMode) {
+        _totalQuestions = questionsCount;
+      }
+    });
   }
 
   void _buildCandidateList() {
@@ -78,7 +96,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
     } else {
       _candidateChars =
           allHanzi.where((h) => extractInitial(h.pinyin) != null).toList();
-      _totalQuestions = 10;
+      // _totalQuestions 由后台配置决定，默认值 10 已在字段声明处设置
     }
   }
 
