@@ -15,9 +15,22 @@ class PinyinLearnScreen extends StatefulWidget {
   State<PinyinLearnScreen> createState() => _PinyinLearnScreenState();
 }
 
-class _PinyinLearnScreenState extends State<PinyinLearnScreen> {
-  String _selectedTab = '声母';
+class _PinyinLearnScreenState extends State<PinyinLearnScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   bool _isAutoMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,62 +39,65 @@ class _PinyinLearnScreenState extends State<PinyinLearnScreen> {
       appBar: CsAppBar(
         title: '拼音学习 📚',
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(56),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-            child: SegmentedButton<bool>(
-              segments: const [
-                ButtonSegment(
-                    value: false,
-                    label: Text('手动模式'),
-                    icon: Icon(Icons.touch_app)),
-                ButtonSegment(
-                    value: true,
-                    label: Text('自动模式'),
-                    icon: Icon(Icons.play_circle_outline)),
-              ],
-              selected: {_isAutoMode},
-              onSelectionChanged: (s) =>
-                  setState(() => _isAutoMode = s.first),
-              style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return AppTheme.primaryOrange;
-                  }
-                  return Colors.white;
-                }),
-                foregroundColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return Colors.white;
-                  }
-                  return Colors.grey[700];
-                }),
+          preferredSize: const Size.fromHeight(96),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                child: SegmentedButton<bool>(
+                  segments: const [
+                    ButtonSegment(
+                        value: false,
+                        label: Text('手动模式'),
+                        icon: Icon(Icons.touch_app)),
+                    ButtonSegment(
+                        value: true,
+                        label: Text('自动模式'),
+                        icon: Icon(Icons.play_circle_outline)),
+                  ],
+                  selected: {_isAutoMode},
+                  onSelectionChanged: (s) =>
+                      setState(() => _isAutoMode = s.first),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return AppTheme.primaryOrange;
+                      }
+                      return Colors.white;
+                    }),
+                    foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return Colors.white;
+                      }
+                      return Colors.grey[700];
+                    }),
+                  ),
+                ),
               ),
-            ),
+              if (!_isAutoMode)
+                TabBar(
+                  controller: _tabController,
+                  labelColor: AppTheme.primaryOrange,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: AppTheme.primaryOrange,
+                  tabs: const [
+                    Tab(text: '声母'),
+                    Tab(text: '韵母'),
+                    Tab(text: '四声'),
+                  ],
+                ),
+            ],
           ),
         ),
       ),
       body: _isAutoMode
           ? _AutoModeView()
-          : ShadTabs<String>(
-              value: _selectedTab,
-              onChanged: (v) => setState(() => _selectedTab = v),
-              tabs: [
-                ShadTab(
-                  value: '声母',
-                  child: const Text('声母'),
-                  content: const _InitialsGrid(),
-                ),
-                ShadTab(
-                  value: '韵母',
-                  child: const Text('韵母'),
-                  content: const _FinalsGrid(),
-                ),
-                ShadTab(
-                  value: '四声',
-                  child: const Text('四声'),
-                  content: const _TonesView(),
-                ),
+          : TabBarView(
+              controller: _tabController,
+              children: const [
+                _InitialsGrid(),
+                _FinalsGrid(),
+                _TonesView(),
               ],
             ),
     );
