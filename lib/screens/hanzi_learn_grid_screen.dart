@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
@@ -24,19 +25,16 @@ class _HanziLearnGridScreenState extends State<HanziLearnGridScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
+      appBar: CsAppBar(
+        title: '识字学习 📖',
+        leading: ShadButton.ghost(
           onPressed: () => Navigator.pop(context),
+          child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
         ),
-        title: Text(
-          '识字学习 📖',
-          style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                color: AppTheme.primaryOrange,
-                fontSize: 22,
-              ),
+        titleTextStyle: TextStyle(
+          color: AppTheme.primaryOrange,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
         ),
       ),
       body: Column(

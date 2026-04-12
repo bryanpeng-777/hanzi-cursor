@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../data/pinyin_data.dart';
 import '../models/hanzi_model.dart';
@@ -197,13 +198,8 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          widget.mistakeMode ? '错题重练 🔴' : '声母测验 ✏️',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+      appBar: CsAppBar(
+        title: widget.mistakeMode ? '错题重练 🔴' : '声母测验 ✏️',
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -489,7 +485,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
               runSpacing: 12,
               alignment: WrapAlignment.center,
               children: [
-                ElevatedButton.icon(
+                ShadButton(
                   onPressed: () {
                     setState(() {
                       _score = 0;
@@ -502,11 +498,11 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
                     _buildCandidateList();
                     _nextQuestion();
                   },
-                  icon: const Text('🔄'),
-                  label: const Text('再来一次'),
+                  leading: const Text('🔄'),
+                  child: const Text('再来一次'),
                 ),
                 if (widget.mistakeMode && _mistakesCleared > 0)
-                  ElevatedButton.icon(
+                  ShadButton(
                     onPressed: () {
                       final remaining =
                           context.read<LearningProvider>().pinyinMistakes.length;
@@ -525,15 +521,14 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
                         Navigator.pop(context);
                       }
                     },
-                    icon: const Text('⚡'),
-                    label: const Text('继续错题'),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent),
+                    backgroundColor: Colors.redAccent,
+                    leading: const Text('⚡'),
+                    child: const Text('继续错题'),
                   ),
-                OutlinedButton.icon(
+                ShadButton.outline(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.home),
-                  label: const Text('返回'),
+                  leading: const Icon(Icons.home),
+                  child: const Text('返回'),
                 ),
               ],
             ).animate(delay: 700.ms).fadeIn(),

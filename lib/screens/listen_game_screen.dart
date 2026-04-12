@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
 import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
@@ -83,11 +84,8 @@ class _ListenGameScreenState extends State<ListenGameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('听音选字 👂',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+      appBar: CsAppBar(
+        title: '听音选字 👂',
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -305,7 +303,7 @@ class _ListenGameScreenState extends State<ListenGameScreen> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ElevatedButton.icon(
+                ShadButton(
                   onPressed: () {
                     setState(() {
                       _score = 0;
@@ -314,14 +312,14 @@ class _ListenGameScreenState extends State<ListenGameScreen> {
                     });
                     _nextQuestion();
                   },
-                  icon: const Text('🔄'),
-                  label: const Text('再来一次'),
+                  leading: const Text('🔄'),
+                  child: const Text('再来一次'),
                 ),
                 const SizedBox(width: 16),
-                OutlinedButton.icon(
+                ShadButton.outline(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.home),
-                  label: const Text('返回'),
+                  leading: const Icon(Icons.home),
+                  child: const Text('返回'),
                 ),
               ],
             ).animate(delay: 700.ms).fadeIn(),

@@ -27,24 +27,6 @@ class AppTheme {
       useMaterial3: true,
       fontFamily: fontFamily,
       scaffoldBackgroundColor: backgroundPeach,
-      cardTheme: const CardTheme(
-        color: cardWhite,
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          backgroundColor: primaryOrange,
-          foregroundColor: Colors.white,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-          textStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, fontFamily: fontFamily),
-        ),
-      ),
       textTheme: GoogleFonts.notoSansScTextTheme(
         const TextTheme(
           displayLarge: TextStyle(

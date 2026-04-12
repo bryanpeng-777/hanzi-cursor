@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_ui/cs_ui.dart';
 import 'providers/learning_provider.dart';
 import 'screens/home_screen.dart';
 import 'utils/app_theme.dart';
@@ -30,10 +31,9 @@ class HanziApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => LearningProvider()..loadProgress(),
-      child: MaterialApp(
+      child: CsApp(
         title: '宝宝识字',
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.theme,
         home: const SplashScreen(),
       ),
     );

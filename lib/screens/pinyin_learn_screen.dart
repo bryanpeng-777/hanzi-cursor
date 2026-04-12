@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../data/pinyin_data.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
@@ -35,11 +36,8 @@ class _PinyinLearnScreenState extends State<PinyinLearnScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text('拼音学习 📚',
-            style: TextStyle(fontWeight: FontWeight.bold)),
+      appBar: CsAppBar(
+        title: '拼音学习 📚',
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(96),
           child: Column(
@@ -883,10 +881,10 @@ class _AutoModeViewState extends State<_AutoModeView> {
             const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton.icon(
+              child: ShadButton(
                 onPressed: _startAuto,
-                icon: const Icon(Icons.play_arrow_rounded),
-                label: const Text('开始自动学习'),
+                leading: const Icon(Icons.play_arrow_rounded),
+                child: const Text('开始自动学习'),
               ),
             ),
           ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:provider/provider.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
@@ -40,21 +41,19 @@ class _HanziDetailScreenState extends State<HanziDetailScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
+      appBar: CsAppBar(
+        leading: ShadButton.ghost(
           onPressed: () => Navigator.pop(context),
+          child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
         ),
         actions: [
           Consumer<LearningProvider>(
             builder: (context, provider, child) {
               final isFav = provider.isFavorite(widget.hanzi.character);
-              return IconButton(
-                icon: Text(isFav ? '⭐' : '☆',
-                    style: const TextStyle(fontSize: 24)),
+              return ShadButton.ghost(
                 onPressed: () => provider.toggleFavorite(widget.hanzi.character),
+                child: Text(isFav ? '⭐' : '☆',
+                    style: const TextStyle(fontSize: 24)),
               );
             },
           ),
@@ -266,23 +265,18 @@ class _HanziDetailScreenState extends State<HanziDetailScreen>
     return Consumer<LearningProvider>(
       builder: (context, provider, child) {
         final isLearned = provider.isLearned(widget.hanzi.character);
-        return SizedBox(
+        return           SizedBox(
           width: double.infinity,
-          child: ElevatedButton(
+          child: ShadButton(
             onPressed: isLearned
                 ? null
                 : () async {
                     await provider.markAsLearned(widget.hanzi.character, starsEarned: 3);
                     setState(() => _showReward = true);
                   },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: isLearned ? AppTheme.primaryGreen : AppTheme.primaryOrange,
-              disabledBackgroundColor: AppTheme.primaryGreen,
-              padding: const EdgeInsets.symmetric(vertical: 18),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
+            enabled: !isLearned,
+            backgroundColor: isLearned ? AppTheme.primaryGreen : AppTheme.primaryOrange,
+            padding: const EdgeInsets.symmetric(vertical: 18),
             child: Text(
               isLearned ? '✅ 已学会！' : '🌟 我学会了！',
               style: const TextStyle(
