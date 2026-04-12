@@ -1,0 +1,10 @@
+{
+  "_comment": "离线兜底配置，网络不可用时生效",
+  "enable_spell_game": false,
+  "quiz_pass_threshold": 70,
+  "quiz_time_limit_seconds": 6,
+  "quiz_questions_count": 10,
+  "match_game_word_count": 5,
+  "listen_game_questions_count": 8,
+  "home_banner_url": ""
+}
