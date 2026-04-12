@@ -327,7 +327,29 @@ flutter build web --release
 
 # 本地预览构建产物（端口 8091）
 python3 -m http.server 8091 --directory build/web
+
+# 部署到 GitHub Pages（自动触发 GitHub Actions）
+# 线上地址：https://bryanpeng-777.github.io/hanzi-cursor/
+git push origin main
 ```
+
+### CI/部署注意事项
+
+推送前必须确认，否则 GitHub Actions 必然失败：
+
+1. **pubspec.lock 不能含 path 依赖**：本地 `pubspec_overrides.yaml` 使用 path 依赖后如果执行了 `flutter pub get`，lock 会被污染。推送前检查：
+   ```bash
+   grep -A4 "source:" pubspec.lock | grep "path"  # 有输出 = 需要修复
+   ```
+   修复：临时移走 overrides → `flutter pub get` → 恢复 → 提交新 lock
+
+2. **依赖包先于主项目推送**：`cs_ui` / `cs_framework` 若有未推送 commit，CI 拉到旧版本可能版本冲突。推送前检查：
+   ```bash
+   cd ../cs_ui && git log --oneline origin/main..HEAD
+   cd ../cs_framework && git log --oneline origin/main..HEAD
+   ```
+
+3. **依赖仓库需为 Public**：`cs_framework` 和 `cs_ui` 已设为 Public，CI 可匿名 clone。
 
 ---
 
