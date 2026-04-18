@@ -38,10 +38,12 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   }
 
   String? redirect(BuildContext context, GoRouterState state) {
-    final isLoggedIn = this.state;
-    final location = state.matchedLocation;
-    final isPublic = _publicRoutes.contains(location);
+    return computeRedirect(this.state, state.matchedLocation);
+  }
 
+  /// 纯函数，便于单元测试（不依赖 BuildContext / GoRouterState）
+  static String? computeRedirect(bool isLoggedIn, String location) {
+    final isPublic = _publicRoutes.contains(location);
     if (!isLoggedIn && !isPublic) return '/login';
     if (isLoggedIn && location == '/login') return '/';
     return null;
