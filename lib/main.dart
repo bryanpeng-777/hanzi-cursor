@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
-import 'router/app_router.dart';
+import 'router/app_router.dart' show appRouterProvider;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,15 +24,16 @@ void main() async {
   runApp(const ProviderScope(child: HanziApp()));
 }
 
-class HanziApp extends StatelessWidget {
+class HanziApp extends ConsumerWidget {
   const HanziApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
     return CsApp(
       title: '宝宝识字',
       debugShowCheckedModeBanner: false,
-      routerConfig: appRouter,
+      routerConfig: router,
     );
   }
 }
@@ -68,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
+        // auth guard 会根据登录状态决定实际跳到 /login 还是 /
         context.go('/');
       }
     });
