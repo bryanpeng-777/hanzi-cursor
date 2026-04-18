@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
+import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
 class ListenGameScreen extends ConsumerStatefulWidget {
@@ -23,23 +23,18 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
   late List<HanziCharacter> _options;
   int _score = 0;
   int _questionNum = 0;
-  int _totalQuestions = 8;
   String? _selectedAnswer;
   bool _answered = false;
   bool _gameComplete = false;
   bool _isPlaying = false;
 
+  int get _totalQuestions =>
+      ref.read(gameConfigProvider).valueOrNull?.listenGameQuestionsCount ?? 8;
+
   @override
   void initState() {
     super.initState();
-    _loadConfig();
     _nextQuestion();
-  }
-
-  Future<void> _loadConfig() async {
-    final total =
-        await ConfigManager.getInt('listen_game_questions_count') ?? 8;
-    if (mounted) setState(() => _totalQuestions = total);
   }
 
   void _nextQuestion() {

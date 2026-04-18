@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
+import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
 class MatchGameScreen extends ConsumerStatefulWidget {
@@ -18,31 +18,25 @@ class MatchGameScreen extends ConsumerStatefulWidget {
 
 class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
   late List<HanziCharacter> _gameCharacters;
-  late List<_MatchItem> _leftItems;  // emoji cards
-  late List<_MatchItem> _rightItems; // character cards
+  late List<_MatchItem> _leftItems;
+  late List<_MatchItem> _rightItems;
   String? _selectedLeft;
   String? _selectedRight;
   Set<String> _matchedPairs = {};
   int _score = 0;
   int _errors = 0;
   bool _gameComplete = false;
-  int _wordCount = 5;
 
   @override
   void initState() {
     super.initState();
-    _loadConfig();
     _initGame();
   }
 
-  Future<void> _loadConfig() async {
-    final count = await ConfigManager.getInt('match_game_word_count') ?? 5;
-    if (mounted) setState(() => _wordCount = count);
-  }
-
   void _initGame() {
+    final wordCount = ref.read(gameConfigProvider).valueOrNull?.matchGameWordCount ?? 5;
     final allChars = allHanzi.toList()..shuffle();
-    _gameCharacters = allChars.take(_wordCount).toList();
+    _gameCharacters = allChars.take(wordCount).toList();
     _leftItems = _gameCharacters
         .map((h) => _MatchItem(id: h.character, display: h.emoji, isEmoji: true))
         .toList()

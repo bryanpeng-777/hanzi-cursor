@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
+import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
 class HanziQuizScreen extends ConsumerStatefulWidget {
@@ -52,6 +52,11 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
   @override
   void initState() {
     super.initState();
+    final config = ref.read(gameConfigProvider).valueOrNull;
+    if (config != null) {
+      _timeLimit = config.quizTimeLimitSeconds.toDouble();
+      _passThreshold = config.quizPassThreshold;
+    }
     _timerController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: (_timeLimit * 1000).toInt()),
@@ -61,21 +66,6 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
 
     _buildCandidateList();
     _nextQuestion();
-    _loadConfigs();
-  }
-
-  Future<void> _loadConfigs() async {
-    final timeLimit = await ConfigManager.getInt('quiz_time_limit_seconds');
-    final passThreshold = await ConfigManager.getInt('quiz_pass_threshold');
-    if (!mounted) return;
-    setState(() {
-      if (timeLimit != null) {
-        _timeLimit = timeLimit.toDouble();
-        _timerController.duration =
-            Duration(milliseconds: (timeLimit * 1000));
-      }
-      if (passThreshold != null) _passThreshold = passThreshold;
-    });
   }
 
   void _buildCandidateList() {

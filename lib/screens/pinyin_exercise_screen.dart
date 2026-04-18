@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../data/pinyin_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
+import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
 class PinyinExerciseScreen extends ConsumerStatefulWidget {
@@ -56,6 +56,13 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   @override
   void initState() {
     super.initState();
+    final config = ref.read(gameConfigProvider).valueOrNull;
+    if (config != null) {
+      _timeLimit = config.quizTimeLimitSeconds.toDouble();
+      if (!widget.mistakeMode) {
+        _totalQuestions = config.quizQuestionsCount;
+      }
+    }
     _timerController = AnimationController(
       vsync: this,
       duration: Duration(milliseconds: (_timeLimit * 1000).toInt()),
@@ -65,23 +72,6 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
 
     _buildCandidateList();
     _nextQuestion();
-    _loadConfigs();
-  }
-
-  Future<void> _loadConfigs() async {
-    final timeLimit = await ConfigManager.getInt('quiz_time_limit_seconds');
-    final questionsCount = await ConfigManager.getInt('quiz_questions_count');
-    if (!mounted) return;
-    setState(() {
-      if (timeLimit != null) {
-        _timeLimit = timeLimit.toDouble();
-        _timerController.duration =
-            Duration(milliseconds: (timeLimit * 1000));
-      }
-      if (questionsCount != null && !widget.mistakeMode) {
-        _totalQuestions = questionsCount;
-      }
-    });
   }
 
   void _buildCandidateList() {

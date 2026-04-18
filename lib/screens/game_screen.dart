@@ -1,32 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
+import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
-class GameScreen extends StatefulWidget {
+class GameScreen extends ConsumerWidget {
   const GameScreen({super.key});
 
   @override
-  State<GameScreen> createState() => _GameScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final configAsync = ref.watch(gameConfigProvider);
+    final spellGameEnabled = configAsync.valueOrNull?.spellGameEnabled ?? false;
 
-class _GameScreenState extends State<GameScreen> {
-  bool _spellGameEnabled = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadConfig();
-  }
-
-  Future<void> _loadConfig() async {
-    final enabled = await ConfigManager.getBool('enable_spell_game') ?? false;
-    if (mounted) setState(() => _spellGameEnabled = enabled);
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
@@ -76,8 +62,8 @@ class _GameScreenState extends State<GameScreen> {
               gradient: const [Color(0xFF667EEA), Color(0xFF764BA2)],
               difficulty: '困难',
               stars: 1,
-              isComingSoon: !_spellGameEnabled,
-              onTap: _spellGameEnabled ? () {} : () {},
+              isComingSoon: !spellGameEnabled,
+              onTap: spellGameEnabled ? () {} : () {},
             ).animate(delay: 300.ms).fadeIn().slideX(begin: -0.2),
           ],
         ),
