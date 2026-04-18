@@ -49,9 +49,16 @@ lib/
 │   ├── hanzi_data.dart                # 所有汉字数据（68个，10关卡）
 │   └── pinyin_data.dart               # 拼音声母/韵母数据
 ├── models/
-│   └── hanzi_model.dart               # 数据模型定义
+│   ├── hanzi_model.dart               # HanziCharacter + LearningProgress（@freezed）
+│   ├── hanzi_model.freezed.dart       # build_runner 生成
+│   ├── hanzi_model.g.dart             # build_runner 生成
+│   ├── learning_state.dart            # LearningState（@freezed，含计算属性）
+│   └── learning_state.freezed.dart    # build_runner 生成
 ├── providers/
-│   └── learning_provider.dart         # 全局状态管理（Provider）
+│   ├── learning_provider.dart         # LearningNotifier（@riverpod keepAlive），管理全局学习进度
+│   ├── learning_provider.g.dart       # build_runner 生成
+│   ├── game_config_provider.dart      # GameConfigProvider（@riverpod keepAlive），从 ConfigManager 加载游戏配置
+│   └── game_config_provider.g.dart    # build_runner 生成
 ├── screens/
 │   ├── home_screen.dart               # 首页（进度卡 + 每日一字 + 功能入口）
 │   ├── learn_screen.dart              # 识字 Hub（学习/测验/错题重练 三入口）
@@ -107,47 +114,63 @@ class LearningProgress {
 
 ## 状态管理
 
-使用 **Provider（ChangeNotifier）** 模式，全局单例 `LearningProvider`。
+使用 **Riverpod（@riverpod 注解 + build_runner 代码生成）** 模式。
 
-### 关键 API
+### Provider 列表
+
+| Provider | 类型 | 说明 |
+|----------|------|------|
+| `learningNotifierProvider` | `Notifier<LearningState>`（keepAlive） | 全局学习进度状态 |
+| `gameConfigProvider` | `AsyncNotifier<GameConfigState>`（keepAlive） | 游戏配置（从 ConfigManager 加载） |
+
+### 学习状态 API（LearningState）
 
 ```dart
-// 读取
-provider.totalStars          // 总星星数
-provider.learnedCount        // 已学汉字数
-provider.totalCount          // 全部汉字数（22）
-provider.overallProgress     // 学习进度 0.0~1.0
-provider.learnedCharacters   // 已学汉字列表
-provider.favoriteCharacters  // 收藏汉字列表
-provider.getProgress(char)   // 获取某字的学习进度
-provider.isLearned(char)     // 是否已学
-provider.isFavorite(char)    // 是否已收藏
+// 读取（在 Widget 中用 ref.watch）
+final state = ref.watch(learningNotifierProvider);
+state.totalStars          // 总星星数
+state.learnedCount        // 已学汉字数
+state.totalCount          // 全部汉字数
+state.overallProgress     // 学习进度 0.0~1.0
+state.learnedCharacters   // 已学汉字列表
+state.favoriteCharacters  // 收藏汉字列表
+state.getProgress(char)   // 获取某字的学习进度
+state.isLearned(char)     // 是否已学
+state.isFavorite(char)    // 是否已收藏
+state.pinyinMistakes      // 拼音错题集 Set<String>
+state.hanziQuizMistakes   // 汉字测验错题集 Set<String>
+state.isHanziLevelUnlocked(level)   // 关卡是否已解锁
+state.isHanziLevelPassed(level)     // 关卡是否已通关
+state.getHanziQuizBestScore(level)  // 某关卡历史最高分
 
-// 写入（自动持久化到 SharedPreferences）
-provider.markAsLearned(char, starsEarned: 3)  // 标记已学，+星星
-provider.addStars(char, count)                 // 增加星星
-provider.toggleFavorite(char)                  // 收藏/取消收藏
-
-// 识字测验相关
-provider.hanziQuizMistakes                     // 测验错题集 Set<String>
-provider.isHanziLevelUnlocked(level)           // 关卡是否已解锁
-provider.isHanziLevelPassed(level)             // 关卡是否已通关（≥70%）
-provider.getHanziQuizBestScore(level)          // 某关卡历史最高分（百分比）
-provider.addHanziMistake(char)                 // 加入错题集
-provider.removeHanziMistake(char)              // 从错题集移除
-provider.markHanziLevelPassed(level, score)    // 记录通关 + 更新最高分
+// 写入（在回调中用 ref.read）
+final notifier = ref.read(learningNotifierProvider.notifier);
+await notifier.markAsLearned(char, starsEarned: 3)
+await notifier.addStars(char, count)
+await notifier.toggleFavorite(char)
+await notifier.addPinyinMistake(initial)
+await notifier.removePinyinMistake(initial)
+await notifier.clearPinyinMistakes()
+await notifier.addHanziMistake(char)
+await notifier.removeHanziMistake(char)
+await notifier.markHanziLevelPassed(level, scorePercent)
 ```
 
 ### 持久化
 
-SharedPreferences 存储的 key：
-- `learning_progress`：JSON 格式的 `Map<String, LearningProgress>`
-- `total_stars`：int，总星星数
-- `current_streak`：int，连续学习天数（暂未在 UI 展示）
-- `pinyin_mistakes`：逗号分隔字符串，拼音错题集
-- `hanzi_quiz_mistakes`：逗号分隔字符串，汉字测验错题集
-- `hanzi_quiz_passed_levels`：逗号分隔 int，已通关的关卡
-- `hanzi_quiz_best_scores`：JSON，各关卡历史最高分
+学习进度由 `LearningNotifier` 双写到本地（SharedPreferences）和云端（Supabase DataManager）：
+
+| SharedPreferences Key | 类型 | 内容 |
+|----------------------|------|------|
+| `learning_progress` | JSON | `Map<String, LearningProgress>` |
+| `total_stars` | int | 总星星数 |
+| `current_streak` | int | 连续学习天数（UI 暂未展示） |
+| `pinyin_mistakes` | 逗号字符串 | 拼音错题集 |
+| `hanzi_quiz_mistakes` | 逗号字符串 | 汉字测验错题集 |
+| `hanzi_quiz_passed_levels` | 逗号字符串 | 已通关关卡 |
+| `hanzi_quiz_best_scores` | JSON | 各关卡历史最高分 |
+
+> ❌ 禁止在业务代码中直接调用 `SharedPreferences.getInstance()`，持久化逻辑已全部封装在 `LearningNotifier` 内。
 
 ---
 
@@ -357,12 +380,23 @@ git push origin main
 
 | 包 | 版本 | 用途 |
 |----|------|------|
-| `provider` | ^6.1.2 | 状态管理 |
-| `shared_preferences` | ^2.3.3 | 本地持久化 |
-| `flutter_animate` | ^4.5.2 | 动画效果（fadeIn/scale/slideX 等）|
+| `cs_framework` | path: ../cs/cs_framework | 认证、配置下发、数据存储、推送 |
+| `cs_ui` | path: ../cs/cs_ui | shadcn_ui 统一主题，CsApp / CsAppBar / ShadButton 等 |
+| `flutter_riverpod` | ^2.5.0 | 状态管理核心 |
+| `riverpod_annotation` | ^2.4.0 | @riverpod 注解 |
+| `freezed_annotation` | ^2.4.0 | @freezed 不可变数据类注解 |
+| `json_annotation` | ^4.9.0 | JSON 序列化注解 |
+| `go_router` | ^14.0.0 | 声明式路由 |
+| `flutter_screenutil` | ^5.9.0 | 屏幕适配（.w / .h / .sp） |
+| `dio` | ^5.7.0 | 第三方 HTTP 客户端 |
+| `shared_preferences` | ^2.3.3 | 用户偏好本地存储 |
+| `flutter_secure_storage` | ^9.2.0 | 敏感凭证存储（Token / API Key） |
+| `logger` | ^2.4.0 | 分级日志（替代 print） |
+| `flutter_animate` | ^4.5.2 | 动画效果（fadeIn/scale/slideX 等） |
 | `google_fonts` | ^6.2.1 | Noto Sans SC 中文字体 |
-| `audioplayers` | ^6.1.0 | 音频播放（暂未使用，预留） |
-| `lottie` | ^3.3.1 | Lottie 动画（暂未使用，预留） |
+| `audioplayers` | ^6.1.0 | 音频播放（预留，暂未使用） |
+| `lottie` | ^3.1.3 | Lottie 动画（预留，暂未使用） |
+| `flutter_tts` | ^4.2.5 | 文字转语音 |
 
 ---
 
@@ -422,3 +456,32 @@ git push origin main
 ### UI 组件（cs_ui / shadcn_ui）
 - ✅ 按钮用 `ShadButton`，顶栏用 `CsAppBar`，应用根用 `CsApp`
 - ❌ 禁止使用 `ElevatedButton` / `TextButton` / `AppBar`
+
+### 本地存储分层
+
+| 数据类型 | 使用方式 |
+|---------|---------|
+| 学习进度（复杂对象） | `ref.read(learningNotifierProvider.notifier)` → 自动双写 SharedPreferences + DataManager |
+| 简单用户偏好（bool/int/String） | `SharedPreferences`（通过 cs_framework PreferencesManager） |
+| 敏感凭证（Token / API Key） | `flutter_secure_storage`（通过 cs_framework SecureStorageManager） |
+| 业务数据（云端） | `cs_framework DataManager` |
+
+- ❌ 禁止在业务代码中直接调用 `SharedPreferences.getInstance()`
+- ❌ 禁止将 Token / API Key 硬编码在代码中
+
+### HTTP 请求
+
+- ✅ 调用 Supabase 表 / Auth / Storage → `cs_framework DataManager`
+- ✅ 调用第三方 / 自建后端 → `DioClient`（通过 cs_framework）
+- ❌ 禁止使用 `http` 包，禁止直接 `Dio()`
+
+### 日志
+
+- ✅ 使用 `appLogger.d()` / `.i()` / `.w()` / `.e()`
+- ❌ 禁止使用 `print()` / `debugPrint()` / `developer.log()`
+
+### 后端配置（ConfigManager）
+
+- ✅ 从 ConfigManager 加载的配置值（开关、数字参数等）必须放入 `@Riverpod(keepAlive: true)` Provider
+- ❌ 禁止将 ConfigManager 加载结果通过 `setState` 存储在 Widget State 中
+- 参考：`lib/providers/game_config_provider.dart`（spellGameEnabled / matchGameWordCount 等）
