@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'hanzi_learn_grid_screen.dart';
-import 'hanzi_quiz_level_screen.dart';
-import 'hanzi_quiz_screen.dart';
 
-class LearnScreen extends StatelessWidget {
+class LearnScreen extends ConsumerWidget {
   const LearnScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<LearningProvider>(
-      builder: (context, provider, _) {
-        final mistakeCount = provider.hanziQuizMistakes.length;
-        return SafeArea(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mistakeCount = ref.watch(learningNotifierProvider).hanziQuizMistakes.length;
+    return SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -34,8 +30,6 @@ class LearnScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -73,10 +67,7 @@ class LearnScreen extends StatelessWidget {
       ),
       shadowColor: AppTheme.primaryGreen,
       badge: null,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const HanziLearnGridScreen()),
-      ),
+      onTap: () => context.push('/hanzi-learn'),
       delay: 0,
     );
   }
@@ -93,10 +84,7 @@ class LearnScreen extends StatelessWidget {
       ),
       shadowColor: AppTheme.primaryOrange,
       badge: null,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const HanziQuizLevelScreen()),
-      ),
+      onTap: () => context.push('/hanzi-quiz-level'),
       delay: 100,
     );
   }
@@ -121,12 +109,7 @@ class LearnScreen extends StatelessWidget {
       shadowColor: hasMistakes ? Colors.redAccent : Colors.grey,
       badge: hasMistakes ? '$mistakeCount' : null,
       onTap: hasMistakes
-          ? () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const HanziQuizScreen(mistakeMode: true),
-                ),
-              )
+          ? () => context.push('/hanzi-quiz', extra: {'mistakeMode': true})
           : null,
       delay: 200,
     );

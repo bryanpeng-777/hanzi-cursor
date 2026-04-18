@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
@@ -8,16 +9,16 @@ import '../utils/app_theme.dart';
 import '../widgets/stroke_animation_widget.dart';
 import '../widgets/star_reward_widget.dart';
 
-class HanziDetailScreen extends StatefulWidget {
+class HanziDetailScreen extends ConsumerStatefulWidget {
   final HanziCharacter hanzi;
 
   const HanziDetailScreen({super.key, required this.hanzi});
 
   @override
-  State<HanziDetailScreen> createState() => _HanziDetailScreenState();
+  ConsumerState<HanziDetailScreen> createState() => _HanziDetailScreenState();
 }
 
-class _HanziDetailScreenState extends State<HanziDetailScreen>
+class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
     with TickerProviderStateMixin {
   late AnimationController _bounceController;
   bool _showReward = false;
@@ -43,20 +44,18 @@ class _HanziDetailScreenState extends State<HanziDetailScreen>
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
         leading: ShadButton.ghost(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
         ),
         actions: [
-          Consumer<LearningProvider>(
-            builder: (context, provider, child) {
-              final isFav = provider.isFavorite(widget.hanzi.character);
-              return ShadButton.ghost(
-                onPressed: () => provider.toggleFavorite(widget.hanzi.character),
-                child: Text(isFav ? '⭐' : '☆',
-                    style: const TextStyle(fontSize: 24)),
-              );
-            },
-          ),
+          Builder(builder: (context) {
+            final isFav = ref.watch(learningNotifierProvider).isFavorite(widget.hanzi.character);
+            return ShadButton.ghost(
+              onPressed: () => ref.read(learningNotifierProvider.notifier).toggleFavorite(widget.hanzi.character),
+              child: Text(isFav ? '⭐' : '☆',
+                  style: const TextStyle(fontSize: 24)),
+            );
+          }),
         ],
       ),
       body: Stack(
@@ -262,32 +261,28 @@ class _HanziDetailScreenState extends State<HanziDetailScreen>
   }
 
   Widget _buildLearnButton() {
-    return Consumer<LearningProvider>(
-      builder: (context, provider, child) {
-        final isLearned = provider.isLearned(widget.hanzi.character);
-        return           SizedBox(
-          width: double.infinity,
-          child: ShadButton(
-            onPressed: isLearned
-                ? null
-                : () async {
-                    await provider.markAsLearned(widget.hanzi.character, starsEarned: 3);
-                    setState(() => _showReward = true);
-                  },
-            enabled: !isLearned,
-            backgroundColor: isLearned ? AppTheme.primaryGreen : AppTheme.primaryOrange,
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Text(
-              isLearned ? '✅ 已学会！' : '🌟 我学会了！',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
+    final isLearned = ref.watch(learningNotifierProvider).isLearned(widget.hanzi.character);
+    return SizedBox(
+      width: double.infinity,
+      child: ShadButton(
+        onPressed: isLearned
+            ? null
+            : () async {
+                await ref.read(learningNotifierProvider.notifier).markAsLearned(widget.hanzi.character, starsEarned: 3);
+                setState(() => _showReward = true);
+              },
+        enabled: !isLearned,
+        backgroundColor: isLearned ? AppTheme.primaryGreen : AppTheme.primaryOrange,
+        padding: const EdgeInsets.symmetric(vertical: 18),
+        child: Text(
+          isLearned ? '✅ 已学会！' : '🌟 我学会了！',
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-        );
-      },
+        ),
+      ),
     ).animate(delay: 400.ms).fadeIn().slideY(begin: 0.3);
   }
 }

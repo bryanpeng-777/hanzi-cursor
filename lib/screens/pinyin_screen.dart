@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'pinyin_learn_screen.dart';
-import 'pinyin_exercise_screen.dart';
 
-class PinyinScreen extends StatelessWidget {
+class PinyinScreen extends ConsumerWidget {
   const PinyinScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<LearningProvider>(
-      builder: (context, provider, _) {
-        final mistakeCount = provider.pinyinMistakes.length;
-        return SafeArea(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mistakeCount = ref.watch(learningNotifierProvider).pinyinMistakes.length;
+    return SafeArea(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Column(
@@ -33,8 +30,6 @@ class PinyinScreen extends StatelessWidget {
             ),
           ),
         );
-      },
-    );
   }
 
   Widget _buildHeader(BuildContext context) {
@@ -72,10 +67,7 @@ class PinyinScreen extends StatelessWidget {
       ),
       shadowColor: const Color(0xFF4ECDC4),
       badge: null,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const PinyinLearnScreen()),
-      ),
+      onTap: () => context.push('/pinyin-learn'),
       delay: 0,
     );
   }
@@ -92,11 +84,7 @@ class PinyinScreen extends StatelessWidget {
       ),
       shadowColor: AppTheme.primaryOrange,
       badge: null,
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (_) => const PinyinExerciseScreen(mistakeMode: false)),
-      ),
+      onTap: () => context.push('/pinyin-exercise'),
       delay: 100,
     );
   }
@@ -121,12 +109,7 @@ class PinyinScreen extends StatelessWidget {
       shadowColor: hasmistakes ? Colors.redAccent : Colors.grey,
       badge: hasmistakes ? '$mistakeCount' : null,
       onTap: hasmistakes
-          ? () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) =>
-                        const PinyinExerciseScreen(mistakeMode: true)),
-              )
+          ? () => context.push('/pinyin-exercise', extra: {'mistakeMode': true})
           : null,
       delay: 200,
     );

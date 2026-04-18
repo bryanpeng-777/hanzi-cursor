@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
@@ -10,16 +11,16 @@ import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
-class PinyinExerciseScreen extends StatefulWidget {
+class PinyinExerciseScreen extends ConsumerStatefulWidget {
   final bool mistakeMode;
 
   const PinyinExerciseScreen({super.key, this.mistakeMode = false});
 
   @override
-  State<PinyinExerciseScreen> createState() => _PinyinExerciseScreenState();
+  ConsumerState<PinyinExerciseScreen> createState() => _PinyinExerciseScreenState();
 }
 
-class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
+class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     with SingleTickerProviderStateMixin {
   final _random = Random();
 
@@ -84,9 +85,9 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
   }
 
   void _buildCandidateList() {
-    final provider = context.read<LearningProvider>();
+    final state = ref.read(learningNotifierProvider);
     if (widget.mistakeMode) {
-      final mistakes = provider.pinyinMistakes;
+      final mistakes = state.pinyinMistakes;
       _candidateChars = allHanzi
           .where((h) {
             final init = extractInitial(h.pinyin);
@@ -140,7 +141,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
       _timedOut = true;
       _answered = true;
     });
-    context.read<LearningProvider>().addPinyinMistake(_correctInitial).then((_) {
+    ref.read(learningNotifierProvider.notifier).addPinyinMistake(_correctInitial).then((_) {
       if (mounted) setState(() => _mistakesAdded++);
     });
     Future.delayed(const Duration(milliseconds: 1500), () {
@@ -165,21 +166,20 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
       _answered = true;
     });
 
-    final provider = context.read<LearningProvider>();
+    final notifier = ref.read(learningNotifierProvider.notifier);
     if (isCorrect) {
       _score++;
-      provider.addStars(_currentHanzi!.character, 1);
+      notifier.addStars(_currentHanzi!.character, 1);
       if (widget.mistakeMode) {
-        provider.removePinyinMistake(_correctInitial).then((_) {
+        notifier.removePinyinMistake(_correctInitial).then((_) {
           if (mounted) setState(() => _mistakesCleared++);
         });
       }
     } else {
-      provider.addPinyinMistake(_correctInitial).then((_) {
+      notifier.addPinyinMistake(_correctInitial).then((_) {
         if (mounted) setState(() => _mistakesAdded++);
       });
     }
-
     Future.delayed(const Duration(milliseconds: 1200), () {
       if (mounted) {
         setState(() => _questionNum++);
@@ -505,7 +505,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
                   ShadButton(
                     onPressed: () {
                       final remaining =
-                          context.read<LearningProvider>().pinyinMistakes.length;
+                          ref.read(learningNotifierProvider).pinyinMistakes.length;
                       if (remaining > 0) {
                         setState(() {
                           _score = 0;
@@ -517,8 +517,8 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
                         });
                         _buildCandidateList();
                         _nextQuestion();
-                      } else {
-                        Navigator.pop(context);
+                        } else {
+                        context.pop();
                       }
                     },
                     backgroundColor: Colors.redAccent,
@@ -526,7 +526,7 @@ class _PinyinExerciseScreenState extends State<PinyinExerciseScreen>
                     child: const Text('继续错题'),
                   ),
                 ShadButton.outline(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   leading: const Icon(Icons.home),
                   child: const Text('返回'),
                 ),

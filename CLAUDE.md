@@ -385,3 +385,40 @@ git push origin main
 - [ ] 汉字库扩展（目前 68 字 10 关，可继续追加 level 11+）
 - [ ] 连续打卡奖励（`currentStreak` 已有字段，UI 待接入）
 - [ ] 多人对战模式
+
+---
+
+## 技术栈规范
+
+本项目已接入 cs_framework 完整技术栈，所有新增功能必须遵守以下规范。
+
+### 路由（go_router）
+- ✅ 跳转用 `context.go()` / `context.push()` / `context.pop()`
+- ❌ 禁止使用 `Navigator.push` / `Navigator.pop` / `Navigator.pushNamed`
+- 所有路由定义集中在 `lib/router/app_router.dart`
+
+### 状态管理（Riverpod）
+- ✅ 新建状态用 `@riverpod` 注解 + `build_runner` 生成，放在 `lib/providers/`
+- ✅ Widget 继承 `ConsumerWidget` 或 `ConsumerStatefulWidget`
+- ❌ 禁止使用 `StatefulWidget` + `setState` 管理业务状态
+- ❌ 禁止使用 Provider、GetX、BLoC 等其他状态管理库
+
+### 数据模型（freezed + json_annotation）
+- ✅ `lib/models/` 下的数据类用 `@freezed` 注解，由 `build_runner` 生成
+- ✅ JSON 反序列化用 `factory X.fromJson(json) => _$XFromJson(json)`
+- ❌ 禁止手写 `copyWith` / `==` / `hashCode` / `toString`
+- ❌ 禁止在 `@freezed` 类上叠加 `@JsonSerializable()`
+
+### 代码生成（build_runner）
+- 修改 `@riverpod` / `@freezed` / `@JsonSerializable` 注解后必须运行：
+  `flutter pub run build_runner build --delete-conflicting-outputs`
+
+### 状态访问
+- 全局学习状态：`ref.watch(learningNotifierProvider)` → `LearningState`
+- 操作方法：`ref.read(learningNotifierProvider.notifier).markAsLearned(...)`
+- 状态定义：`lib/models/learning_state.dart`（@freezed）
+- Notifier 定义：`lib/providers/learning_provider.dart`（@riverpod keepAlive）
+
+### UI 组件（cs_ui / shadcn_ui）
+- ✅ 按钮用 `ShadButton`，顶栏用 `CsAppBar`，应用根用 `CsApp`
+- ❌ 禁止使用 `ElevatedButton` / `TextButton` / `AppBar`

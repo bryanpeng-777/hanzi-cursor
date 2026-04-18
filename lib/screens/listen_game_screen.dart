@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
@@ -9,14 +10,14 @@ import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
-class ListenGameScreen extends StatefulWidget {
+class ListenGameScreen extends ConsumerStatefulWidget {
   const ListenGameScreen({super.key});
 
   @override
-  State<ListenGameScreen> createState() => _ListenGameScreenState();
+  ConsumerState<ListenGameScreen> createState() => _ListenGameScreenState();
 }
 
-class _ListenGameScreenState extends State<ListenGameScreen> {
+class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
   final _random = Random();
   late HanziCharacter _currentHanzi;
   late List<HanziCharacter> _options;
@@ -62,7 +63,7 @@ class _ListenGameScreenState extends State<ListenGameScreen> {
       _answered = true;
       if (character == _currentHanzi.character) {
         _score++;
-        context.read<LearningProvider>().addStars(_currentHanzi.character, 1);
+        ref.read(learningNotifierProvider.notifier).addStars(_currentHanzi.character, 1);
       }
     });
     Future.delayed(const Duration(milliseconds: 1200), () {
@@ -317,7 +318,7 @@ class _ListenGameScreenState extends State<ListenGameScreen> {
                 ),
                 const SizedBox(width: 16),
                 ShadButton.outline(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   leading: const Icon(Icons.home),
                   child: const Text('返回'),
                 ),

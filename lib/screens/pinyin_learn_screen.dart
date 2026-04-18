@@ -2,20 +2,20 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/pinyin_data.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
-class PinyinLearnScreen extends StatefulWidget {
+class PinyinLearnScreen extends ConsumerStatefulWidget {
   const PinyinLearnScreen({super.key});
 
   @override
-  State<PinyinLearnScreen> createState() => _PinyinLearnScreenState();
+  ConsumerState<PinyinLearnScreen> createState() => _PinyinLearnScreenState();
 }
 
-class _PinyinLearnScreenState extends State<PinyinLearnScreen>
+class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   bool _isAutoMode = false;
@@ -106,15 +106,13 @@ class _PinyinLearnScreenState extends State<PinyinLearnScreen>
 
 // ─── 手动模式：声母网格 ─────────────────────────────────────────────────────────
 
-class _InitialsGrid extends StatelessWidget {
+class _InitialsGrid extends ConsumerWidget {
   const _InitialsGrid();
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<LearningProvider>(
-      builder: (context, provider, _) {
-        final mistakes = provider.pinyinMistakes;
-        return GridView.builder(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final mistakes = ref.watch(learningNotifierProvider).pinyinMistakes;
+    return GridView.builder(
           padding: const EdgeInsets.all(16),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
@@ -134,8 +132,6 @@ class _InitialsGrid extends StatelessWidget {
                 );
           },
         );
-      },
-    );
   }
 }
 

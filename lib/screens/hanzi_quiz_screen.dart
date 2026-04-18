@@ -1,7 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
@@ -9,17 +10,17 @@ import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
-class HanziQuizScreen extends StatefulWidget {
+class HanziQuizScreen extends ConsumerStatefulWidget {
   final int? level;
   final bool mistakeMode;
 
   const HanziQuizScreen({super.key, this.level, this.mistakeMode = false});
 
   @override
-  State<HanziQuizScreen> createState() => _HanziQuizScreenState();
+  ConsumerState<HanziQuizScreen> createState() => _HanziQuizScreenState();
 }
 
-class _HanziQuizScreenState extends State<HanziQuizScreen>
+class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
     with SingleTickerProviderStateMixin {
   final _random = Random();
 
@@ -78,9 +79,9 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
   }
 
   void _buildCandidateList() {
-    final provider = context.read<LearningProvider>();
+    final state = ref.read(learningNotifierProvider);
     if (widget.mistakeMode) {
-      final mistakes = provider.hanziQuizMistakes;
+      final mistakes = state.hanziQuizMistakes;
       _candidateChars =
           allHanzi.where((h) => mistakes.contains(h.character)).toList();
       _totalQuestions = _candidateChars.length.clamp(1, 20);
@@ -132,8 +133,7 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
     if (!widget.mistakeMode && widget.level != null) {
       final scorePercent = (_score / _totalQuestions * 100).round();
       if (scorePercent >= _passThreshold) {
-        context
-            .read<LearningProvider>()
+        ref.read(learningNotifierProvider.notifier)
             .markHanziLevelPassed(widget.level!, scorePercent);
       }
     }
@@ -150,8 +150,7 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
       _answered = true;
     });
 
-    context
-        .read<LearningProvider>()
+    ref.read(learningNotifierProvider.notifier)
         .addHanziMistake(_currentHanzi!.character)
         .then((_) {
       if (mounted) setState(() => _mistakesAdded++);
@@ -179,16 +178,16 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
       _answered = true;
     });
 
-    final provider = context.read<LearningProvider>();
+    final notifier = ref.read(learningNotifierProvider.notifier);
     if (isCorrect) {
       _score++;
       if (widget.mistakeMode) {
-        provider.removeHanziMistake(character).then((_) {
+        notifier.removeHanziMistake(character).then((_) {
           if (mounted) setState(() => _mistakesCleared++);
         });
       }
     } else {
-      provider.addHanziMistake(_currentHanzi!.character).then((_) {
+      notifier.addHanziMistake(_currentHanzi!.character).then((_) {
         if (mounted) setState(() => _mistakesAdded++);
       });
     }
@@ -538,7 +537,7 @@ class _HanziQuizScreenState extends State<HanziQuizScreen>
                   child: const Text('再来一次'),
                 ),
                 ShadButton.outline(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => context.pop(),
                   leading: const Icon(Icons.home),
                   child: const Text('返回'),
                 ),

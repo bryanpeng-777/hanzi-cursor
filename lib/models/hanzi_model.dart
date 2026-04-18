@@ -1,54 +1,32 @@
-class HanziCharacter {
-  final String character;
-  final String pinyin;
-  final String meaning;
-  final String emoji;
-  final String strokeCount;
-  final List<String> exampleWords;
-  final int level;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-  const HanziCharacter({
-    required this.character,
-    required this.pinyin,
-    required this.meaning,
-    required this.emoji,
-    required this.strokeCount,
-    required this.exampleWords,
-    required this.level,
-  });
+part 'hanzi_model.freezed.dart';
+part 'hanzi_model.g.dart';
+
+@freezed
+class HanziCharacter with _$HanziCharacter {
+  const factory HanziCharacter({
+    required String character,
+    required String pinyin,
+    required String meaning,
+    required String emoji,
+    required String strokeCount,
+    required List<String> exampleWords,
+    required int level,
+  }) = _HanziCharacter;
 }
 
-class LearningProgress {
-  final String character;
-  bool isLearned;
-  bool isFavorite;
-  int stars;
-  DateTime? lastStudied;
-
-  LearningProgress({
-    required this.character,
-    this.isLearned = false,
-    this.isFavorite = false,
-    this.stars = 0,
-    this.lastStudied,
-  });
-
-  Map<String, dynamic> toJson() => {
-        'character': character,
-        'isLearned': isLearned,
-        'isFavorite': isFavorite,
-        'stars': stars,
-        'lastStudied': lastStudied?.toIso8601String(),
-      };
+@freezed
+class LearningProgress with _$LearningProgress {
+  const factory LearningProgress({
+    required String character,
+    @Default(false) bool isLearned,
+    @Default(false) bool isFavorite,
+    @Default(0) int stars,
+    DateTime? lastStudied,
+  }) = _LearningProgress;
 
   factory LearningProgress.fromJson(Map<String, dynamic> json) =>
-      LearningProgress(
-        character: json['character'],
-        isLearned: json['isLearned'] ?? false,
-        isFavorite: json['isFavorite'] ?? false,
-        stars: json['stars'] ?? 0,
-        lastStudied: json['lastStudied'] != null
-            ? DateTime.parse(json['lastStudied'])
-            : null,
-      );
+      _$LearningProgressFromJson(json);
 }

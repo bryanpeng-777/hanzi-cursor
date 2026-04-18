@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
@@ -8,14 +9,14 @@ import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
-class MatchGameScreen extends StatefulWidget {
+class MatchGameScreen extends ConsumerStatefulWidget {
   const MatchGameScreen({super.key});
 
   @override
-  State<MatchGameScreen> createState() => _MatchGameScreenState();
+  ConsumerState<MatchGameScreen> createState() => _MatchGameScreenState();
 }
 
-class _MatchGameScreenState extends State<MatchGameScreen> {
+class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
   late List<HanziCharacter> _gameCharacters;
   late List<_MatchItem> _leftItems;  // emoji cards
   late List<_MatchItem> _rightItems; // character cards
@@ -98,9 +99,9 @@ class _MatchGameScreenState extends State<MatchGameScreen> {
   }
 
   Future<void> _saveProgress() async {
-    final provider = context.read<LearningProvider>();
+    final notifier = ref.read(learningNotifierProvider.notifier);
     for (final hanzi in _gameCharacters) {
-      await provider.addStars(hanzi.character, 1);
+      await notifier.addStars(hanzi.character, 1);
     }
   }
 
@@ -263,7 +264,7 @@ class _MatchGameScreenState extends State<MatchGameScreen> {
               ),
               const SizedBox(width: 16),
               ShadButton.outline(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(),
                 leading: const Icon(Icons.home),
                 child: const Text('返回'),
               ),

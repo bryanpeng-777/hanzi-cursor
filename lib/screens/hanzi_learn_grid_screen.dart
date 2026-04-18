@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'hanzi_detail_screen.dart';
 
-class HanziLearnGridScreen extends StatefulWidget {
+class HanziLearnGridScreen extends ConsumerStatefulWidget {
   const HanziLearnGridScreen({super.key});
 
   @override
-  State<HanziLearnGridScreen> createState() => _HanziLearnGridScreenState();
+  ConsumerState<HanziLearnGridScreen> createState() => _HanziLearnGridScreenState();
 }
 
-class _HanziLearnGridScreenState extends State<HanziLearnGridScreen> {
+class _HanziLearnGridScreenState extends ConsumerState<HanziLearnGridScreen> {
   int _selectedLevel = 1;
 
   int get _maxLevel =>
@@ -28,7 +28,7 @@ class _HanziLearnGridScreenState extends State<HanziLearnGridScreen> {
       appBar: CsAppBar(
         title: '识字学习 📖',
         leading: ShadButton.ghost(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
         ),
         titleTextStyle: TextStyle(
@@ -85,28 +85,25 @@ class _HanziLearnGridScreenState extends State<HanziLearnGridScreen> {
 
   Widget _buildHanziGrid() {
     final characters = getHanziByLevel(_selectedLevel);
-    return Consumer<LearningProvider>(
-      builder: (context, provider, child) {
-        return GridView.builder(
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
-            childAspectRatio: 0.85,
-          ),
-          itemCount: characters.length,
-          itemBuilder: (context, index) {
-            final hanzi = characters[index];
-            final isLearned = provider.isLearned(hanzi.character);
-            final isFavorite = provider.isFavorite(hanzi.character);
-            return _HanziCard(
-              hanzi: hanzi,
-              isLearned: isLearned,
-              isFavorite: isFavorite,
-              index: index,
-            );
-          },
+    final state = ref.watch(learningNotifierProvider);
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.85,
+      ),
+      itemCount: characters.length,
+      itemBuilder: (context, index) {
+        final hanzi = characters[index];
+        final isLearned = state.isLearned(hanzi.character);
+        final isFavorite = state.isFavorite(hanzi.character);
+        return _HanziCard(
+          hanzi: hanzi,
+          isLearned: isLearned,
+          isFavorite: isFavorite,
+          index: index,
         );
       },
     );
@@ -129,14 +126,7 @@ class _HanziCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HanziDetailScreen(hanzi: hanzi),
-          ),
-        );
-      },
+      onTap: () => context.push('/hanzi-detail', extra: hanzi),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,

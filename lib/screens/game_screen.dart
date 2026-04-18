@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import '../utils/app_theme.dart';
-import 'match_game_screen.dart';
-import 'listen_game_screen.dart';
 
 class GameScreen extends StatefulWidget {
   const GameScreen({super.key});
@@ -55,10 +54,7 @@ class _GameScreenState extends State<GameScreen> {
               gradient: const [Color(0xFFFF6B6B), Color(0xFFFF8E53)],
               difficulty: '简单',
               stars: 3,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const MatchGameScreen()),
-              ),
+              onTap: () => context.push('/match-game'),
             ).animate(delay: 100.ms).fadeIn().slideX(begin: -0.2),
             const SizedBox(height: 16),
             _GameCard(
@@ -69,10 +65,7 @@ class _GameScreenState extends State<GameScreen> {
               gradient: const [Color(0xFF4ECDC4), Color(0xFF44A08D)],
               difficulty: '中等',
               stars: 2,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const ListenGameScreen()),
-              ),
+              onTap: () => context.push('/listen-game'),
             ).animate(delay: 200.ms).fadeIn().slideX(begin: -0.2),
             const SizedBox(height: 16),
             _GameCard(

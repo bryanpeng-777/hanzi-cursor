@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
-import 'providers/learning_provider.dart';
-import 'screens/home_screen.dart';
-import 'utils/app_theme.dart';
+import 'router/app_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,10 +17,11 @@ void main() async {
     supabaseUrl: 'https://ljmkxoptnzimpompabsq.supabase.co',
     supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbWt4b3B0bnppbXBvbXBhYnNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MzgxMzIsImV4cCI6MjA5MTIxNDEzMn0.CUbc6E49wyt-9WV2978T5kvMsW7CkqUwKn1o_1xBrZw',
     appId: 'hanzi-cursor',
+    urlScheme: 'mountainhanzicursor',
     environment: kReleaseMode ? CsEnvironment.prod : CsEnvironment.dev,
     enablePushNotifications: false,
   );
-  runApp(const HanziApp());
+  runApp(const ProviderScope(child: HanziApp()));
 }
 
 class HanziApp extends StatelessWidget {
@@ -29,13 +29,10 @@ class HanziApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => LearningProvider()..loadProgress(),
-      child: CsApp(
-        title: '宝宝识字',
-        debugShowCheckedModeBanner: false,
-        home: const SplashScreen(),
-      ),
+    return CsApp(
+      title: '宝宝识字',
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRouter,
     );
   }
 }
@@ -71,14 +68,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     Future.delayed(const Duration(seconds: 2), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          PageRouteBuilder(
-            pageBuilder: (_, __, ___) => const HomeScreen(),
-            transitionsBuilder: (_, animation, __, child) =>
-                FadeTransition(opacity: animation, child: child),
-            transitionDuration: const Duration(milliseconds: 500),
-          ),
-        );
+        context.go('/');
       }
     });
   }
@@ -114,7 +104,7 @@ class _SplashScreenState extends State<SplashScreen>
                     borderRadius: BorderRadius.circular(35),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),

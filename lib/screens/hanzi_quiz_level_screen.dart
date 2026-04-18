@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'hanzi_quiz_screen.dart';
 
-class HanziQuizLevelScreen extends StatelessWidget {
+class HanziQuizLevelScreen extends ConsumerWidget {
   const HanziQuizLevelScreen({super.key});
 
   int get _maxLevel =>
@@ -27,62 +27,53 @@ class HanziQuizLevelScreen extends StatelessWidget {
   };
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final learningState = ref.watch(learningNotifierProvider);
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
         title: '选择关卡 ✏️',
         leading: ShadButton.ghost(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(),
           child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
         ),
       ),
-      body: Consumer<LearningProvider>(
-        builder: (context, provider, _) {
-          return ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: _maxLevel,
-            itemBuilder: (context, index) {
-              final level = index + 1;
-              final isUnlocked = provider.isHanziLevelUnlocked(level);
-              final isPassed = provider.isHanziLevelPassed(level);
-              final bestScore = provider.getHanziQuizBestScore(level);
-              final theme = _levelThemes[level] ??
-                  _LevelTheme('第$level关', '', '📖');
-              final hanziCount = getHanziByLevel(level).length;
+      body: ListView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: _maxLevel,
+        itemBuilder: (context, index) {
+          final level = index + 1;
+          final isUnlocked = learningState.isHanziLevelUnlocked(level);
+          final isPassed = learningState.isHanziLevelPassed(level);
+          final bestScore = learningState.getHanziQuizBestScore(level);
+          final theme = _levelThemes[level] ?? _LevelTheme('第$level关', '', '📖');
+          final hanziCount = getHanziByLevel(level).length;
 
-              return _LevelCard(
-                level: level,
-                theme: theme,
-                hanziCount: hanziCount,
-                isUnlocked: isUnlocked,
-                isPassed: isPassed,
-                bestScore: bestScore,
-                index: index,
-                onTap: isUnlocked
-                    ? () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => HanziQuizScreen(level: level),
-                          ),
-                        )
-                    : () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              '🔒 请先通过第${level - 1}关测验来解锁',
-                              style: const TextStyle(fontSize: 15),
-                            ),
-                            behavior: SnackBarBehavior.floating,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            duration: const Duration(seconds: 2),
-                          ),
-                        );
-                      },
-              );
-            },
+          return _LevelCard(
+            level: level,
+            theme: theme,
+            hanziCount: hanziCount,
+            isUnlocked: isUnlocked,
+            isPassed: isPassed,
+            bestScore: bestScore,
+            index: index,
+            onTap: isUnlocked
+                    ? () => context.push('/hanzi-quiz', extra: {'level': level})
+                : () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          '🔒 请先通过第${level - 1}关测验来解锁',
+                          style: const TextStyle(fontSize: 15),
+                        ),
+                        behavior: SnackBarBehavior.floating,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
           );
         },
       ),

@@ -1,41 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../data/pinyin_data.dart';
+import '../models/learning_state.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import 'hanzi_detail_screen.dart';
 
-class VocabularyScreen extends StatelessWidget {
+class VocabularyScreen extends ConsumerWidget {
   const VocabularyScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Consumer<LearningProvider>(
-      builder: (context, provider, _) {
-        return SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildHeader(context, provider),
-                const SizedBox(height: 24),
-                _buildPinyinSection(context, provider),
-                const SizedBox(height: 20),
-                _buildHanziSection(context, provider),
-                const SizedBox(height: 20),
-                _buildFavoritesSection(context, provider),
-                const SizedBox(height: 24),
-              ],
-            ),
-          ),
-        );
-      },
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(learningNotifierProvider);
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(context, state),
+            const SizedBox(height: 24),
+            _buildPinyinSection(context, state),
+            const SizedBox(height: 20),
+            _buildHanziSection(context, state),
+            const SizedBox(height: 20),
+            _buildFavoritesSection(context, state),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget _buildHeader(BuildContext context, LearningProvider provider) {
+  Widget _buildHeader(BuildContext context, LearningState state) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -59,7 +57,7 @@ class VocabularyScreen extends StatelessWidget {
               const Text('⭐', style: TextStyle(fontSize: 18)),
               const SizedBox(width: 6),
               Text(
-                '${provider.totalStars}',
+                '${state.totalStars}',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -75,9 +73,9 @@ class VocabularyScreen extends StatelessWidget {
 
   // ─── 拼音学习进度 ────────────────────────────────────────────────────────────
 
-  Widget _buildPinyinSection(BuildContext context, LearningProvider provider) {
-    final totalInitials = allInitials.length; // 23
-    final mistakeCount = provider.pinyinMistakes.length;
+  Widget _buildPinyinSection(BuildContext context, LearningState state) {
+    final totalInitials = allInitials.length;
+    final mistakeCount = state.pinyinMistakes.length;
     final masteredCount = totalInitials - mistakeCount;
     final progress = masteredCount / totalInitials;
 
@@ -111,7 +109,7 @@ class VocabularyScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          _buildInitialsGrid(provider),
+          _buildInitialsGrid(state),
           const SizedBox(height: 14),
           _buildJumpButton(
             context,
@@ -124,12 +122,12 @@ class VocabularyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildInitialsGrid(LearningProvider provider) {
+  Widget _buildInitialsGrid(LearningState state) {
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: allInitials.map((item) {
-        final isMistake = provider.pinyinMistakes.contains(item.symbol);
+        final isMistake = state.pinyinMistakes.contains(item.symbol);
         return Container(
           width: 44,
           height: 44,
@@ -162,9 +160,9 @@ class VocabularyScreen extends StatelessWidget {
 
   // ─── 识字学习进度 ────────────────────────────────────────────────────────────
 
-  Widget _buildHanziSection(BuildContext context, LearningProvider provider) {
+  Widget _buildHanziSection(BuildContext context, LearningState state) {
     final passedCount =
-        List.generate(10, (i) => i + 1).where(provider.isHanziLevelPassed).length;
+        List.generate(10, (i) => i + 1).where(state.isHanziLevelPassed).length;
 
     return _SectionCard(
       title: '📖 识字学习进度',
@@ -176,9 +174,9 @@ class VocabularyScreen extends StatelessWidget {
           _buildProgressBar(
             context,
             label: '已学汉字',
-            progress: provider.overallProgress,
-            current: provider.learnedCount,
-            total: provider.totalCount,
+            progress: state.overallProgress,
+            current: state.learnedCount,
+            total: state.totalCount,
             color: AppTheme.primaryOrange,
           ),
           const SizedBox(height: 12),
@@ -186,7 +184,7 @@ class VocabularyScreen extends StatelessWidget {
             children: [
               _StatChip(
                   label: '已学会',
-                  value: '${provider.learnedCount}',
+                  value: '${state.learnedCount}',
                   color: AppTheme.primaryOrange),
               const SizedBox(width: 10),
               _StatChip(
@@ -196,7 +194,7 @@ class VocabularyScreen extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 14),
-          _buildLevelList(provider),
+          _buildLevelList(state),
           const SizedBox(height: 14),
           _buildJumpButton(
             context,
@@ -209,7 +207,7 @@ class VocabularyScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildLevelList(LearningProvider provider) {
+  Widget _buildLevelList(LearningState state) {
     const levelNames = [
       '数字&基础', '大小&五行', '天地&日常', '动物', '颜色',
       '食物', '身体', '家庭', '方位', '自然',
@@ -217,9 +215,9 @@ class VocabularyScreen extends StatelessWidget {
     return Column(
       children: List.generate(10, (i) {
         final level = i + 1;
-        final unlocked = provider.isHanziLevelUnlocked(level);
-        final passed = provider.isHanziLevelPassed(level);
-        final bestScore = provider.getHanziQuizBestScore(level);
+        final unlocked = state.isHanziLevelUnlocked(level);
+        final passed = state.isHanziLevelPassed(level);
+        final bestScore = state.getHanziQuizBestScore(level);
         final name = levelNames[i];
 
         return Container(
@@ -295,9 +293,8 @@ class VocabularyScreen extends StatelessWidget {
 
   // ─── 我的收藏 ────────────────────────────────────────────────────────────────
 
-  Widget _buildFavoritesSection(
-      BuildContext context, LearningProvider provider) {
-    final favorites = provider.favoriteCharacters;
+  Widget _buildFavoritesSection(BuildContext context, LearningState state) {
+    final favorites = state.favoriteCharacters;
 
     return _SectionCard(
       title: '❤️ 我的收藏',
@@ -318,11 +315,7 @@ class VocabularyScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 final hanzi = favorites[index];
                 return GestureDetector(
-                  onTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => HanziDetailScreen(hanzi: hanzi)),
-                  ),
+                  onTap: () => context.push('/hanzi-detail', extra: hanzi),
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
