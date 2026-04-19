@@ -32,3 +32,4 @@ web/build/
 # 本地开发 path override，不提交
 pubspec_overrides.yaml
 aiworkspace/
+.fvm/flutter_sdk
