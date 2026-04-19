@@ -81,7 +81,7 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: '听音选字 👂',
+        title: '听音选字',
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -167,9 +167,10 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
                 color: Colors.white.withOpacity(_isPlaying ? 0.5 : 0.2),
                 shape: BoxShape.circle,
               ),
-              child: Text(
-                _isPlaying ? '🔊' : '👂',
-                style: const TextStyle(fontSize: 50),
+              child: CsImage(
+                configKey: _isPlaying ? 'img_icon_playing' : 'img_icon_listen',
+                description: _isPlaying ? '播放中' : '点击播放',
+                width: 50, height: 50,
               ),
             ),
             const SizedBox(height: 16),
@@ -237,7 +238,7 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(hanzi.emoji, style: const TextStyle(fontSize: 28)),
+                CsImage(configKey: 'hanzi_icon_${hanzi.character}', description: hanzi.iconHint, width: 28, height: 28),
                 const SizedBox(height: 6),
                 Text(
                   hanzi.character,
@@ -258,16 +259,16 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
 
   Widget _buildCompletionScreen() {
     final percent = (_score / _totalQuestions * 100).toInt();
-    String emoji;
+    String resultKey;
     String message;
     if (percent >= 80) {
-      emoji = '🏆';
+      resultKey = 'img_result_excellent';
       message = '太厉害了！';
     } else if (percent >= 60) {
-      emoji = '🎉';
+      resultKey = 'img_result_good';
       message = '很不错！';
     } else {
-      emoji = '💪';
+      resultKey = 'img_result_ok';
       message = '继续加油！';
     }
 
@@ -277,7 +278,7 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 80))
+            CsImage(configKey: resultKey, description: message, width: 80, height: 80)
                 .animate()
                 .scale(curve: Curves.elasticOut, duration: 600.ms),
             const SizedBox(height: 16),
@@ -308,7 +309,7 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
                     });
                     _nextQuestion();
                   },
-                  leading: const Text('🔄'),
+                  leading: CsImage(configKey: 'img_icon_refresh', description: '重来', width: 20, height: 20),
                   child: const Text('再来一次'),
                 ),
                 const SizedBox(width: 16),

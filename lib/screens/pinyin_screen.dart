@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
 
@@ -37,7 +38,7 @@ class PinyinScreen extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '拼音学习 🔤',
+          '拼音学习',
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 color: AppTheme.primaryBlue,
                 fontSize: 28,
@@ -57,7 +58,8 @@ class PinyinScreen extends ConsumerWidget {
 
   Widget _buildLearnCard(BuildContext context) {
     return _EntryCard(
-      emoji: '📚',
+      iconKey: 'img_card_pinyin_learn',
+      iconDesc: '拼音学习',
       title: '拼音学习',
       subtitle: '认识声母·韵母·四声',
       gradient: const LinearGradient(
@@ -74,7 +76,8 @@ class PinyinScreen extends ConsumerWidget {
 
   Widget _buildExerciseCard(BuildContext context) {
     return _EntryCard(
-      emoji: '✏️',
+      iconKey: 'img_card_pinyin_quiz',
+      iconDesc: '拼音测验',
       title: '拼音测验',
       subtitle: '声母识别·10 题挑战',
       gradient: const LinearGradient(
@@ -92,7 +95,8 @@ class PinyinScreen extends ConsumerWidget {
   Widget _buildMistakeCard(BuildContext context, int mistakeCount) {
     final hasmistakes = mistakeCount > 0;
     return _EntryCard(
-      emoji: hasmistakes ? '🔴' : '✅',
+      iconKey: hasmistakes ? 'img_card_pinyin_mistakes_active' : 'img_card_pinyin_mistakes_empty',
+      iconDesc: hasmistakes ? '有错题' : '无错题',
       title: '错题重练',
       subtitle: hasmistakes ? '共 $mistakeCount 个声母需要复习' : '太棒了！暂无错题',
       gradient: hasmistakes
@@ -126,7 +130,7 @@ class PinyinScreen extends ConsumerWidget {
       ),
       child: Row(
         children: [
-          const Text('💡', style: TextStyle(fontSize: 24)),
+          CsImage(configKey: 'img_icon_tip', description: '提示', width: 24, height: 24),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -141,7 +145,8 @@ class PinyinScreen extends ConsumerWidget {
 }
 
 class _EntryCard extends StatelessWidget {
-  final String emoji;
+  final String iconKey;
+  final String iconDesc;
   final String title;
   final String subtitle;
   final Gradient gradient;
@@ -151,7 +156,8 @@ class _EntryCard extends StatelessWidget {
   final int delay;
 
   const _EntryCard({
-    required this.emoji,
+    required this.iconKey,
+    required this.iconDesc,
     required this.title,
     required this.subtitle,
     required this.gradient,
@@ -187,7 +193,7 @@ class _EntryCard extends StatelessWidget {
               child: Row(
                 children: [
                   const SizedBox(width: 24),
-                  Text(emoji, style: const TextStyle(fontSize: 44)),
+                  CsImage(configKey: iconKey, description: iconDesc, width: 44, height: 44),
                   const SizedBox(width: 20),
                   Expanded(
                     child: Column(

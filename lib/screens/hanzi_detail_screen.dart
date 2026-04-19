@@ -52,8 +52,11 @@ class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
             final isFav = ref.watch(learningNotifierProvider).isFavorite(widget.hanzi.character);
             return ShadButton.ghost(
               onPressed: () => ref.read(learningNotifierProvider.notifier).toggleFavorite(widget.hanzi.character),
-              child: Text(isFav ? '⭐' : '☆',
-                  style: const TextStyle(fontSize: 24)),
+              child: CsImage(
+                configKey: isFav ? 'img_icon_favorite_on' : 'img_icon_favorite_off',
+                description: isFav ? '已收藏' : '未收藏',
+                width: 24, height: 24,
+              ),
             );
           }),
         ],
@@ -108,9 +111,11 @@ class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
       ),
       child: Column(
         children: [
-          Text(
-            widget.hanzi.emoji,
-            style: const TextStyle(fontSize: 60),
+          CsImage(
+            configKey: 'hanzi_icon_${widget.hanzi.character}',
+            description: widget.hanzi.iconHint,
+            width: 60,
+            height: 60,
           ).animate().scale(
                 begin: const Offset(0, 0),
                 duration: 500.ms,
@@ -189,7 +194,7 @@ class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
         children: [
           Row(
             children: [
-              const Text('✏️', style: TextStyle(fontSize: 20)),
+              CsImage(configKey: 'img_icon_stroke', description: '笔画', width: 20, height: 20),
               const SizedBox(width: 8),
               Text(
                 '笔画 ${widget.hanzi.strokeCount}',
@@ -220,7 +225,7 @@ class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
         children: [
           Row(
             children: [
-              const Text('📝', style: TextStyle(fontSize: 20)),
+              CsImage(configKey: 'img_icon_examples', description: '例词', width: 20, height: 20),
               const SizedBox(width: 8),
               Text(
                 '例词',
@@ -275,7 +280,7 @@ class _HanziDetailScreenState extends ConsumerState<HanziDetailScreen>
         backgroundColor: isLearned ? AppTheme.primaryGreen : AppTheme.primaryOrange,
         padding: const EdgeInsets.symmetric(vertical: 18),
         child: Text(
-          isLearned ? '✅ 已学会！' : '🌟 我学会了！',
+          isLearned ? '已学会！' : '我学会了！',
           style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,

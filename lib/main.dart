@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:cs_framework/cs_framework.dart';
 import 'package:cs_ui/cs_ui.dart';
 import 'router/app_router.dart' show appRouterProvider;
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -113,7 +112,12 @@ class _SplashScreenState extends State<SplashScreen>
                     ],
                   ),
                   child: const Center(
-                    child: Text('📚', style: TextStyle(fontSize: 70)),
+                    child: CsImage(
+                    configKey: 'img_splash_logo',
+                    description: 'App Logo',
+                    width: 64,
+                    height: 64,
+                  ),
                   ),
                 ),
               ),

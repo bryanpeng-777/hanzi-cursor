@@ -19,7 +19,9 @@ mixin _$HanziCharacter {
   String get character => throw _privateConstructorUsedError;
   String get pinyin => throw _privateConstructorUsedError;
   String get meaning => throw _privateConstructorUsedError;
-  String get emoji => throw _privateConstructorUsedError;
+
+  /// 配图语义说明（供 CsImage description），禁止写入 Unicode 表情符号。
+  String get iconHint => throw _privateConstructorUsedError;
   String get strokeCount => throw _privateConstructorUsedError;
   List<String> get exampleWords => throw _privateConstructorUsedError;
   int get level => throw _privateConstructorUsedError;
@@ -41,7 +43,7 @@ abstract class $HanziCharacterCopyWith<$Res> {
       {String character,
       String pinyin,
       String meaning,
-      String emoji,
+      String iconHint,
       String strokeCount,
       List<String> exampleWords,
       int level});
@@ -65,7 +67,7 @@ class _$HanziCharacterCopyWithImpl<$Res, $Val extends HanziCharacter>
     Object? character = null,
     Object? pinyin = null,
     Object? meaning = null,
-    Object? emoji = null,
+    Object? iconHint = null,
     Object? strokeCount = null,
     Object? exampleWords = null,
     Object? level = null,
@@ -83,9 +85,9 @@ class _$HanziCharacterCopyWithImpl<$Res, $Val extends HanziCharacter>
           ? _value.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
               as String,
-      emoji: null == emoji
-          ? _value.emoji
-          : emoji // ignore: cast_nullable_to_non_nullable
+      iconHint: null == iconHint
+          ? _value.iconHint
+          : iconHint // ignore: cast_nullable_to_non_nullable
               as String,
       strokeCount: null == strokeCount
           ? _value.strokeCount
@@ -115,7 +117,7 @@ abstract class _$$HanziCharacterImplCopyWith<$Res>
       {String character,
       String pinyin,
       String meaning,
-      String emoji,
+      String iconHint,
       String strokeCount,
       List<String> exampleWords,
       int level});
@@ -137,7 +139,7 @@ class __$$HanziCharacterImplCopyWithImpl<$Res>
     Object? character = null,
     Object? pinyin = null,
     Object? meaning = null,
-    Object? emoji = null,
+    Object? iconHint = null,
     Object? strokeCount = null,
     Object? exampleWords = null,
     Object? level = null,
@@ -155,9 +157,9 @@ class __$$HanziCharacterImplCopyWithImpl<$Res>
           ? _value.meaning
           : meaning // ignore: cast_nullable_to_non_nullable
               as String,
-      emoji: null == emoji
-          ? _value.emoji
-          : emoji // ignore: cast_nullable_to_non_nullable
+      iconHint: null == iconHint
+          ? _value.iconHint
+          : iconHint // ignore: cast_nullable_to_non_nullable
               as String,
       strokeCount: null == strokeCount
           ? _value.strokeCount
@@ -182,7 +184,7 @@ class _$HanziCharacterImpl implements _HanziCharacter {
       {required this.character,
       required this.pinyin,
       required this.meaning,
-      required this.emoji,
+      required this.iconHint,
       required this.strokeCount,
       required final List<String> exampleWords,
       required this.level})
@@ -194,8 +196,10 @@ class _$HanziCharacterImpl implements _HanziCharacter {
   final String pinyin;
   @override
   final String meaning;
+
+  /// 配图语义说明（供 CsImage description），禁止写入 Unicode 表情符号。
   @override
-  final String emoji;
+  final String iconHint;
   @override
   final String strokeCount;
   final List<String> _exampleWords;
@@ -211,7 +215,7 @@ class _$HanziCharacterImpl implements _HanziCharacter {
 
   @override
   String toString() {
-    return 'HanziCharacter(character: $character, pinyin: $pinyin, meaning: $meaning, emoji: $emoji, strokeCount: $strokeCount, exampleWords: $exampleWords, level: $level)';
+    return 'HanziCharacter(character: $character, pinyin: $pinyin, meaning: $meaning, iconHint: $iconHint, strokeCount: $strokeCount, exampleWords: $exampleWords, level: $level)';
   }
 
   @override
@@ -223,7 +227,8 @@ class _$HanziCharacterImpl implements _HanziCharacter {
                 other.character == character) &&
             (identical(other.pinyin, pinyin) || other.pinyin == pinyin) &&
             (identical(other.meaning, meaning) || other.meaning == meaning) &&
-            (identical(other.emoji, emoji) || other.emoji == emoji) &&
+            (identical(other.iconHint, iconHint) ||
+                other.iconHint == iconHint) &&
             (identical(other.strokeCount, strokeCount) ||
                 other.strokeCount == strokeCount) &&
             const DeepCollectionEquality()
@@ -237,7 +242,7 @@ class _$HanziCharacterImpl implements _HanziCharacter {
       character,
       pinyin,
       meaning,
-      emoji,
+      iconHint,
       strokeCount,
       const DeepCollectionEquality().hash(_exampleWords),
       level);
@@ -257,7 +262,7 @@ abstract class _HanziCharacter implements HanziCharacter {
       {required final String character,
       required final String pinyin,
       required final String meaning,
-      required final String emoji,
+      required final String iconHint,
       required final String strokeCount,
       required final List<String> exampleWords,
       required final int level}) = _$HanziCharacterImpl;
@@ -268,8 +273,10 @@ abstract class _HanziCharacter implements HanziCharacter {
   String get pinyin;
   @override
   String get meaning;
+
+  /// 配图语义说明（供 CsImage description），禁止写入 Unicode 表情符号。
   @override
-  String get emoji;
+  String get iconHint;
   @override
   String get strokeCount;
   @override

@@ -88,7 +88,7 @@ class _StrokeAnimationWidgetState extends State<StrokeAnimationWidget>
         ),
         const SizedBox(height: 8),
         Text(
-          _isAnimating ? '✨ 笔画动画中...' : '👆 点击查看笔画',
+          _isAnimating ? '笔画动画中...' : '点击查看笔画',
           style: TextStyle(
             color: Colors.grey[600],
             fontSize: 13,

@@ -86,17 +86,10 @@ lib/
 
 ### HanziCharacter（`lib/models/hanzi_model.dart`）
 
-```dart
-class HanziCharacter {
-  final String character;      // 汉字本体，如 '一'
-  final String pinyin;         // 拼音，如 'yī'
-  final String meaning;        // 含义，如 '数字1'
-  final String emoji;          // 配图 emoji，如 '☝️'
-  final String strokeCount;    // 笔画数，如 '1画'
-  final List<String> exampleWords; // 例词，如 ['一个', '第一', '一起']
-  final int level;             // 关卡：1=初级 2=中级 3=高级
-}
-```
+`HanziCharacter` 为 `@freezed` 生成类，核心字段包括：
+
+- `character` / `pinyin` / `meaning` / `strokeCount` / `exampleWords` / `level`
+- `iconHint`：配图语义短文案（**禁止** Unicode 表情），供 `CsImage(description: …)` 与无障碍说明使用；实际图由 `hanzi_icon_${character}` 等 `configKey` 指向 `default_configs.json`
 
 ### LearningProgress（`lib/models/hanzi_model.dart`）
 
@@ -200,7 +193,7 @@ HanziCharacter(
   character: '风',
   pinyin: 'fēng',
   meaning: '风',
-  emoji: '💨',
+  iconHint: '「风」识字配图：风',
   strokeCount: '4画',
   exampleWords: ['风筝', '台风', '风景'],
   level: 2,
@@ -285,7 +278,7 @@ homeState?._onTap(tabIndex);  // 0=拼音 1=识字 2=游戏 3=生字本
 final todayChar = allHanzi[DateTime.now().day % allHanzi.length];
 ```
 
-展示内容：汉字大字、拼音、含义、emoji、笔画数、前2个例词。
+展示内容：汉字大字、拼音、含义、`CsImage` 情境配图、笔画数、前2个例词。
 
 ### 识字 Tab（三入口 Hub）
 
@@ -293,13 +286,13 @@ final todayChar = allHanzi[DateTime.now().day % allHanzi.length];
 
 **识字学习**（`hanzi_learn_grid_screen.dart`）：
 - 横向滚动的关卡选择器，动态适配关卡数量（无需硬编码）
-- 网格展示当前关卡汉字，已学显示绿色角标 ✅
+- 网格展示当前关卡汉字，已学显示绿色角标（对号图标）
 - 点击进入 `HanziDetailScreen`
 
 **识字测验**（`hanzi_quiz_level_screen.dart` + `hanzi_quiz_screen.dart`）：
 - 关卡选择界面：10关列表，展示解锁状态和历史最高分
 - 未解锁关卡点击弹 SnackBar 提示「请先通过第X关测验」
-- 题型：显示拼音（大字）+ 含义文字（无 emoji），4选1正确汉字
+- 题型：显示拼音（大字）+ 含义文字，4选1正确汉字
 - 每题限时 6 秒，答错进错题集，≥70% 正确率通关并解锁下一关
 
 **错题重练**：错题集有内容时激活，进入 `HanziQuizScreen(mistakeMode: true)`
@@ -308,14 +301,14 @@ final todayChar = allHanzi[DateTime.now().day % allHanzi.length];
 
 - 弹跳入场动画（`flutter_animate`）
 - 米字格 + 笔画动画（`StrokeAnimationWidget`）
-- 收藏按钮（❤️）
+- 收藏按钮（`CsImage`：`img_icon_favorite_on` / `img_icon_favorite_off`）
 - "我学会了" 按钮 → 触发 `markAsLearned` → 弹出星星奖励
 
 ### 游戏系统
 
 **图字配对**（`match_game_screen.dart`）：
 - 从当前关卡随机抽 5 对汉字
-- 左列 emoji，右列汉字，点击配对
+- 左列情境配图（`CsImage`），右列汉字，点击配对
 - 正确高亮绿色，完成后显示结算
 
 **听音选字**（`listen_game_screen.dart`）：
@@ -427,19 +420,19 @@ git push origin main
 本项目已接入 cs_framework 完整技术栈，所有新增功能必须遵守以下规范。
 
 ### 路由（go_router）
-- ✅ 跳转用 `context.go()` / `context.push()` / `context.pop()`
+- 跳转用 `context.go()` / `context.push()` / `context.pop()`
 - ❌ 禁止使用 `Navigator.push` / `Navigator.pop` / `Navigator.pushNamed`
 - 所有路由定义集中在 `lib/router/app_router.dart`
 
 ### 状态管理（Riverpod）
-- ✅ 新建状态用 `@riverpod` 注解 + `build_runner` 生成，放在 `lib/providers/`
-- ✅ Widget 继承 `ConsumerWidget` 或 `ConsumerStatefulWidget`
+- 新建状态用 `@riverpod` 注解 + `build_runner` 生成，放在 `lib/providers/`
+- Widget 继承 `ConsumerWidget` 或 `ConsumerStatefulWidget`
 - ❌ 禁止使用 `StatefulWidget` + `setState` 管理业务状态
 - ❌ 禁止使用 Provider、GetX、BLoC 等其他状态管理库
 
 ### 数据模型（freezed + json_annotation）
-- ✅ `lib/models/` 下的数据类用 `@freezed` 注解，由 `build_runner` 生成
-- ✅ JSON 反序列化用 `factory X.fromJson(json) => _$XFromJson(json)`
+- `lib/models/` 下的数据类用 `@freezed` 注解，由 `build_runner` 生成
+- JSON 反序列化用 `factory X.fromJson(json) => _$XFromJson(json)`
 - ❌ 禁止手写 `copyWith` / `==` / `hashCode` / `toString`
 - ❌ 禁止在 `@freezed` 类上叠加 `@JsonSerializable()`
 
@@ -454,7 +447,7 @@ git push origin main
 - Notifier 定义：`lib/providers/learning_provider.dart`（@riverpod keepAlive）
 
 ### UI 组件（cs_ui / shadcn_ui）
-- ✅ 按钮用 `ShadButton`，顶栏用 `CsAppBar`，应用根用 `CsApp`
+- 按钮用 `ShadButton`，顶栏用 `CsAppBar`，应用根用 `CsApp`
 - ❌ 禁止使用 `ElevatedButton` / `TextButton` / `AppBar`
 
 ### 本地存储分层
@@ -471,17 +464,17 @@ git push origin main
 
 ### HTTP 请求
 
-- ✅ 调用 Supabase 表 / Auth / Storage → `cs_framework DataManager`
-- ✅ 调用第三方 / 自建后端 → `DioClient`（通过 cs_framework）
+- 调用 Supabase 表 / Auth / Storage → `cs_framework DataManager`
+- 调用第三方 / 自建后端 → `DioClient`（通过 cs_framework）
 - ❌ 禁止使用 `http` 包，禁止直接 `Dio()`
 
 ### 日志
 
-- ✅ 使用 `appLogger.d()` / `.i()` / `.w()` / `.e()`
+- 使用 `appLogger.d()` / `.i()` / `.w()` / `.e()`
 - ❌ 禁止使用 `print()` / `debugPrint()` / `developer.log()`
 
 ### 后端配置（ConfigManager）
 
-- ✅ 从 ConfigManager 加载的配置值（开关、数字参数等）必须放入 `@Riverpod(keepAlive: true)` Provider
+- 从 ConfigManager 加载的配置值（开关、数字参数等）必须放入 `@Riverpod(keepAlive: true)` Provider
 - ❌ 禁止将 ConfigManager 加载结果通过 `setState` 存储在 Widget State 中
 - 参考：`lib/providers/game_config_provider.dart`（spellGameEnabled / matchGameWordCount 等）

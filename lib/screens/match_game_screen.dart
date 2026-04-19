@@ -38,11 +38,11 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
     final allChars = allHanzi.toList()..shuffle();
     _gameCharacters = allChars.take(wordCount).toList();
     _leftItems = _gameCharacters
-        .map((h) => _MatchItem(id: h.character, display: h.emoji, isEmoji: true))
+        .map((h) => _MatchItem(id: h.character, imageDescription: h.iconHint))
         .toList()
       ..shuffle();
     _rightItems = _gameCharacters
-        .map((h) => _MatchItem(id: h.character, display: h.character, isEmoji: false))
+        .map((h) => _MatchItem(id: h.character, imageDescription: null))
         .toList()
       ..shuffle();
     _selectedLeft = null;
@@ -104,14 +104,28 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: '图字配对 🔗',
+        title: '图字配对',
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
             child: Center(
-              child: Text('⭐ $_score',
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold)),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CsImage(
+                    configKey: 'img_icon_star',
+                    description: '星星',
+                    width: 18,
+                    height: 18,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    '$_score',
+                    style: const TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
@@ -147,7 +161,8 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
                       final isMatched = _matchedPairs.contains(item.id);
                       final isSelected = _selectedLeft == item.id;
                       return _buildCard(
-                        item.display,
+                        item.id,
+                        imageDescription: item.imageDescription,
                         isMatched: isMatched,
                         isSelected: isSelected,
                         fontSize: 40,
@@ -164,7 +179,8 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
                       final isMatched = _matchedPairs.contains(item.id);
                       final isSelected = _selectedRight == item.id;
                       return _buildCard(
-                        item.display,
+                        item.id,
+                        imageDescription: item.imageDescription,
                         isMatched: isMatched,
                         isSelected: isSelected,
                         fontSize: 36,
@@ -182,7 +198,8 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
   }
 
   Widget _buildCard(
-    String text, {
+    String character, {
+    required String? imageDescription,
     required bool isMatched,
     required bool isSelected,
     required double fontSize,
@@ -217,13 +234,20 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
           ],
         ),
         child: Center(
-          child: Text(
-            text,
-            style: TextStyle(
-              fontSize: fontSize,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: imageDescription != null
+              ? CsImage(
+                  configKey: 'hanzi_icon_$character',
+                  description: imageDescription,
+                  width: fontSize,
+                  height: fontSize,
+                )
+              : Text(
+                  character,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
         ),
       ),
     );
@@ -234,7 +258,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Text('🎉', style: TextStyle(fontSize: 80))
+          CsImage(configKey: 'img_icon_celebration', description: '庆祝', width: 80, height: 80)
               .animate()
               .scale(curve: Curves.elasticOut, duration: 600.ms),
           const SizedBox(height: 16),
@@ -253,7 +277,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
             children: [
               ShadButton(
                 onPressed: () => setState(() => _initGame()),
-                leading: const Text('🔄'),
+                leading: CsImage(configKey: 'img_icon_refresh', description: '重来', width: 20, height: 20),
                 child: const Text('再来一次'),
               ),
               const SizedBox(width: 16),
@@ -272,8 +296,8 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
 
 class _MatchItem {
   final String id;
-  final String display;
-  final bool isEmoji;
+  /// 左侧配图列非空；右侧汉字列为 null。
+  final String? imageDescription;
 
-  _MatchItem({required this.id, required this.display, required this.isEmoji});
+  _MatchItem({required this.id, required this.imageDescription});
 }

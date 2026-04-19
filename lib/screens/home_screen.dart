@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../utils/app_theme.dart';
 import 'learn_screen.dart';
 import 'game_screen.dart';
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -2),
             )
@@ -43,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _NavItem(icon: '🔤', label: '拼音', index: 0, current: _currentIndex, onTap: _onTap),
-                _NavItem(icon: '📖', label: '识字', index: 1, current: _currentIndex, onTap: _onTap),
-                _NavItem(icon: '🎮', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap),
-                _NavItem(icon: '🎓', label: '我的学习', index: 3, current: _currentIndex, onTap: _onTap),
+                _NavItem(iconKey: 'img_nav_pinyin', iconDesc: '拼音', label: '拼音', index: 0, current: _currentIndex, onTap: _onTap),
+                _NavItem(iconKey: 'img_nav_learn', iconDesc: '识字', label: '识字', index: 1, current: _currentIndex, onTap: _onTap),
+                _NavItem(iconKey: 'img_nav_game', iconDesc: '游戏', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap),
+                _NavItem(iconKey: 'img_nav_vocab', iconDesc: '我的学习', label: '我的学习', index: 3, current: _currentIndex, onTap: _onTap),
               ],
             ),
           ),
@@ -59,14 +60,16 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _NavItem extends StatelessWidget {
-  final String icon;
+  final String iconKey;
+  final String iconDesc;
   final String label;
   final int index;
   final int current;
   final Function(int) onTap;
 
   const _NavItem({
-    required this.icon,
+    required this.iconKey,
+    required this.iconDesc,
     required this.label,
     required this.index,
     required this.current,
@@ -76,19 +79,25 @@ class _NavItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isSelected = index == current;
+    final iconSize = isSelected ? 28.0 : 24.0;
     return GestureDetector(
       onTap: () => onTap(index),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryOrange.withOpacity(0.15) : Colors.transparent,
+          color: isSelected ? AppTheme.primaryOrange.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(icon, style: TextStyle(fontSize: isSelected ? 28 : 24)),
+            CsImage(
+              configKey: iconKey,
+              description: iconDesc,
+              width: iconSize,
+              height: iconSize,
+            ),
             const SizedBox(height: 2),
             Text(
               label,

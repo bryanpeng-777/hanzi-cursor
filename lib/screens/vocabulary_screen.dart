@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../data/pinyin_data.dart';
 import '../models/learning_state.dart';
 import '../providers/learning_provider.dart';
@@ -38,7 +39,7 @@ class VocabularyScreen extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          '我的学习 🎓',
+          '我的学习',
           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                 color: AppTheme.primaryOrange,
                 fontSize: 26,
@@ -54,7 +55,12 @@ class VocabularyScreen extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              const Text('⭐', style: TextStyle(fontSize: 18)),
+              CsImage(
+                configKey: 'img_icon_star',
+                description: '星星',
+                width: 18,
+                height: 18,
+              ),
               const SizedBox(width: 6),
               Text(
                 '${state.totalStars}',
@@ -80,7 +86,7 @@ class VocabularyScreen extends ConsumerWidget {
     final progress = masteredCount / totalInitials;
 
     return _SectionCard(
-      title: '🔤 拼音学习进度',
+      title: '拼音学习进度',
       accentColor: const Color(0xFF4ECDC4),
       delay: 0,
       child: Column(
@@ -165,7 +171,7 @@ class VocabularyScreen extends ConsumerWidget {
         List.generate(10, (i) => i + 1).where(state.isHanziLevelPassed).length;
 
     return _SectionCard(
-      title: '📖 识字学习进度',
+      title: '识字学习进度',
       accentColor: AppTheme.primaryOrange,
       delay: 100,
       child: Column(
@@ -240,9 +246,10 @@ class VocabularyScreen extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              Text(
-                passed ? '✅' : unlocked ? '🔓' : '🔒',
-                style: const TextStyle(fontSize: 18),
+              CsImage(
+                configKey: passed ? 'img_icon_passed' : unlocked ? 'img_icon_unlocked' : 'img_icon_locked',
+                description: passed ? '已通关' : unlocked ? '已解锁' : '未解锁',
+                width: 18, height: 18,
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -297,7 +304,7 @@ class VocabularyScreen extends ConsumerWidget {
     final favorites = state.favoriteCharacters;
 
     return _SectionCard(
-      title: '❤️ 我的收藏',
+      title: '我的收藏',
       accentColor: AppTheme.primaryPink,
       delay: 200,
       child: favorites.isEmpty
@@ -333,8 +340,7 @@ class VocabularyScreen extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(hanzi.emoji,
-                            style: const TextStyle(fontSize: 20)),
+                        CsImage(configKey: 'hanzi_icon_${hanzi.character}', description: hanzi.iconHint, width: 20, height: 20),
                         const SizedBox(height: 2),
                         Text(
                           hanzi.character,
@@ -367,7 +373,7 @@ class VocabularyScreen extends ConsumerWidget {
       child: Center(
         child: Column(
           children: [
-            const Text('❤️', style: TextStyle(fontSize: 40))
+            CsImage(configKey: 'img_icon_favorites_empty', description: '暂无收藏', width: 40, height: 40)
                 .animate()
                 .scale(curve: Curves.elasticOut),
             const SizedBox(height: 10),
@@ -375,7 +381,7 @@ class VocabularyScreen extends ConsumerWidget {
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             const SizedBox(height: 4),
             Text(
-              '在汉字详情页点击 ❤️ 收藏',
+              '在汉字详情页点击收藏',
               style: TextStyle(fontSize: 14, color: Colors.grey[500]),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:cs_ui/cs_ui.dart';
 
 class StarRewardWidget extends StatefulWidget {
   final VoidCallback onComplete;
@@ -27,7 +28,7 @@ class _StarRewardWidgetState extends State<StarRewardWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('🎉', style: TextStyle(fontSize: 80))
+            CsImage(configKey: 'img_icon_celebration', description: '庆祝', width: 80, height: 80)
                 .animate()
                 .scale(
                   begin: const Offset(0, 0),
@@ -52,7 +53,12 @@ class _StarRewardWidgetState extends State<StarRewardWidget> {
                 3,
                 (i) => Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: const Text('⭐', style: TextStyle(fontSize: 40))
+                  child: CsImage(
+                    configKey: 'img_icon_star',
+                    description: '奖励星星',
+                    width: 40,
+                    height: 40,
+                  )
                       .animate(delay: (400 + i * 150).ms)
                       .scale(
                         begin: const Offset(0, 0),

@@ -199,8 +199,8 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
   @override
   Widget build(BuildContext context) {
     final title = widget.mistakeMode
-        ? '错题重练 🔴'
-        : '第${widget.level}关测验 ✏️';
+        ? '错题重练'
+        : '第${widget.level}关测验';
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
@@ -369,7 +369,7 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Text(
-                '⏰ 时间到！正确答案是「${_currentHanzi!.character}」',
+                '时间到！正确答案是「${_currentHanzi!.character}」',
                 style: const TextStyle(
                     color: Colors.yellowAccent, fontSize: 15),
               ).animate().fadeIn().shake(),
@@ -449,19 +449,19 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
 
     final bool passed = percent >= 70;
 
-    String emoji;
+    String resultKey;
     String message;
     if (percent >= 90) {
-      emoji = '🏆';
+      resultKey = 'img_result_excellent';
       message = '太厉害了！';
     } else if (percent >= 70) {
-      emoji = '🎉';
+      resultKey = 'img_result_good';
       message = '很不错！通关了！';
     } else if (percent >= 50) {
-      emoji = '💪';
+      resultKey = 'img_result_ok';
       message = '继续加油！';
     } else {
-      emoji = '📚';
+      resultKey = 'img_result_study_more';
       message = '多练练就好了！';
     }
 
@@ -471,7 +471,7 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 80))
+            CsImage(configKey: resultKey, description: message, width: 80, height: 80)
                 .animate()
                 .scale(curve: Curves.elasticOut, duration: 600.ms),
             const SizedBox(height: 16),
@@ -496,14 +496,14 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
             const SizedBox(height: 12),
             // 通关提示
             if (!widget.mistakeMode && passed)
-              _buildStatChip('🔓 已解锁下一关！', AppTheme.primaryGreen)
+              _buildStatChip('已解锁下一关！', AppTheme.primaryGreen)
             else if (!widget.mistakeMode && !passed)
               _buildStatChip('再接再厉，70% 可通关', Colors.orange),
             // 错题摘要
             if (widget.mistakeMode && _mistakesCleared > 0)
-              _buildStatChip('已消灭 $_mistakesCleared 个错题 ✅', AppTheme.primaryGreen)
+              _buildStatChip('已消灭 $_mistakesCleared 个错题', AppTheme.primaryGreen)
             else if (_mistakesAdded > 0)
-              _buildStatChip('本次新增 $_mistakesAdded 个错题 🔴', Colors.redAccent),
+              _buildStatChip('本次新增 $_mistakesAdded 个错题', Colors.redAccent),
             const SizedBox(height: 28),
             Wrap(
               spacing: 12,
@@ -523,7 +523,7 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
                     _buildCandidateList();
                     _nextQuestion();
                   },
-                  leading: const Text('🔄'),
+                  leading: CsImage(configKey: 'img_icon_refresh', description: '重新练习', width: 20, height: 20),
                   child: const Text('再来一次'),
                 ),
                 ShadButton.outline(

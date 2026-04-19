@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cs_ui/cs_ui.dart';
 import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
@@ -20,7 +21,7 @@ class GameScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '趣味游戏 🎮',
+              '趣味游戏',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: AppTheme.primaryOrange,
                     fontSize: 26,
@@ -33,7 +34,8 @@ class GameScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 24),
             _GameCard(
-              emoji: '🔗',
+              iconKey: 'img_card_game_match',
+              iconDesc: '图字配对',
               title: '图字配对',
               description: '把汉字和图片配对，考验你的记忆力！',
               color: const Color(0xFFFF6B6B),
@@ -44,7 +46,8 @@ class GameScreen extends ConsumerWidget {
             ).animate(delay: 100.ms).fadeIn().slideX(begin: -0.2),
             const SizedBox(height: 16),
             _GameCard(
-              emoji: '👂',
+              iconKey: 'img_card_game_listen',
+              iconDesc: '听音选字',
               title: '听音选字',
               description: '听拼音找出正确的汉字，锻炼听力！',
               color: const Color(0xFF4ECDC4),
@@ -55,7 +58,8 @@ class GameScreen extends ConsumerWidget {
             ).animate(delay: 200.ms).fadeIn().slideX(begin: -0.2),
             const SizedBox(height: 16),
             _GameCard(
-              emoji: '🧩',
+              iconKey: 'img_card_game_spell',
+              iconDesc: '拼字游戏',
               title: '拼字游戏',
               description: '将笔画拼成完整的汉字！',
               color: const Color(0xFF667EEA),
@@ -73,7 +77,8 @@ class GameScreen extends ConsumerWidget {
 }
 
 class _GameCard extends StatelessWidget {
-  final String emoji;
+  final String iconKey;
+  final String iconDesc;
   final String title;
   final String description;
   final Color color;
@@ -84,7 +89,8 @@ class _GameCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _GameCard({
-    required this.emoji,
+    required this.iconKey,
+    required this.iconDesc,
     required this.title,
     required this.description,
     required this.color,
@@ -122,7 +128,7 @@ class _GameCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: Center(
-                child: Text(emoji, style: const TextStyle(fontSize: 36)),
+                child: CsImage(configKey: iconKey, description: iconDesc, width: 36, height: 36),
               ),
             ),
             const SizedBox(width: 16),
@@ -182,8 +188,15 @@ class _GameCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       ...List.generate(
                         stars,
-                        (i) => const Text('⭐',
-                            style: TextStyle(fontSize: 14)),
+                        (i) => Padding(
+                          padding: const EdgeInsets.only(right: 2),
+                          child: CsImage(
+                            configKey: 'img_icon_star',
+                            description: '难度星星',
+                            width: 14,
+                            height: 14,
+                          ),
+                        ),
                       ),
                     ],
                   ),

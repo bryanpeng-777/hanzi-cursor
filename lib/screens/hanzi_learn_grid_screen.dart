@@ -26,7 +26,7 @@ class _HanziLearnGridScreenState extends ConsumerState<HanziLearnGridScreen> {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: '识字学习 📖',
+        title: '识字学习',
         leading: ShadButton.ghost(
           onPressed: () => context.pop(),
           child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
@@ -149,7 +149,7 @@ class _HanziCard extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(hanzi.emoji, style: const TextStyle(fontSize: 28)),
+                  CsImage(configKey: 'hanzi_icon_${hanzi.character}', description: hanzi.iconHint, width: 28, height: 28),
                   const SizedBox(height: 6),
                   Text(
                     hanzi.character,
@@ -186,10 +186,15 @@ class _HanziCard extends StatelessWidget {
                 ),
               ),
             if (isFavorite)
-              const Positioned(
+              Positioned(
                 top: 6,
                 left: 6,
-                child: Text('⭐', style: TextStyle(fontSize: 14)),
+                child: CsImage(
+                  configKey: 'img_icon_star',
+                  description: '收藏',
+                  width: 14,
+                  height: 14,
+                ),
               ),
           ],
         ),

@@ -37,7 +37,7 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: '拼音学习 📚',
+        title: '拼音学习',
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(96),
           child: Column(
@@ -173,7 +173,8 @@ class _TonesView extends StatelessWidget {
       'mark': '—',
       'desc': '平平的，像在唱歌',
       'example': '妈 māma',
-      'emoji': '👩',
+      'iconKey': 'pinyin_tone_1',
+      'iconDesc': '一声示例',
       'color': Color(0xFF4CAF50),
     },
     {
@@ -181,7 +182,8 @@ class _TonesView extends StatelessWidget {
       'mark': '/',
       'desc': '往上升，像在问问题',
       'example': '麻 máma',
-      'emoji': '🤔',
+      'iconKey': 'pinyin_tone_2',
+      'iconDesc': '二声示例',
       'color': Color(0xFF2196F3),
     },
     {
@@ -189,7 +191,8 @@ class _TonesView extends StatelessWidget {
       'mark': '∨',
       'desc': '先降后升，像在叹气',
       'example': '马 mǎ',
-      'emoji': '🐴',
+      'iconKey': 'pinyin_tone_3',
+      'iconDesc': '三声示例',
       'color': Color(0xFFFF9800),
     },
     {
@@ -197,7 +200,8 @@ class _TonesView extends StatelessWidget {
       'mark': '\\',
       'desc': '快快往下，像在命令',
       'example': '骂 mà',
-      'emoji': '😤',
+      'iconKey': 'pinyin_tone_4',
+      'iconDesc': '四声示例',
       'color': Color(0xFFE91E8C),
     },
   ];
@@ -270,9 +274,19 @@ class _TonesView extends StatelessWidget {
                             fontSize: 13, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 6),
-                      Text(
-                        '${data['emoji']}  ${data['example']}',
-                        style: const TextStyle(fontSize: 16),
+                      Row(
+                        children: [
+                          CsImage(
+                            configKey: data['iconKey'] as String,
+                            description: data['iconDesc'] as String,
+                            width: 16, height: 16,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            data['example'] as String,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -381,10 +395,7 @@ class _PinyinCardState extends State<_PinyinCard> {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          widget.item.emoji,
-          style: const TextStyle(fontSize: 18),
-        ),
+        CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 18, height: 18),
       ],
     );
   }
@@ -394,7 +405,7 @@ class _PinyinCardState extends State<_PinyinCard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 拼音符号 + emoji
+          // 拼音符号 + 配图
           Row(
             children: [
               Text(
@@ -406,8 +417,7 @@ class _PinyinCardState extends State<_PinyinCard> {
                 ),
               ),
               const Spacer(),
-              Text(widget.item.emoji,
-                  style: const TextStyle(fontSize: 16)),
+              CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 16, height: 16),
             ],
           ),
           const SizedBox(height: 2),
@@ -617,7 +627,7 @@ class _AutoModeViewState extends State<_AutoModeView> {
                     ),
                   ).animate(key: ValueKey(item.symbol)).fadeIn(duration: 300.ms),
                   const SizedBox(height: 12),
-                  // 例字 + emoji
+                  // 例字 + 配图
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -627,8 +637,7 @@ class _AutoModeViewState extends State<_AutoModeView> {
                               fontWeight: FontWeight.bold,
                               color: Colors.white)),
                       const SizedBox(width: 12),
-                      Text(item.emoji,
-                          style: const TextStyle(fontSize: 36)),
+                      CsImage(configKey: 'pinyin_icon_${item.symbol}', description: item.iconHint, width: 36, height: 36),
                     ],
                   ),
                   const SizedBox(height: 6),
@@ -736,7 +745,7 @@ class _AutoModeViewState extends State<_AutoModeView> {
 
           // 控制按钮
           if (!_isPlaying && isLast)
-            Text('🎉 全部学完了！',
+            const Text('全部学完了！',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -824,7 +833,7 @@ class _AutoModeViewState extends State<_AutoModeView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('🔤', style: TextStyle(fontSize: 32)),
+                          CsImage(configKey: 'img_tab_initials', description: '声母', width: 32, height: 32),
                           const SizedBox(height: 8),
                           const Text('声母',
                               style: TextStyle(
@@ -858,7 +867,7 @@ class _AutoModeViewState extends State<_AutoModeView> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('🔡', style: TextStyle(fontSize: 32)),
+                          CsImage(configKey: 'img_tab_finals', description: '韵母', width: 32, height: 32),
                           const SizedBox(height: 8),
                           const Text('韵母',
                               style: TextStyle(

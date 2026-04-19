@@ -189,7 +189,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: widget.mistakeMode ? '错题重练 🔴' : '声母测验 ✏️',
+        title: widget.mistakeMode ? '错题重练' : '声母测验',
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16),
@@ -317,10 +317,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            _currentHanzi!.emoji,
-            style: const TextStyle(fontSize: 36),
-          ),
+          CsImage(configKey: 'hanzi_icon_${_currentHanzi!.character}', description: _currentHanzi!.iconHint, width: 36, height: 36),
           const SizedBox(height: 12),
           Container(
             padding:
@@ -338,7 +335,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
             Padding(
               padding: const EdgeInsets.only(top: 12),
               child: Text(
-                '⏰ 时间到！正确答案是 $_correctInitial',
+                '时间到！正确答案是 $_correctInitial',
                 style: const TextStyle(
                     color: Colors.yellowAccent, fontSize: 15),
               ).animate().fadeIn().shake(),
@@ -414,19 +411,19 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
         ? 0.0
         : _responseTimes.reduce((a, b) => a + b) / _responseTimes.length;
 
-    String emoji;
+    String resultKey;
     String message;
     if (percent >= 90) {
-      emoji = '🏆';
+      resultKey = 'img_result_excellent';
       message = '太厉害了！';
     } else if (percent >= 70) {
-      emoji = '🎉';
+      resultKey = 'img_result_good';
       message = '很不错！';
     } else if (percent >= 50) {
-      emoji = '💪';
+      resultKey = 'img_result_ok';
       message = '继续加油！';
     } else {
-      emoji = '📚';
+      resultKey = 'img_result_study_more';
       message = '多练练就好了！';
     }
 
@@ -436,7 +433,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(emoji, style: const TextStyle(fontSize: 80))
+            CsImage(configKey: resultKey, description: message, width: 80, height: 80)
                 .animate()
                 .scale(curve: Curves.elasticOut, duration: 600.ms),
             const SizedBox(height: 16),
@@ -463,11 +460,11 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
             // 错题摘要
             if (widget.mistakeMode)
               _buildStatChip(
-                  '已消灭 $_mistakesCleared 个错题 ✅',
+                  '已消灭 $_mistakesCleared 个错题',
                   AppTheme.primaryGreen)
             else if (_mistakesAdded > 0)
               _buildStatChip(
-                  '本次新增 $_mistakesAdded 个错题 🔴',
+                  '本次新增 $_mistakesAdded 个错题',
                   Colors.redAccent),
             const SizedBox(height: 28),
             Wrap(
@@ -488,7 +485,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
                     _buildCandidateList();
                     _nextQuestion();
                   },
-                  leading: const Text('🔄'),
+                  leading: CsImage(configKey: 'img_icon_refresh', description: '重新练习', width: 20, height: 20),
                   child: const Text('再来一次'),
                 ),
                 if (widget.mistakeMode && _mistakesCleared > 0)
@@ -512,7 +509,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
                       }
                     },
                     backgroundColor: Colors.redAccent,
-                    leading: const Text('⚡'),
+                    leading: CsImage(configKey: 'img_icon_lightning', description: '继续错题', width: 20, height: 20),
                     child: const Text('继续错题'),
                   ),
                 ShadButton.outline(

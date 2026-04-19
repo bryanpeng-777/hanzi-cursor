@@ -14,16 +14,16 @@ class HanziQuizLevelScreen extends ConsumerWidget {
       allHanzi.map((h) => h.level).reduce((a, b) => a > b ? a : b);
 
   static const _levelThemes = <int, _LevelTheme>{
-    1: _LevelTheme('数字&基础', '一二三人口手…', '🔢'),
-    2: _LevelTheme('大小&五行', '大小火水木土', '🔥'),
-    3: _LevelTheme('天地&日常', '天地心书鱼花', '🌍'),
-    4: _LevelTheme('动物', '猫狗鸟虫马牛…', '🐾'),
-    5: _LevelTheme('颜色', '红黄蓝绿白黑', '🎨'),
-    6: _LevelTheme('食物', '饭米面包果菜', '🍚'),
-    7: _LevelTheme('身体', '头耳鼻足发眼', '👁️'),
-    8: _LevelTheme('家庭', '爸妈哥姐弟妹', '👨‍👩‍👧‍👦'),
-    9: _LevelTheme('方位', '上下左右前后', '⬆️'),
-    10: _LevelTheme('自然', '风雨雪云雷电', '🌧️'),
+    1: _LevelTheme('数字&基础', '一二三人口手…'),
+    2: _LevelTheme('大小&五行', '大小火水木土'),
+    3: _LevelTheme('天地&日常', '天地心书鱼花'),
+    4: _LevelTheme('动物', '猫狗鸟虫马牛…'),
+    5: _LevelTheme('颜色', '红黄蓝绿白黑'),
+    6: _LevelTheme('食物', '饭米面包果菜'),
+    7: _LevelTheme('身体', '头耳鼻足发眼'),
+    8: _LevelTheme('家庭', '爸妈哥姐弟妹'),
+    9: _LevelTheme('方位', '上下左右前后'),
+    10: _LevelTheme('自然', '风雨雪云雷电'),
   };
 
   @override
@@ -32,7 +32,7 @@ class HanziQuizLevelScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppTheme.backgroundPeach,
       appBar: CsAppBar(
-        title: '选择关卡 ✏️',
+        title: '选择关卡',
         leading: ShadButton.ghost(
           onPressed: () => context.pop(),
           child: const Icon(Icons.arrow_back_ios, color: Color(0xFF333333)),
@@ -46,7 +46,7 @@ class HanziQuizLevelScreen extends ConsumerWidget {
           final isUnlocked = learningState.isHanziLevelUnlocked(level);
           final isPassed = learningState.isHanziLevelPassed(level);
           final bestScore = learningState.getHanziQuizBestScore(level);
-          final theme = _levelThemes[level] ?? _LevelTheme('第$level关', '', '📖');
+          final theme = _levelThemes[level] ?? _LevelTheme('第$level关', '');
           final hanziCount = getHanziByLevel(level).length;
 
           return _LevelCard(
@@ -63,7 +63,7 @@ class HanziQuizLevelScreen extends ConsumerWidget {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
-                          '🔒 请先通过第${level - 1}关测验来解锁',
+                          '请先通过第${level - 1}关测验来解锁',
                           style: const TextStyle(fontSize: 15),
                         ),
                         behavior: SnackBarBehavior.floating,
@@ -84,8 +84,7 @@ class HanziQuizLevelScreen extends ConsumerWidget {
 class _LevelTheme {
   final String name;
   final String preview;
-  final String emoji;
-  const _LevelTheme(this.name, this.preview, this.emoji);
+  const _LevelTheme(this.name, this.preview);
 }
 
 class _LevelCard extends StatelessWidget {
@@ -156,9 +155,10 @@ class _LevelCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      isUnlocked ? theme.emoji : '🔒',
-                      style: const TextStyle(fontSize: 24),
+                    CsImage(
+                      configKey: isUnlocked ? 'img_level_theme_$level' : 'img_icon_locked',
+                      description: isUnlocked ? theme.name : '未解锁',
+                      width: 24, height: 24,
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -224,7 +224,12 @@ class _LevelCard extends StatelessWidget {
                       const SizedBox(height: 6),
                       Row(
                         children: [
-                          const Text('⭐', style: TextStyle(fontSize: 12)),
+                          CsImage(
+                            configKey: 'img_icon_star',
+                            description: '星星',
+                            width: 12,
+                            height: 12,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '最高 $bestScore%',
