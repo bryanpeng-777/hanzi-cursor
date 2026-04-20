@@ -7,156 +7,576 @@
   "match_game_word_count": 5,
   "listen_game_questions_count": 8,
   "home_banner_url": "",
-
-  "img_splash_logo": {"url": null, "asset": null},
-  "img_nav_pinyin": {"url": null, "asset": null},
-  "img_nav_learn": {"url": null, "asset": null},
-  "img_nav_game": {"url": null, "asset": null},
-  "img_nav_vocab": {"url": null, "asset": null},
-
-  "img_card_pinyin_learn": {"url": null, "asset": null},
-  "img_card_pinyin_quiz": {"url": null, "asset": null},
-  "img_card_pinyin_mistakes_active": {"url": null, "asset": null},
-  "img_card_pinyin_mistakes_empty": {"url": null, "asset": null},
-  "img_card_hanzi_learn": {"url": null, "asset": null},
-  "img_card_hanzi_quiz": {"url": null, "asset": null},
-  "img_card_hanzi_mistakes_active": {"url": null, "asset": null},
-  "img_card_hanzi_mistakes_empty": {"url": null, "asset": null},
-  "img_card_game_match": {"url": null, "asset": null},
-  "img_card_game_listen": {"url": null, "asset": null},
-  "img_card_game_spell": {"url": null, "asset": null},
-
-  "img_level_theme_1": {"url": null, "asset": null},
-  "img_level_theme_2": {"url": null, "asset": null},
-  "img_level_theme_3": {"url": null, "asset": null},
-  "img_level_theme_4": {"url": null, "asset": null},
-  "img_level_theme_5": {"url": null, "asset": null},
-  "img_level_theme_6": {"url": null, "asset": null},
-  "img_level_theme_7": {"url": null, "asset": null},
-  "img_level_theme_8": {"url": null, "asset": null},
-  "img_level_theme_9": {"url": null, "asset": null},
-  "img_level_theme_10": {"url": null, "asset": null},
-  "img_icon_locked": {"url": null, "asset": null},
-  "img_icon_unlocked": {"url": null, "asset": null},
-  "img_icon_passed": {"url": null, "asset": null},
-
-  "img_icon_tip": {"url": null, "asset": null},
-  "img_icon_stroke": {"url": null, "asset": null},
-  "img_icon_examples": {"url": null, "asset": null},
-  "img_icon_favorite_on": {"url": null, "asset": null},
-  "img_icon_favorite_off": {"url": null, "asset": null},
-  "img_icon_favorites_empty": {"url": null, "asset": null},
-  "img_icon_playing": {"url": null, "asset": null},
-  "img_icon_listen": {"url": null, "asset": null},
-  "img_icon_refresh": {"url": null, "asset": null},
-  "img_icon_lightning": {"url": null, "asset": null},
-  "img_icon_star": {"url": null, "asset": null},
-
-  "img_result_excellent": {"url": null, "asset": null},
-  "img_result_good": {"url": null, "asset": null},
-  "img_result_ok": {"url": null, "asset": null},
-  "img_result_study_more": {"url": null, "asset": null},
-  "img_icon_celebration": {"url": null, "asset": null},
-
-  "img_tab_initials": {"url": null, "asset": null},
-  "img_tab_finals": {"url": null, "asset": null},
-  "img_section_pinyin_progress": {"url": null, "asset": null},
-  "img_section_hanzi_progress": {"url": null, "asset": null},
-  "img_section_favorites": {"url": null, "asset": null},
-
-  "hanzi_icon_一": {"url": null, "asset": null},
-  "hanzi_icon_二": {"url": null, "asset": null},
-  "hanzi_icon_三": {"url": null, "asset": null},
-  "hanzi_icon_人": {"url": null, "asset": null},
-  "hanzi_icon_口": {"url": null, "asset": null},
-  "hanzi_icon_手": {"url": null, "asset": null},
-  "hanzi_icon_目": {"url": null, "asset": null},
-  "hanzi_icon_日": {"url": null, "asset": null},
-  "hanzi_icon_月": {"url": null, "asset": null},
-  "hanzi_icon_山": {"url": null, "asset": null},
-  "hanzi_icon_大": {"url": null, "asset": null},
-  "hanzi_icon_小": {"url": null, "asset": null},
-  "hanzi_icon_火": {"url": null, "asset": null},
-  "hanzi_icon_水": {"url": null, "asset": null},
-  "hanzi_icon_木": {"url": null, "asset": null},
-  "hanzi_icon_土": {"url": null, "asset": null},
-  "hanzi_icon_天": {"url": null, "asset": null},
-  "hanzi_icon_地": {"url": null, "asset": null},
-  "hanzi_icon_心": {"url": null, "asset": null},
-  "hanzi_icon_书": {"url": null, "asset": null},
-  "hanzi_icon_鱼": {"url": null, "asset": null},
-  "hanzi_icon_花": {"url": null, "asset": null},
-  "hanzi_icon_猫": {"url": null, "asset": null},
-  "hanzi_icon_狗": {"url": null, "asset": null},
-  "hanzi_icon_鸟": {"url": null, "asset": null},
-  "hanzi_icon_虫": {"url": null, "asset": null},
-  "hanzi_icon_马": {"url": null, "asset": null},
-  "hanzi_icon_牛": {"url": null, "asset": null},
-  "hanzi_icon_羊": {"url": null, "asset": null},
-  "hanzi_icon_兔": {"url": null, "asset": null},
-  "hanzi_icon_红": {"url": null, "asset": null},
-  "hanzi_icon_黄": {"url": null, "asset": null},
-  "hanzi_icon_蓝": {"url": null, "asset": null},
-  "hanzi_icon_绿": {"url": null, "asset": null},
-  "hanzi_icon_白": {"url": null, "asset": null},
-  "hanzi_icon_黑": {"url": null, "asset": null},
-  "hanzi_icon_饭": {"url": null, "asset": null},
-  "hanzi_icon_米": {"url": null, "asset": null},
-  "hanzi_icon_面": {"url": null, "asset": null},
-  "hanzi_icon_包": {"url": null, "asset": null},
-  "hanzi_icon_果": {"url": null, "asset": null},
-  "hanzi_icon_菜": {"url": null, "asset": null},
-  "hanzi_icon_头": {"url": null, "asset": null},
-  "hanzi_icon_耳": {"url": null, "asset": null},
-  "hanzi_icon_鼻": {"url": null, "asset": null},
-  "hanzi_icon_足": {"url": null, "asset": null},
-  "hanzi_icon_发": {"url": null, "asset": null},
-  "hanzi_icon_眼": {"url": null, "asset": null},
-  "hanzi_icon_爸": {"url": null, "asset": null},
-  "hanzi_icon_妈": {"url": null, "asset": null},
-  "hanzi_icon_哥": {"url": null, "asset": null},
-  "hanzi_icon_姐": {"url": null, "asset": null},
-  "hanzi_icon_弟": {"url": null, "asset": null},
-  "hanzi_icon_妹": {"url": null, "asset": null},
-  "hanzi_icon_上": {"url": null, "asset": null},
-  "hanzi_icon_下": {"url": null, "asset": null},
-  "hanzi_icon_左": {"url": null, "asset": null},
-  "hanzi_icon_右": {"url": null, "asset": null},
-  "hanzi_icon_前": {"url": null, "asset": null},
-  "hanzi_icon_后": {"url": null, "asset": null},
-  "hanzi_icon_风": {"url": null, "asset": null},
-  "hanzi_icon_雨": {"url": null, "asset": null},
-  "hanzi_icon_雪": {"url": null, "asset": null},
-  "hanzi_icon_云": {"url": null, "asset": null},
-  "hanzi_icon_雷": {"url": null, "asset": null},
-  "hanzi_icon_电": {"url": null, "asset": null},
-
-  "pinyin_icon_b": {"url": null, "asset": null},
-  "pinyin_icon_p": {"url": null, "asset": null},
-  "pinyin_icon_m": {"url": null, "asset": null},
-  "pinyin_icon_f": {"url": null, "asset": null},
-  "pinyin_icon_d": {"url": null, "asset": null},
-  "pinyin_icon_t": {"url": null, "asset": null},
-  "pinyin_icon_n": {"url": null, "asset": null},
-  "pinyin_icon_l": {"url": null, "asset": null},
-  "pinyin_icon_g": {"url": null, "asset": null},
-  "pinyin_icon_k": {"url": null, "asset": null},
-  "pinyin_icon_h": {"url": null, "asset": null},
-  "pinyin_icon_j": {"url": null, "asset": null},
-  "pinyin_icon_q": {"url": null, "asset": null},
-  "pinyin_icon_x": {"url": null, "asset": null},
-  "pinyin_icon_zh": {"url": null, "asset": null},
-  "pinyin_icon_ch": {"url": null, "asset": null},
-  "pinyin_icon_sh": {"url": null, "asset": null},
-  "pinyin_icon_r": {"url": null, "asset": null},
-  "pinyin_icon_z": {"url": null, "asset": null},
-  "pinyin_icon_c": {"url": null, "asset": null},
-  "pinyin_icon_s": {"url": null, "asset": null},
-  "pinyin_icon_y": {"url": null, "asset": null},
-  "pinyin_icon_w": {"url": null, "asset": null},
-
-  "pinyin_tone_1": {"url": null, "asset": null},
-  "pinyin_tone_2": {"url": null, "asset": null},
-  "pinyin_tone_3": {"url": null, "asset": null},
-  "pinyin_tone_4": {"url": null, "asset": null}
+  "img_splash_logo": {
+    "url": null,
+    "asset": null
+  },
+  "img_nav_pinyin": {
+    "url": null,
+    "asset": null
+  },
+  "img_nav_learn": {
+    "url": null,
+    "asset": null
+  },
+  "img_nav_game": {
+    "url": null,
+    "asset": null
+  },
+  "img_nav_vocab": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_pinyin_learn": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_pinyin_quiz": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_pinyin_mistakes_active": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_pinyin_mistakes_empty": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_learn": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_quiz": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_mistakes_active": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_mistakes_empty": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_match": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_listen": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_spell": {
+    "url": null,
+    "asset": null
+  },
+  "img_level_theme_1": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_1.jpg"
+  },
+  "img_level_theme_2": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_2.jpg"
+  },
+  "img_level_theme_3": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_3.jpg"
+  },
+  "img_level_theme_4": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_4.jpg"
+  },
+  "img_level_theme_5": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_5.jpg"
+  },
+  "img_level_theme_6": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_6.jpg"
+  },
+  "img_level_theme_7": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_7.jpg"
+  },
+  "img_level_theme_8": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_8.jpg"
+  },
+  "img_level_theme_9": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_9.jpg"
+  },
+  "img_level_theme_10": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_10.jpg"
+  },
+  "img_icon_locked": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_unlocked": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_passed": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_tip": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_stroke": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_examples": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorite_on": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorite_off": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorites_empty": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_playing": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_listen": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_refresh": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_lightning": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_star": {
+    "url": null,
+    "asset": null
+  },
+  "img_result_excellent": {
+    "url": null,
+    "asset": null
+  },
+  "img_result_good": {
+    "url": null,
+    "asset": null
+  },
+  "img_result_ok": {
+    "url": null,
+    "asset": null
+  },
+  "img_result_study_more": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_celebration": {
+    "url": null,
+    "asset": null
+  },
+  "img_tab_initials": {
+    "url": null,
+    "asset": null
+  },
+  "img_tab_finals": {
+    "url": null,
+    "asset": null
+  },
+  "img_section_pinyin_progress": {
+    "url": null,
+    "asset": null
+  },
+  "img_section_hanzi_progress": {
+    "url": null,
+    "asset": null
+  },
+  "img_section_favorites": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_一": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_二": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_三": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_人": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_口": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_手": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_目": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_日": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_月": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_山": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_大": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_小": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_火": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_水": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_木": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_土": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_天": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_地": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_心": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_书": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_鱼": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_花": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_猫": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_狗": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_鸟": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_虫": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_马": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_牛": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_羊": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_兔": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_红": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_黄": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_蓝": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_绿": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_白": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_黑": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_饭": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_米": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_面": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_包": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_果": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_菜": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_头": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_耳": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_鼻": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_足": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_发": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_眼": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_爸": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_妈": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_哥": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_姐": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_弟": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_妹": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_上": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_下": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_左": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_右": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_前": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_后": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_风": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_雨": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_雪": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_云": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_雷": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_电": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_b": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_p": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_m": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_f": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_d": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_t": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_n": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_l": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_g": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_k": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_h": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_j": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_q": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_x": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_zh": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_ch": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_sh": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_r": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_z": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_c": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_s": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_y": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_icon_w": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_tone_1": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_tone_2": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_tone_3": {
+    "url": null,
+    "asset": null
+  },
+  "pinyin_tone_4": {
+    "url": null,
+    "asset": null
+  }
 }
