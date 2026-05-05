@@ -13,19 +13,19 @@
   },
   "img_nav_pinyin": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_pinyin.png"
   },
   "img_nav_learn": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_learn.png"
   },
   "img_nav_game": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_game.png"
   },
   "img_nav_vocab": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_vocab.png"
   },
   "img_card_pinyin_learn": {
     "url": null,
