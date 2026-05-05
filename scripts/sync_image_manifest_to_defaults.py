@@ -12,6 +12,7 @@ This script is intentionally conservative:
 Usage:
   python3 scripts/sync_image_manifest_to_defaults.py --apply
   python3 scripts/sync_image_manifest_to_defaults.py --check
+  python3 scripts/sync_image_manifest_to_defaults.py --bootstrap-missing-keys --apply
 """
 
 from __future__ import annotations
@@ -55,6 +56,72 @@ def _iter_manifest_images(manifest: Dict[str, Any]) -> Iterable[Tuple[str, Dict[
                 yield key, meta
 
 
+def _is_cs_image_entry(v: Any) -> bool:
+    return isinstance(v, dict) and "url" in v and "asset" in v
+
+
+def _manifest_keys(manifest: Dict[str, Any]) -> set[str]:
+    return {k for k, _ in _iter_manifest_images(manifest)}
+
+
+def _bootstrap_manifest_pages_with_missing_keys(
+    manifest: Dict[str, Any], defaults: Dict[str, Any]
+) -> int:
+    """Insert placeholder manifest entries for any CsImage-shaped keys missing from manifest."""
+    existing = _manifest_keys(manifest)
+    pages = manifest.setdefault("pages", {})
+    if not isinstance(pages, dict):
+        raise ValueError("manifest.pages must be an object")
+
+    bucket = pages.setdefault("_imported_from_default_configs", {})
+    if not isinstance(bucket, dict):
+        raise ValueError("manifest page bucket must be an object")
+    bucket.setdefault("title", "从 default_configs.json 自动补齐的图片 key")
+    images = bucket.setdefault("images", {})
+    if not isinstance(images, dict):
+        raise ValueError("images must be an object")
+
+    added = 0
+    for key, val in defaults.items():
+        if key in existing:
+            continue
+        if not _is_cs_image_entry(val):
+            continue
+        images[key] = {
+            "description": f"自动导入：{key}（请在台账里补全描述/规格）",
+            "aspect_ratio": "1:1",
+            "suggested_size": "512x512",
+            "format": "png",
+            "asset_path": val.get("asset"),
+            "image_url": val.get("url"),
+            "status": "local"
+            if val.get("asset")
+            else ("remote" if val.get("url") else "placeholder"),
+            "last_updated": date.today().isoformat(),
+        }
+        existing.add(key)
+        added += 1
+
+    # Recompute summary if present (avoid lying counters)
+    summary = manifest.get("summary")
+    if isinstance(summary, dict):
+        totals = {"placeholder": 0, "local": 0, "remote": 0}
+        for _, meta in _iter_manifest_images(manifest):
+            st = (meta.get("status") or "").strip().lower()
+            if st in {"remote", "url"}:
+                totals["remote"] += 1
+            elif st in {"local", "asset"}:
+                totals["local"] += 1
+            else:
+                totals["placeholder"] += 1
+        summary["total"] = sum(totals.values())
+        summary["placeholder"] = totals["placeholder"]
+        summary["local"] = totals["local"]
+        summary["remote"] = totals["remote"]
+
+    return added
+
+
 def _expected_url_asset(meta: Dict[str, Any]) -> Tuple[Any, Any]:
     status = (meta.get("status") or "").strip().lower()
     asset_path = meta.get("asset_path")
@@ -68,11 +135,6 @@ def _expected_url_asset(meta: Dict[str, Any]) -> Tuple[Any, Any]:
 
     # placeholder / skip / unknown → force empty (CsImage should show placeholder)
     return None, None
-
-
-def _is_cs_image_entry(v: Any) -> bool:
-    return isinstance(v, dict) and "url" in v and "asset" in v
-
 
 @dataclass(frozen=True)
 class Diff:
@@ -165,6 +227,11 @@ def main(argv: list[str]) -> int:
         action="store_true",
         help="Exit non-zero if default_configs.json is not in sync with manifest",
     )
+    ap.add_argument(
+        "--bootstrap-missing-keys",
+        action="store_true",
+        help="Add missing CsImage keys from default_configs.json into manifest (placeholder) then continue",
+    )
     args = ap.parse_args(argv)
 
     if args.apply and args.check:
@@ -186,6 +253,13 @@ def main(argv: list[str]) -> int:
     if not isinstance(manifest, dict) or not isinstance(defaults, dict):
         print("Invalid JSON structure", file=sys.stderr)
         return 1
+
+    if args.bootstrap_missing_keys:
+        added = _bootstrap_manifest_pages_with_missing_keys(manifest, defaults)
+        if added:
+            manifest["_last_updated"] = date.today().isoformat()
+            _dump_json_pretty(manifest_path, manifest)
+            print(f"BOOTSTRAP: added {added} missing image keys into manifest")
 
     if args.check:
         diffs = _compute_diffs(defaults, manifest)
