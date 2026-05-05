@@ -238,6 +238,15 @@ AppColors.getLevelColor(level)  // level 1=绿 2=蓝 3=橙
 
 ---
 
+## 图片资源（CsImage）与批量生图
+
+- **运行时**：`CsImage(configKey: …)` 由 `assets/default_configs.json` 提供 `url` / `asset` 兜底；业务代码不写死资源路径。
+- **开发期台账**：`~/.claude/knowledge/ui-assistant/hanzi/image_manifest.json`（与 Cursor `sync_image_manifest.py` hook 增量同步 `configKey`）。
+- **凡「生成 / 替换位图」**（配图、图标、占位图、`assets/images` 下文件、`default_configs` 的 `asset` 等）：**必须**先读取并遵循 `~/.claude/skills/image-generator/SKILL.md`（Step 0 选图 → Step 1 统一风格 → Step 2 逐张 GenerateImage + PIL 定尺寸与压缩 → Step 3 回写 manifest + `default_configs.json`）。大仓内对应 Cursor 规则：`.cursor/rules/image-generator.mdc`。
+- **提交前**：若修改了配图与配置，在 `hanzi-cursor` 根目录执行 `python3 scripts/sync_image_manifest_to_defaults.py --check`（不通则 `--apply`）以满足 pre-commit 对「台账 ↔ default_configs」一致性的校验。
+
+---
+
 ## 页面导航
 
 App 采用底部 Tab 导航，4 个一级页面：
