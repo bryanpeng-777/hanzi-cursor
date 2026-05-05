@@ -9,7 +9,7 @@
   "home_banner_url": "",
   "img_splash_logo": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_splash_logo.png"
   },
   "img_nav_pinyin": {
     "url": null,
@@ -165,7 +165,7 @@
   },
   "img_icon_star": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_result_excellent": {
     "url": null,
