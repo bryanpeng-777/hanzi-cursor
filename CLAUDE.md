@@ -242,7 +242,7 @@ AppColors.getLevelColor(level)  // level 1=绿 2=蓝 3=橙
 
 - **运行时**：`CsImage(configKey: …)` 由 `assets/default_configs.json` 提供 `url` / `asset` 兜底；业务代码不写死资源路径。
 - **开发期台账**：`~/.claude/knowledge/ui-assistant/hanzi/image_manifest.json`（与 Cursor `sync_image_manifest.py` hook 增量同步 `configKey`）。
-- **凡「生成 / 替换位图」**（配图、图标、占位图、`assets/images` 下文件、`default_configs` 的 `asset` 等）：**必须**先读取并严格按 `~/.claude/agents/image-generator-workflow.md` 的 **Step 0～3 清单**执行（工具白名单与门禁见该 Agent）。大仓内对应 Cursor 规则：`.cursor/rules/image-generator.mdc`。
+- **凡「生成图片 / 替换图片」或同义**（生图、换图、更新配图等）：**必须先 Read** `~/.claude/knowledge/ui-assistant/hanzi/image_manifest.json` 取得各 `configKey` 的 **description、suggested_size、status** 等；**台账缺失或字段不全时须询问用户**，不得直接生图。再严格按 `~/.claude/agents/image-generator-workflow.md` 的 **Step 0～3 清单**执行。大仓内 Cursor 规则：`.cursor/rules/image-generator.mdc`。
 - **提交前**：若修改了配图与配置，在 `hanzi-cursor` 根目录执行 `python3 scripts/sync_image_manifest_to_defaults.py --check`（不通则 `--apply`）以满足 pre-commit 对「台账 ↔ default_configs」一致性的校验。
 
 ---
