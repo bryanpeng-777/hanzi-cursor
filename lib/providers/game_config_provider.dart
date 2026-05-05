@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_core/cs_core.dart';
 
 part 'game_config_provider.g.dart';
 

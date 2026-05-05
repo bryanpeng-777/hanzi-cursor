@@ -1,0 +1,80 @@
+{
+  "schema": "cs-plugin-v3",
+  "installed": {
+    "cs-src-core": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "config": {},
+      "cs_commit": "001ccfa8c3d6d2c2d7988eabbf9eba21a64b2ed9",
+      "cs_package_path": "cs_core",
+      "verify_passed": true
+    },
+    "cs-src-auth": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "config": {},
+      "cs_commit": "001ccfa8c3d6d2c2d7988eabbf9eba21a64b2ed9",
+      "cs_package_path": "cs_auth",
+      "verify_passed": true
+    },
+    "cs-src-ui": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "config": {},
+      "cs_commit": "001ccfa8c3d6d2c2d7988eabbf9eba21a64b2ed9",
+      "cs_package_path": "cs_ui",
+      "verify_passed": true
+    },
+    "cs-src-tool-image": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "config": {},
+      "cs_commit": "001ccfa8c3d6d2c2d7988eabbf9eba21a64b2ed9",
+      "cs_package_path": "cs_ui",
+      "verify_passed": true
+    },
+    "cs-riverpod": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "2.6.1",
+      "verify_passed": true
+    },
+    "cs-freezed": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "2.4.4",
+      "verify_passed": true
+    },
+    "cs-go-router": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "14.8.1",
+      "verify_passed": true
+    },
+    "cs-dio": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "5.9.2",
+      "verify_passed": true
+    },
+    "cs-local-storage": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "2.3.3",
+      "verify_passed": true
+    },
+    "cs-logger": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "2.7.0",
+      "verify_passed": true
+    },
+    "cs-screen-util": {
+      "plugin_version": "1.0.0",
+      "installed_at": "2026-05-03",
+      "resolved_version": "5.9.3",
+      "verify_passed": true
+    }
+  },
+  "exceptions": {}
+}

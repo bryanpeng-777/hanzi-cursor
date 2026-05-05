@@ -11,8 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  cs_framework:
-    path: ../cs/cs_framework
+  cs_core:
+    path: ../cs/cs_core
+  cs_auth:
+    path: ../cs/cs_auth
   cs_ui:
     path: ../cs/cs_ui
   flutter_riverpod: ^2.5.0

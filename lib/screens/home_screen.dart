@@ -44,10 +44,10 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _NavItem(iconKey: 'img_nav_pinyin', iconDesc: '拼音', label: '拼音', index: 0, current: _currentIndex, onTap: _onTap),
-                _NavItem(iconKey: 'img_nav_learn', iconDesc: '识字', label: '识字', index: 1, current: _currentIndex, onTap: _onTap),
-                _NavItem(iconKey: 'img_nav_game', iconDesc: '游戏', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap),
-                _NavItem(iconKey: 'img_nav_vocab', iconDesc: '我的学习', label: '我的学习', index: 3, current: _currentIndex, onTap: _onTap),
+                Expanded(child: _NavItem(iconKey: 'img_nav_pinyin', iconDesc: '拼音', label: '拼音', index: 0, current: _currentIndex, onTap: _onTap)),
+                Expanded(child: _NavItem(iconKey: 'img_nav_learn', iconDesc: '识字', label: '识字', index: 1, current: _currentIndex, onTap: _onTap)),
+                Expanded(child: _NavItem(iconKey: 'img_nav_game', iconDesc: '游戏', label: '游戏', index: 2, current: _currentIndex, onTap: _onTap)),
+                Expanded(child: _NavItem(iconKey: 'img_nav_vocab', iconDesc: '我的学习', label: '我的学习', index: 3, current: _currentIndex, onTap: _onTap)),
               ],
             ),
           ),
@@ -83,14 +83,16 @@ class _NavItem extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        duration: const Duration(milliseconds: 300),
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected ? AppTheme.primaryOrange.withValues(alpha: 0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CsImage(
               configKey: iconKey,
@@ -101,6 +103,9 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,

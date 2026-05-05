@@ -6,6 +6,7 @@ import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
 import '../providers/learning_provider.dart';
+import '../utils/app_logger.dart';
 import '../utils/app_theme.dart';
 
 class HanziLearnGridScreen extends ConsumerStatefulWidget {
@@ -17,6 +18,14 @@ class HanziLearnGridScreen extends ConsumerStatefulWidget {
 
 class _HanziLearnGridScreenState extends ConsumerState<HanziLearnGridScreen> {
   int _selectedLevel = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    AppLogger.i(
+      '[Hanzi] 识字学习页进入 | 默认关卡=$_selectedLevel | 总关卡数=$_maxLevel',
+    );
+  }
 
   int get _maxLevel =>
       allHanzi.map((h) => h.level).reduce((a, b) => a > b ? a : b);

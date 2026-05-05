@@ -178,7 +178,8 @@ class _EntryCard extends StatelessWidget {
           children: [
             Container(
               width: double.infinity,
-              height: 100,
+              constraints: const BoxConstraints(minHeight: 100),
+              padding: const EdgeInsets.symmetric(vertical: 14),
               decoration: BoxDecoration(
                 gradient: gradient,
                 borderRadius: BorderRadius.circular(24),
@@ -191,17 +192,21 @@ class _EntryCard extends StatelessWidget {
                 ],
               ),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(width: 24),
                   CsImage(configKey: iconKey, description: iconDesc, width: 44, height: 44),
                   const SizedBox(width: 20),
                   Expanded(
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 20,
@@ -211,6 +216,8 @@ class _EntryCard extends StatelessWidget {
                         const SizedBox(height: 4),
                         Text(
                           subtitle,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               color: Colors.white70, fontSize: 13),
                         ),

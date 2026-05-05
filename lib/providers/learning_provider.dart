@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_core/cs_core.dart';
 import '../models/hanzi_model.dart';
 import '../models/learning_state.dart';
+import '../utils/app_logger.dart';
 
 part 'learning_provider.g.dart';
 
@@ -28,14 +28,14 @@ class LearningNotifier extends _$LearningNotifier {
         return;
       }
     } catch (e) {
-      if (kDebugMode) debugPrint('[LearningNotifier] 云端读取失败，回退到本地: $e');
+      AppLogger.w('[LearningNotifier] 云端读取失败，回退到本地', error: e);
     }
 
     state = _applyPrefs(prefs, state).copyWith(isLoaded: true);
 
     if (state.progressMap.isNotEmpty || state.totalStars > 0) {
       _saveToCloud().catchError((e) {
-        if (kDebugMode) debugPrint('[LearningNotifier] 本地数据迁移云端失败: $e');
+        AppLogger.w('[LearningNotifier] 本地数据迁移云端失败', error: e);
       });
     }
   }
@@ -123,7 +123,7 @@ class LearningNotifier extends _$LearningNotifier {
         json.encode(state.hanziQuizBestScores.map((k, v) => MapEntry(k.toString(), v))));
 
     _saveToCloud().catchError((e) {
-      if (kDebugMode) debugPrint('[LearningNotifier] 云端保存失败: $e');
+      AppLogger.w('[LearningNotifier] 云端保存失败', error: e);
     });
   }
 

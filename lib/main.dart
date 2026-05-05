@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_core/cs_core.dart';
 import 'package:cs_ui/cs_ui.dart';
 import 'router/app_router.dart' show appRouterProvider;
 void main() async {
@@ -18,7 +19,6 @@ void main() async {
     appId: 'hanzi-cursor',
     urlScheme: 'mountainhanzicursor',
     environment: kReleaseMode ? CsEnvironment.prod : CsEnvironment.dev,
-    enablePushNotifications: false,
   );
   runApp(const ProviderScope(child: HanziApp()));
 }
@@ -29,10 +29,15 @@ class HanziApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
-    return CsApp(
-      title: '宝宝识字',
-      debugShowCheckedModeBanner: false,
-      routerConfig: router,
+    return ScreenUtilInit(
+      designSize: const Size(375, 812),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (context, child) => CsApp.router(
+        title: '宝宝识字',
+        debugShowCheckedModeBanner: false,
+        routerConfig: router,
+      ),
     );
   }
 }

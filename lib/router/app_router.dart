@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_auth/cs_auth.dart';
 import 'package:cs_ui/cs_ui.dart';
 import 'package:hanzi_app/main.dart' show SplashScreen;
 import '../providers/auth_provider.dart';
