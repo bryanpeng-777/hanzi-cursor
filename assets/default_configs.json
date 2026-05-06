@@ -29,19 +29,19 @@
   },
   "img_card_pinyin_learn": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_card_pinyin_learn.png"
   },
   "img_card_pinyin_quiz": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_card_pinyin_quiz.png"
   },
   "img_card_pinyin_mistakes_active": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_card_pinyin_mistakes_active.png"
   },
   "img_card_pinyin_mistakes_empty": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_card_pinyin_mistakes_empty.png"
   },
   "img_card_hanzi_learn": {
     "url": null,
@@ -125,7 +125,7 @@
   },
   "img_icon_tip": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_tip.png"
   },
   "img_icon_stroke": {
     "url": null,
