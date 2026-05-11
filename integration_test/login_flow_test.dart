@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:cs_framework/cs_framework.dart';
+import 'package:cs_auth/cs_auth.dart';
 import 'package:hanzi_app/main.dart' as app;
 
 /// 登录关键链路集成测试
