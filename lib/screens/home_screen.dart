@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cs_ui/cs_ui.dart';
-import '../utils/app_theme.dart';
 import 'learn_screen.dart';
 import 'game_screen.dart';
 import 'vocabulary_screen.dart';
@@ -30,11 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white,
+          border: Border(
+            top: BorderSide(
+              color: Colors.grey.shade200,
+              width: 1,
+            ),
+          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
+              color: Colors.black.withValues(alpha: 0.06),
+              blurRadius: 8,
+              offset: const Offset(0, -1),
             )
           ],
         ),
@@ -80,6 +85,9 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final isSelected = index == current;
     final iconSize = isSelected ? 28.0 : 24.0;
+    const selectedPink = Color(0xFFFFE4EC);
+    const selectedLabel = Color(0xFFE53935);
+    final unselectedLabel = Colors.grey.shade600;
     return GestureDetector(
       onTap: () => onTap(index),
       child: AnimatedContainer(
@@ -87,7 +95,7 @@ class _NavItem extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? AppTheme.primaryOrange.withValues(alpha: 0.15) : Colors.transparent,
+          color: isSelected ? selectedPink : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
         ),
         child: Column(
@@ -109,7 +117,7 @@ class _NavItem extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                color: isSelected ? AppTheme.primaryOrange : Colors.grey,
+                color: isSelected ? selectedLabel : unselectedLabel,
               ),
             ),
           ],
