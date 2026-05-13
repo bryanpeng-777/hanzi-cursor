@@ -88,22 +88,20 @@ class PinyinScreen extends ConsumerWidget {
                           const SizedBox(height: 20),
                           _buildHeroLearnCard(context),
                           const SizedBox(height: 12),
-                          IntrinsicHeight(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                Expanded(
-                                  child: _buildQuizHalfCard(context),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildQuizHalfCard(context),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _buildMistakeHalfCard(
+                                  context,
+                                  mistakeCount,
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _buildMistakeHalfCard(
-                                    context,
-                                    mistakeCount,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 20),
                           _buildTip(),
@@ -432,11 +430,11 @@ class _PictureBookCard extends StatelessWidget {
                 ),
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Container(
                     width: 6,
-                    margin: const EdgeInsets.symmetric(vertical: 10),
+                    height: iconSize + verticalPad * 2,
                     decoration: BoxDecoration(
                       color: accentColor,
                       borderRadius: const BorderRadius.horizontal(
@@ -444,6 +442,7 @@ class _PictureBookCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.fromLTRB(4, verticalPad, 12, verticalPad),

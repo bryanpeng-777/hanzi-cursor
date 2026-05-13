@@ -32,6 +32,6 @@ void main() {
     expect(find.text('拼音学习'), findsWidgets);
     expect(find.text('拼音测验'), findsOneWidget);
     expect(find.textContaining('声母'), findsWidgets);
-    expect(find.text('每天练习一点点，拼音更简单！'), findsOneWidget);
+    expect(find.text('每天进步一点点，拼音学习更轻松！'), findsOneWidget);
   });
 }
