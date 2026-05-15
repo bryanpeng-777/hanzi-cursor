@@ -48,5 +48,6 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/images/figma_pinyin_1_2/
     - assets/audio/
     - assets/default_configs.json

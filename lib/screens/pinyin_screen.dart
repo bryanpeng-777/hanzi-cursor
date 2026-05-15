@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
+import '../constants/pinyin_figma_assets.dart';
 import '../providers/learning_provider.dart';
 
 /// 拼音 Hub：绘本风衬底 +「一大两小」白卡入口 + 提示 + 底部轻装饰
@@ -11,7 +12,6 @@ class PinyinScreen extends ConsumerWidget {
   /// Figma / 设计稿主标题蓝（约 #28A2E9）
   static const Color _headerBlue = Color(0xFF28A2E9);
 
-  static const Color _creamBg = Color(0xFFFFFBF5);
   static const Color _titleInk = Color(0xFF284059);
   static const Color _subtitleMuted = Color(0xFF8D8C89);
   static const Color _cardShadowBlue = Color(0xFF2F9DE0);
@@ -50,13 +50,13 @@ class PinyinScreen extends ConsumerWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        const Positioned.fill(
-          child: DecoratedBox(
-            decoration: BoxDecoration(color: _creamBg),
+        Positioned.fill(
+          child: Image.asset(
+            PinyinFigmaAssetPaths.canvasBackdrop,
+            fit: BoxFit.cover,
+            alignment: Alignment.topCenter,
+            filterQuality: FilterQuality.high,
           ),
-        ),
-        const Positioned.fill(
-          child: CustomPaint(painter: _PinyinHubBackdropPainter()),
         ),
         SafeArea(
           child: CustomScrollView(
@@ -295,36 +295,6 @@ class _WatermarkLetter extends StatelessWidget {
       ),
     );
   }
-}
-
-/// 轻水彩晕染（不抢内容）
-class _PinyinHubBackdropPainter extends CustomPainter {
-  const _PinyinHubBackdropPainter();
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final rect = Offset.zero & size;
-    final paint = Paint()..blendMode = BlendMode.softLight;
-
-    void blob(Color c, Offset center, double radius) {
-      final g = RadialGradient(
-        colors: [
-          c.withValues(alpha: 0.22),
-          c.withValues(alpha: 0.0),
-        ],
-        stops: const [0.0, 1.0],
-      );
-      paint.shader = g.createShader(Rect.fromCircle(center: center, radius: radius));
-      canvas.drawCircle(center, radius, paint);
-    }
-
-    blob(const Color(0xFF3EC9A7), rect.topLeft + Offset(size.width * 0.08, size.height * 0.18), size.width * 0.42);
-    blob(const Color(0xFFFFB4A2), rect.topRight + Offset(-size.width * 0.02, size.height * 0.32), size.width * 0.38);
-    blob(const Color(0xFF7EC8FF), rect.bottomCenter + Offset(0, -size.height * 0.12), size.width * 0.5);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
 /// Figma 风：红底圆角泡 + 白字
