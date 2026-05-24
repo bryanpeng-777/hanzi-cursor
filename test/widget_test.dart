@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hanzi_app/main.dart';
 import 'package:hanzi_app/providers/auth_provider.dart';
+import 'package:hanzi_app/utils/app_orientation.dart';
 
 // 假 AuthNotifier：未登录状态（不触发真实 Supabase）
 class _FakeAuthNotifier extends AuthNotifier {
@@ -11,6 +12,11 @@ class _FakeAuthNotifier extends AuthNotifier {
 
 void main() {
   testWidgets('App smoke test — HanziApp 在 ProviderScope 内正常渲染', (tester) async {
+    tester.view.physicalSize = AppOrientation.designSize;
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [

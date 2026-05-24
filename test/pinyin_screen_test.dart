@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hanzi_app/screens/pinyin_screen.dart';
+import 'package:hanzi_app/utils/app_orientation.dart';
 
 void main() {
   testWidgets('拼音 Hub 展示标题与入口', (tester) async {
     await tester.pumpWidget(
       ProviderScope(
         child: ScreenUtilInit(
-          designSize: const Size(375, 812),
+          designSize: AppOrientation.designSize,
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) {
@@ -32,6 +33,6 @@ void main() {
     expect(find.text('拼音学习'), findsWidgets);
     expect(find.text('拼音测验'), findsOneWidget);
     expect(find.textContaining('声母'), findsWidgets);
-    expect(find.text('每天进步一点点，拼音学习更轻松！'), findsOneWidget);
+    expect(find.text('学好拼音，读好汉字！'), findsOneWidget);
   });
 }

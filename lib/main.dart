@@ -7,12 +7,11 @@ import 'package:go_router/go_router.dart';
 import 'package:cs_core/cs_core.dart';
 import 'package:cs_ui/cs_ui.dart';
 import 'router/app_router.dart' show appRouterProvider;
+import 'utils/app_orientation.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
+  await AppOrientation.lockLandscape();
   await CsClient.initialize(
     supabaseUrl: 'https://ljmkxoptnzimpompabsq.supabase.co',
     supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqbWt4b3B0bnppbXBvbXBhYnNxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2MzgxMzIsImV4cCI6MjA5MTIxNDEzMn0.CUbc6E49wyt-9WV2978T5kvMsW7CkqUwKn1o_1xBrZw',
@@ -30,7 +29,7 @@ class HanziApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final router = ref.watch(appRouterProvider);
     return ScreenUtilInit(
-      designSize: const Size(375, 812),
+      designSize: AppOrientation.designSize,
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) => CsApp.router(
@@ -120,8 +119,8 @@ class _SplashScreenState extends State<SplashScreen>
                     child: CsImage(
                     configKey: 'img_splash_logo',
                     description: 'App Logo',
-                    width: 64,
-                    height: 64,
+                    width: 48,
+                    height: 48,
                   ),
                   ),
                 ),

@@ -578,5 +578,49 @@
   "pinyin_tone_4": {
     "url": null,
     "asset": null
+  },
+  "figma_pinyin_canvas_backdrop": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_hero_mascot": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_hero_decoration": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_learn_btn": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_daily_plan_bg": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_daily_plan_icon": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_daily_plan_progress": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_quiz_card": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_mistake_card": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_adventure_card": {
+    "url": null,
+    "asset": null
+  },
+  "figma_pinyin_checkin_icon": {
+    "url": null,
+    "asset": null
   }
 }
