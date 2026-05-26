@@ -89,4 +89,27 @@ abstract final class HanziDesignSpec {
       pagePaddingH > 0 &&
       cardRadius > 0 &&
       hubTitleStyle.fontSize != null;
+
+  // ── 底部导航（T002）──────────────────────────────────
+  static const double navBarHeight = 56;
+  static const double navBarPaddingV = 8;
+  static const double navIconSelected = 28;
+  static const double navIconDefault = 24;
+  static const double navLabelSize = 12;
+
+  static const Color navSelectedBackground = Color(0x1F28A2E9);
+
+  static TextStyle get navLabelSelectedStyle => GoogleFonts.notoSansSc(
+        fontSize: navLabelSize,
+        fontWeight: FontWeight.w700,
+        color: headerBlue,
+        height: 1.1,
+      );
+
+  static TextStyle get navLabelStyle => GoogleFonts.notoSansSc(
+        fontSize: navLabelSize,
+        fontWeight: FontWeight.w500,
+        color: subtitleMuted,
+        height: 1.1,
+      );
 }

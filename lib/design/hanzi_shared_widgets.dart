@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cs_ui/cs_ui.dart';
 
 import 'hanzi_design_spec.dart';
 
@@ -135,6 +136,157 @@ class HanziAccentChip extends StatelessWidget {
             BorderRadius.circular(HanziDesignSpec.chipRadius.r),
       ),
       child: Text(label, style: HanziDesignSpec.chipLabelStyle),
+    );
+  }
+}
+
+class HanziBottomNavItem {
+  const HanziBottomNavItem({
+    required this.iconKey,
+    required this.iconDesc,
+    required this.label,
+  });
+
+  final String iconKey;
+  final String iconDesc;
+  final String label;
+}
+
+class HanziBottomNavBar extends StatelessWidget {
+  const HanziBottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
+    required this.items,
+  });
+
+  static const defaultItems = <HanziBottomNavItem>[
+    HanziBottomNavItem(
+      iconKey: 'img_nav_pinyin',
+      iconDesc: '拼音',
+      label: '拼音',
+    ),
+    HanziBottomNavItem(
+      iconKey: 'img_nav_learn',
+      iconDesc: '识字',
+      label: '识字',
+    ),
+    HanziBottomNavItem(
+      iconKey: 'img_nav_game',
+      iconDesc: '游戏',
+      label: '游戏',
+    ),
+    HanziBottomNavItem(
+      iconKey: 'img_nav_vocab',
+      iconDesc: '我的学习',
+      label: '我的学习',
+    ),
+  ];
+
+  final int currentIndex;
+  final ValueChanged<int> onTap;
+  final List<HanziBottomNavItem> items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: HanziDesignSpec.surfaceCard,
+        border: Border(
+          top: BorderSide(
+            color: HanziDesignSpec.subtitleMuted.withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.06),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: HanziDesignSpec.navBarPaddingV,
+          ),
+          child: Row(
+            children: [
+              for (var i = 0; i < items.length; i++)
+                Expanded(
+                  child: _HanziBottomNavTile(
+                    item: items[i],
+                    index: i,
+                    isSelected: i == currentIndex,
+                    onTap: onTap,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _HanziBottomNavTile extends StatelessWidget {
+  const _HanziBottomNavTile({
+    required this.item,
+    required this.index,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final HanziBottomNavItem item;
+  final int index;
+  final bool isSelected;
+  final ValueChanged<int> onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final iconSize = isSelected
+        ? HanziDesignSpec.navIconSelected
+        : HanziDesignSpec.navIconDefault;
+
+    return GestureDetector(
+      onTap: () => onTap(index),
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+        decoration: BoxDecoration(
+          color: isSelected
+              ? HanziDesignSpec.navSelectedBackground
+              : Colors.transparent,
+          borderRadius:
+              BorderRadius.circular(HanziDesignSpec.buttonRadius),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            CsImage(
+              configKey: item.iconKey,
+              description: item.iconDesc,
+              width: iconSize,
+              height: iconSize,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              item.label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: isSelected
+                  ? HanziDesignSpec.navLabelSelectedStyle
+                  : HanziDesignSpec.navLabelStyle,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
