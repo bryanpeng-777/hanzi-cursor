@@ -6,6 +6,7 @@ class DevRouter {
 
   static const t000PlaygroundRoute = '/dev/T000-landscape';
   static const t001PlaygroundRoute = '/dev/T001-design-system';
+  static const t002PlaygroundRoute = '/dev/T002-main-shell';
 
   /// 所有已注册的 Playground 入口（供文档与后续扩展）
   static Map<String, String> get playgroundEntries {
@@ -13,6 +14,7 @@ class DevRouter {
     return {
       t000PlaygroundRoute: 'lib/dev/T000_playground.dart',
       t001PlaygroundRoute: 'lib/dev/T001_playground.dart',
+      t002PlaygroundRoute: 'lib/dev/T002_playground.dart',
     };
   }
 }
