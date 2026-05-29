@@ -110,7 +110,7 @@ def _bootstrap_manifest_pages_with_missing_keys(
             st = (meta.get("status") or "").strip().lower()
             if st in {"remote", "url"}:
                 totals["remote"] += 1
-            elif st in {"local", "asset"}:
+            elif st in {"local", "asset", "provided"}:
                 totals["local"] += 1
             else:
                 totals["placeholder"] += 1
@@ -130,7 +130,7 @@ def _expected_url_asset(meta: Dict[str, Any]) -> Tuple[Any, Any]:
     if status in {"remote", "url"}:
         return image_url, None
 
-    if status in {"local", "asset"}:
+    if status in {"local", "asset", "provided"}:
         return None, asset_path
 
     # placeholder / skip / unknown → force empty (CsImage should show placeholder)

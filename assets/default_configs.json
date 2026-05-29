@@ -9,43 +9,43 @@
   "home_banner_url": "",
   "img_splash_logo": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/img_splash_logo.png"
   },
   "splash_bg_canvas_image": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_bg_canvas_image.png"
   },
   "splash_title_image": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_title_image.png"
   },
   "splash_decor_top_right_image": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_decor_top_right_image.png"
   },
   "splash_decor_top_left_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_decor_top_left_icon.png"
   },
   "splash_decor_bottom_left_image": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_decor_bottom_left_image.png"
   },
   "splash_decor_bottom_right_image": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_decor_bottom_right_image.png"
   },
   "splash_decor_dot_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_decor_dot_icon.png"
   },
   "splash_chip_left_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_chip_left_icon.png"
   },
   "splash_chip_right_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/figma_d2c/splash_chip_right_icon.png"
   },
   "img_nav_pinyin": {
     "url": null,
@@ -617,46 +617,46 @@
   },
   "figma_pinyin_canvas_backdrop": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/922183cb55fd5551ca277e9b6ec34a78.png"
   },
   "figma_pinyin_hero_mascot": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/936e9cdaa1526005b53278a42014df1c.png"
   },
   "figma_pinyin_hero_decoration": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/4c8420bebedfc19a727d568a424d5905.png"
   },
   "figma_pinyin_learn_btn": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/6da95bbb2a349c5b21c68a4b25852366.png"
   },
   "figma_pinyin_daily_plan_bg": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/4acf237e2dd399601474705c9e76c07c.png"
   },
   "figma_pinyin_daily_plan_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/18f248f2cd6cb7d34a64d23611f52d63.png"
   },
   "figma_pinyin_daily_plan_progress": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/f330eae5332d9d981164913f2ddb491c.png"
   },
   "figma_pinyin_quiz_card": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/4efe1d8b762f54f52ea44f54c2d08cf1.png"
   },
   "figma_pinyin_mistake_card": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/af532ae09d4d093e2f3e43c4e65d0a92.png"
   },
   "figma_pinyin_adventure_card": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/0f25bb3719353c3ad4f5b1b0066a630a.png"
   },
   "figma_pinyin_checkin_icon": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/figma_pinyin_1_2/4aeccaa100625f527df32962f2c55120.png"
   }
 }
