@@ -60,6 +60,9 @@ void main() {
 
       // 横屏主布局为 Row（左 logo 区 + 右文案区）
       expect(find.byType(Row), findsWidgets);
+
+      // 走完 Splash 2s 跳转 timer，避免 pending timer 断言失败
+      await tester.pump(const Duration(seconds: 3));
     });
   });
 }

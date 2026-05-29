@@ -9,7 +9,43 @@
   "home_banner_url": "",
   "img_splash_logo": {
     "url": null,
-    "asset": "assets/images/img_splash_logo.png"
+    "asset": null
+  },
+  "splash_bg_canvas_image": {
+    "url": null,
+    "asset": null
+  },
+  "splash_title_image": {
+    "url": null,
+    "asset": null
+  },
+  "splash_decor_top_right_image": {
+    "url": null,
+    "asset": null
+  },
+  "splash_decor_top_left_icon": {
+    "url": null,
+    "asset": null
+  },
+  "splash_decor_bottom_left_image": {
+    "url": null,
+    "asset": null
+  },
+  "splash_decor_bottom_right_image": {
+    "url": null,
+    "asset": null
+  },
+  "splash_decor_dot_icon": {
+    "url": null,
+    "asset": null
+  },
+  "splash_chip_left_icon": {
+    "url": null,
+    "asset": null
+  },
+  "splash_chip_right_icon": {
+    "url": null,
+    "asset": null
   },
   "img_nav_pinyin": {
     "url": null,
