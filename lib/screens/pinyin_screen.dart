@@ -1,24 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../constants/pinyin_figma_assets.dart';
+import '../design/hanzi_design_spec.dart';
 import '../providers/learning_provider.dart';
 
 /// 拼音 Hub：绘本风衬底 +「一大两小」白卡入口 + 提示 + 底部轻装饰
 class PinyinScreen extends ConsumerWidget {
   const PinyinScreen({super.key});
-
-  /// Figma / 设计稿主标题蓝（约 #28A2E9）
-  static const Color _headerBlue = Color(0xFF28A2E9);
-
-  static const Color _titleInk = Color(0xFF284059);
-  static const Color _subtitleMuted = Color(0xFF8D8C89);
-  static const Color _cardShadowBlue = Color(0xFF2F9DE0);
-
-  static const Color _accentLearn = Color(0xFF3EC9A7);
-  static const Color _accentQuiz = Color(0xFFFF7A5C);
-  static const Color _accentMistake = Color(0xFFFF6A88);
 
   static const List<Widget> _footerDecorDots = <Widget>[
     Padding(
@@ -48,6 +39,7 @@ class PinyinScreen extends ConsumerWidget {
     final mistakeCount =
         ref.watch(learningNotifierProvider).pinyinMistakes.length;
     return Stack(
+      key: const Key('hanzi-pinyin-hub-landscape'),
       clipBehavior: Clip.none,
       children: [
         Positioned.fill(
@@ -62,7 +54,12 @@ class PinyinScreen extends ConsumerWidget {
           child: CustomScrollView(
             slivers: [
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                padding: EdgeInsets.fromLTRB(
+                  HanziDesignSpec.pagePaddingH.w,
+                  HanziDesignSpec.pagePaddingV.h,
+                  HanziDesignSpec.pagePaddingH.w,
+                  0,
+                ),
                 sliver: SliverToBoxAdapter(
                   child: Stack(
                     clipBehavior: Clip.none,
@@ -85,16 +82,16 @@ class PinyinScreen extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           _buildHeader(context),
-                          const SizedBox(height: 20),
+                          SizedBox(height: HanziDesignSpec.sectionGap.h + 8),
                           _buildHeroLearnCard(context),
-                          const SizedBox(height: 12),
+                          SizedBox(height: HanziDesignSpec.cardGap.h + 2),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
                                 child: _buildQuizHalfCard(context),
                               ),
-                              const SizedBox(width: 12),
+                              SizedBox(width: HanziDesignSpec.cardGap.w + 2),
                               Expanded(
                                 child: _buildMistakeHalfCard(
                                   context,
@@ -103,9 +100,9 @@ class PinyinScreen extends ConsumerWidget {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 20),
+                          SizedBox(height: HanziDesignSpec.sectionGap.h + 8),
                           _buildTip(),
-                          const SizedBox(height: 14),
+                          SizedBox(height: 14.h),
                         ],
                       ),
                     ],
@@ -128,31 +125,26 @@ class PinyinScreen extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+          key: const Key('hanzi-pinyin-hub-header-chip'),
+          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
           decoration: BoxDecoration(
-            color: _headerBlue.withValues(alpha: 0.12),
+            color: HanziDesignSpec.headerBlue.withValues(alpha: 0.12),
             borderRadius: BorderRadius.circular(999),
           ),
           child: Text(
             '拼音学习',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  color: _headerBlue,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                  height: 1.15,
-                ),
+            style: HanziDesignSpec.hubTitleStyle.copyWith(
+              color: HanziDesignSpec.headerBlue,
+              fontSize: 26.sp,
+              height: 1.15,
+            ),
           ),
         ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.96, 0.96)),
-        const SizedBox(height: 10),
+        SizedBox(height: 10.h),
         Text(
           '学好拼音，读好汉字！',
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: _subtitleMuted,
-                fontSize: 16,
-                height: 1.35,
-                fontWeight: FontWeight.w500,
-              ),
+          style: HanziDesignSpec.hubSubtitleStyle.copyWith(fontSize: 16.sp),
         ).animate(delay: 120.ms).fadeIn(),
       ],
     );
@@ -160,7 +152,7 @@ class PinyinScreen extends ConsumerWidget {
 
   Widget _buildHeroLearnCard(BuildContext context) {
     return _PictureBookCard(
-      accentColor: _accentLearn,
+      accentColor: HanziDesignSpec.accentLearn,
       iconKey: 'img_card_pinyin_learn',
       iconDesc: '拼音学习',
       title: '拼音学习',
@@ -174,7 +166,7 @@ class PinyinScreen extends ConsumerWidget {
 
   Widget _buildQuizHalfCard(BuildContext context) {
     return _PictureBookCard(
-      accentColor: _accentQuiz,
+      accentColor: HanziDesignSpec.accentQuiz,
       iconKey: 'img_card_pinyin_quiz',
       iconDesc: '拼音测验',
       title: '拼音测验',
@@ -190,7 +182,8 @@ class PinyinScreen extends ConsumerWidget {
   Widget _buildMistakeHalfCard(BuildContext context, int mistakeCount) {
     final hasMistakes = mistakeCount > 0;
     return _PictureBookCard(
-      accentColor: hasMistakes ? _accentMistake : Colors.grey.shade500,
+      accentColor:
+          hasMistakes ? HanziDesignSpec.accentMistake : Colors.grey.shade500,
       iconKey: hasMistakes
           ? 'img_card_pinyin_mistakes_active'
           : 'img_card_pinyin_mistakes_empty',
@@ -212,10 +205,10 @@ class PinyinScreen extends ConsumerWidget {
 
   Widget _buildTip() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+      padding: EdgeInsets.all(HanziDesignSpec.cardPadding.w - 2),
       decoration: BoxDecoration(
-        color: const Color(0xFFFFF7E4),
-        borderRadius: BorderRadius.circular(20),
+        color: HanziDesignSpec.surfacePeach,
+        borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
         border: Border.all(
           color: const Color(0xFFFCF0D8),
           width: 2,
@@ -224,21 +217,19 @@ class PinyinScreen extends ConsumerWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const CsImage(
+          CsImage(
             configKey: 'img_icon_tip',
             description: '提示',
-            width: 28,
-            height: 28,
+            width: 28.w,
+            height: 28.w,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12.w),
           Expanded(
             child: Text(
               '小提示：先学习拼音知识，再进行测验巩固；发现错题及时重练，加深记忆效果更好哦！',
-              style: TextStyle(
+              style: HanziDesignSpec.cardBodyStyle.copyWith(
                 color: Colors.grey[800],
-                fontSize: 14,
                 height: 1.45,
-                fontWeight: FontWeight.w500,
               ),
             ),
           ),
@@ -383,7 +374,7 @@ class _PictureBookCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(22),
                 boxShadow: [
                   BoxShadow(
-                    color: PinyinScreen._cardShadowBlue.withValues(alpha: 0.12),
+                    color: HanziDesignSpec.cardShadowBlue.withValues(alpha: 0.12),
                     blurRadius: 22,
                     spreadRadius: 0,
                     offset: const Offset(0, 8),
@@ -415,7 +406,7 @@ class _PictureBookCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(4, verticalPad, 12, verticalPad),
+                      padding: EdgeInsets.fromLTRB(4.w, verticalPad, 12.w, verticalPad),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -437,7 +428,7 @@ class _PictureBookCard extends StatelessWidget {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: PinyinScreen._titleInk,
+                                    color: HanziDesignSpec.titleInk,
                                     fontSize: titleSize,
                                     fontWeight: FontWeight.w800,
                                     height: 1.15,
@@ -449,7 +440,7 @@ class _PictureBookCard extends StatelessWidget {
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: PinyinScreen._subtitleMuted,
+                                    color: HanziDesignSpec.subtitleMuted,
                                     fontSize: subtitleSize,
                                     height: 1.28,
                                     fontWeight: FontWeight.w500,
@@ -461,7 +452,7 @@ class _PictureBookCard extends StatelessWidget {
                           if (onTap != null)
                             Icon(
                               Icons.chevron_right_rounded,
-                              color: PinyinScreen._subtitleMuted
+                              color: HanziDesignSpec.subtitleMuted
                                   .withValues(alpha: 0.75),
                               size: compact ? 22 : 24,
                             ),
