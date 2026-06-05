@@ -7,6 +7,8 @@ import 'package:cs_ui/cs_ui.dart';
 import '../data/pinyin_data.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
+import '../utils/cs_asset_image.dart';
+import 'package:go_router/go_router.dart';
 
 class PinyinLearnScreen extends ConsumerStatefulWidget {
   const PinyinLearnScreen({super.key});
@@ -35,6 +37,7 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
   @override
   Widget build(BuildContext context) {
     return Stack(
+      key: const Key('hanzi-pinyin-learn-landscape'), // TDD marker
       children: [
         // 背景图片
         CsImage(
@@ -70,7 +73,7 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
                 child: IconButton(
                   icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 28),
                   onPressed: () {
-                    // TODO: implement back button logic
+                    context.pop();
                   },
                 ),
               ),
@@ -83,6 +86,7 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
                     fontSize: 73, // from figma.html
                     fontWeight: FontWeight.w600,
                     color: Color(0xFFE6F0F8), // from figma.html
+                    height: 88 / 73, // from figma.html
                   ),
                 ),
               ),
@@ -133,11 +137,12 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
                             Text(
                               '手动模式',
                               style: TextStyle(
-                                fontSize: 26, // from figma.html
+                                fontSize: !_isAutoMode ? 26 : 25, // from figma.html
                                 fontWeight: FontWeight.w500,
                                 color: !_isAutoMode // Manual mode is active
                                     ? const Color(0xFFD2F2EE) // Selected state text color
                                     : const Color(0xFF75889E), // Unselected state text color
+                                height: !_isAutoMode ? 31 / 26 : 30 / 25, // from figma.html
                               ),
                             ),
                           ],
@@ -182,11 +187,12 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
                             Text(
                               '自动模式',
                               style: TextStyle(
-                                fontSize: 25, // from figma.html
+                                fontSize: _isAutoMode ? 25 : 26, // from figma.html
                                 fontWeight: FontWeight.w500,
                                 color: _isAutoMode // Auto mode is active
                                     ? const Color(0xFF75889E) // Selected state text color
-                                    : const Color(0xFF75889E), // Unselected state text color (from Figma)
+                                    : const Color(0xFFD2F2EE), // Unselected state text color
+                                height: _isAutoMode ? 30 / 25 : 31 / 26, // from figma.html
                               ),
                             ),
                           ],
@@ -216,16 +222,25 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
                 indicatorSize: TabBarIndicatorSize.tab,
                 indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
                 tabs: const [
-                  Tab(text: '声母'),
-                  Tab(text: '韵母'),
-                  Tab(text: '四声'),
+                  Tab(
+                    key: Key('pinyin-tab-initials'), // TDD marker
+                    text: '声母',
+                  ),
+                  Tab(
+                    key: Key('pinyin-tab-finals'), // TDD marker
+                    text: '韵母',
+                  ),
+                  Tab(
+                    key: Key('pinyin-tab-tones'), // TDD marker
+                    text: '四声',
+                  ),
                 ],
               ),
             ),
           ),
         // TabBarView
         Positioned.fill(
-          top: 200, // Adjusted to be below the new TabBar and header
+          top: 315, // Adjusted to be below the new TabBar and header based on figma.html
           child: _isAutoMode
               ? _AutoModeView()
               : TabBarView(
@@ -251,11 +266,11 @@ class _InitialsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mistakes = ref.watch(learningNotifierProvider).pinyinMistakes;
     return GridView.builder(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            crossAxisSpacing: 12,
-            mainAxisSpacing: 12,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
             childAspectRatio: 1.0,
           ),
           itemCount: allInitials.length,
@@ -281,11 +296,11 @@ class _FinalsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 12,
-        mainAxisSpacing: 12,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
         childAspectRatio: 1.0,
       ),
       itemCount: allFinals.length,
@@ -350,7 +365,7 @@ class _TonesView extends StatelessWidget {
     tts.setLanguage('zh-CN');
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       itemCount: _toneData.length,
       itemBuilder: (context, i) {
         final data = _toneData[i];
@@ -358,15 +373,15 @@ class _TonesView extends StatelessWidget {
         return GestureDetector(
           onTap: () => tts.speak(data['example'] as String),
           child: Container(
-            margin: const EdgeInsets.only(bottom: 14),
+            margin: const EdgeInsets.only(bottom: 16), // from figma.html
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: color.withOpacity(0.3), width: 2),
+              color: const Color(0xFFFDFDFD), // from figma.html
+              borderRadius: BorderRadius.circular(16), // from figma.html
+              border: Border.all(color: const Color(0xFFB4E0DF), width: 1), // from figma.html
               boxShadow: [
                 BoxShadow(
-                  color: color.withOpacity(0.12),
+                  color: Colors.black.withOpacity(0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -375,19 +390,20 @@ class _TonesView extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 56,
-                  height: 56,
+                  width: 60, // Adjusted based on visual consistency
+                  height: 60, // Adjusted based on visual consistency
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(16),
+                    color: Colors.white, // Changed to white background for the mark container
+                    borderRadius: BorderRadius.circular(12), // Adjusted
+                    border: Border.all(color: const Color(0xFFB4E0DF), width: 1), // Added border for consistency
                   ),
                   child: Center(
                     child: Text(
                       data['mark'] as String,
                       style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: color,
+                        fontSize: 32, // Adjusted for larger size
+                        fontWeight: FontWeight.w700, // Adjusted
+                        color: color, // Keep dynamic color
                       ),
                     ),
                   ),
@@ -400,16 +416,19 @@ class _TonesView extends StatelessWidget {
                       Text(
                         data['tone'] as String,
                         style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 20, // from figma.html
+                          fontWeight: FontWeight.w700, // from figma.html
                           color: color,
+                          height: 28 / 20, // from figma.html
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         data['desc'] as String,
                         style: TextStyle(
-                            fontSize: 13, color: Colors.grey[600]),
+                            fontSize: 16, // from figma.html
+                            color: Color(0xFF788799), // from figma.html
+                            height: 24 / 16), // from figma.html
                       ),
                       const SizedBox(height: 6),
                       Row(
@@ -417,12 +436,16 @@ class _TonesView extends StatelessWidget {
                           CsImage(
                             configKey: data['iconKey'] as String,
                             description: data['iconDesc'] as String,
-                            width: 16, height: 16,
+                            width: 20, height: 20, // from figma.html
                           ),
                           const SizedBox(width: 6),
                           Text(
                             data['example'] as String,
-                            style: const TextStyle(fontSize: 16),
+                            style: const TextStyle(
+                                fontSize: 16, // from figma.html
+                                color: Color(0xFF5E83A0), // from figma.html
+                                height: 24 / 16 // from figma.html
+                            ),
                           ),
                         ],
                       ),
@@ -430,7 +453,8 @@ class _TonesView extends StatelessWidget {
                   ),
                 ),
                 const Icon(Icons.volume_up_rounded,
-                    color: Colors.grey, size: 22),
+                    color: Color(0xFFBED2DF), // from figma.html
+                    size: 24), // from figma.html
               ],
             ),
           ).animate(delay: (i * 100).ms).fadeIn().slideX(begin: 0.1),
@@ -482,13 +506,13 @@ class _PinyinCardState extends State<_PinyinCard> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: _expanded
-                  ? AppTheme.primaryOrange.withOpacity(0.08)
-                  : Colors.white,
+                  ? const Color(0xFFE8F4FA) // Expanded state background color from Figma's overall light theme
+                  : const Color(0xFFFDFDFD), // Default background color from Figma
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _expanded
-                    ? AppTheme.primaryOrange
-                    : Colors.grey.shade200,
+                    ? const Color(0xFFA2D7D1) // Expanded state border color based on Figma
+                    : const Color(0xFFB4E0DF), // Default border color from Figma
                 width: _expanded ? 2 : 1,
               ),
               boxShadow: [
@@ -527,9 +551,9 @@ class _PinyinCardState extends State<_PinyinCard> {
         Text(
           widget.item.symbol,
           style: const TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF333333),
+            fontSize: 40, // from figma.html
+            fontWeight: FontWeight.w700,
+            color: Color(0xFF18496E), // from figma.html
           ),
         ),
         const SizedBox(height: 4),
@@ -549,20 +573,24 @@ class _PinyinCardState extends State<_PinyinCard> {
               Text(
                 widget.item.symbol,
                 style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryOrange,
+                  fontSize: 36, // from figma.html
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF18496E), // from figma.html
                 ),
               ),
               const Spacer(),
-              CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 16, height: 16),
+              CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 20, height: 20),
             ],
           ),
           const SizedBox(height: 2),
           // 例字 + 拼音
           Text(
             '${widget.item.example}  ${widget.item.examplePinyin}',
-            style: const TextStyle(fontSize: 13, color: Color(0xFF555555)),
+            style: const TextStyle(
+                fontSize: 18, // from figma.html
+                color: Color(0xFF5E83A0), // from figma.html
+                height: 26 / 18 // from figma.html
+            ),
           ),
           const SizedBox(height: 4),
           // 四声行（韵母专用）
@@ -575,8 +603,8 @@ class _PinyinCardState extends State<_PinyinCard> {
                   .map((e) => Text(
                         e.value,
                         style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 14, // from figma.html
+                          fontWeight: FontWeight.w600, // from figma.html
                           color: AppTheme.levelColors[
                               e.key.clamp(0, AppTheme.levelColors.length - 1)],
                         ),
@@ -588,9 +616,10 @@ class _PinyinCardState extends State<_PinyinCard> {
           Text(
             '「${widget.item.mnemonic}」',
             style: TextStyle(
-              fontSize: 10,
+              fontSize: 16, // from figma.html
               fontStyle: FontStyle.italic,
-              color: Colors.grey[500],
+              color: Color(0xFF788799), // from figma.html
+              height: 24 / 16, // from figma.html
             ),
           ),
           const SizedBox(height: 4),
@@ -601,15 +630,22 @@ class _PinyinCardState extends State<_PinyinCard> {
             children: widget.item.exampleWords
                 .map((w) => Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                          horizontal: 8, vertical: 4), // from figma.html
                       decoration: BoxDecoration(
-                        color: AppTheme.primaryYellow.withOpacity(0.3),
-                        borderRadius: BorderRadius.circular(6),
+                        color: const Color(0xFFF9FBFD), // from figma.html
+                        borderRadius: BorderRadius.circular(8), // from figma.html
+                        border: Border.all(
+                          color: const Color(0xFFBED2DF), // from figma.html
+                          width: 1, // from figma.html
+                        ),
                       ),
                       child: Text(
                         w,
                         style: const TextStyle(
-                            fontSize: 10, color: Color(0xFF555555)),
+                            fontSize: 14, // from figma.html
+                            color: Color(0xFF5E83A0), // from figma.html
+                            height: 20 / 14 // from figma.html
+                        ),
                       ),
                     ))
                 .toList(),
