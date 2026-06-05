@@ -1,477 +1,603 @@
+import 'package:cs_ui/cs_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:cs_ui/cs_ui.dart';
+
 import '../constants/pinyin_figma_assets.dart';
+import '../constants/pinyin_hub_figma_layout.dart';
 import '../design/hanzi_design_spec.dart';
 import '../providers/learning_provider.dart';
 
-/// 拼音 Hub：绘本风衬底 +「一大两小」白卡入口 + 提示 + 底部轻装饰
+/// 拼音 Hub — Figma node `9-55`「拼音乐园」
+///
+/// 812×375 固定画布 + 单层 Stack 绝对定位（对齐 d2c `intermediate.tsx`）。
 class PinyinScreen extends ConsumerWidget {
   const PinyinScreen({super.key});
 
-  static const List<Widget> _footerDecorDots = <Widget>[
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Icon(Icons.circle, size: 5.5, color: Color(0x73FFD54F)),
-    ),
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Icon(Icons.circle, size: 5.5, color: Color(0x82FFD54F)),
-    ),
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Icon(Icons.circle, size: 5.5, color: Color(0x91FFD54F)),
-    ),
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Icon(Icons.circle, size: 5.5, color: Color(0xA0FFD54F)),
-    ),
-    Padding(
-      padding: EdgeInsets.symmetric(horizontal: 3),
-      child: Icon(Icons.circle, size: 5.5, color: Color(0xB0FFD54F)),
-    ),
-  ];
+  static const Color _titleInk = Color(0xFF202B34);
+  static const Color _subtitleMuted = Color(0xFF5F869D);
+  static const Color _accentLearn = Color(0xFF2EB28A);
+  static const Color _accentQuiz = Color(0xFFFB8A25);
+  static const Color _accentMistake = Color(0xFFFA748A);
+  static const Color _cardSubtitle = Color(0xFF939395);
+  static const Color _tipText = Color(0xFFF67F7C);
+  static const Color _tipBg = Color(0xFFFCEBE8);
+  static const Color _tipBorder = Color(0xFFEAEBF0);
+  static const Color _sloganColor = Color(0xFF478EDD);
+  static const Color _headerBlue = Color(0xFF2C91F1);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final mistakeCount =
         ref.watch(learningNotifierProvider).pinyinMistakes.length;
-    return Stack(
-      key: const Key('hanzi-pinyin-hub-landscape'),
-      clipBehavior: Clip.none,
-      children: [
-        Positioned.fill(
-          child: Image.asset(
-            PinyinFigmaAssetPaths.canvasBackdrop,
-            fit: BoxFit.cover,
-            alignment: Alignment.topCenter,
-            filterQuality: FilterQuality.high,
-          ),
-        ),
-        SafeArea(
-          child: CustomScrollView(
-            slivers: [
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(
-                  HanziDesignSpec.pagePaddingH.w,
-                  HanziDesignSpec.pagePaddingV.h,
-                  HanziDesignSpec.pagePaddingH.w,
-                  0,
-                ),
-                sliver: SliverToBoxAdapter(
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      const Positioned(
-                        left: -28,
-                        top: 96,
-                        child: IgnorePointer(
-                          child: _WatermarkLetter('a', Color(0x663EC9A7)),
-                        ),
-                      ),
-                      const Positioned(
-                        right: -16,
-                        top: 200,
-                        child: IgnorePointer(
-                          child: _WatermarkLetter('e', Color(0x66FF7A5C)),
-                        ),
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          _buildHeader(context),
-                          SizedBox(height: HanziDesignSpec.sectionGap.h + 8),
-                          _buildHeroLearnCard(context),
-                          SizedBox(height: HanziDesignSpec.cardGap.h + 2),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: _buildQuizHalfCard(context),
-                              ),
-                              SizedBox(width: HanziDesignSpec.cardGap.w + 2),
-                              Expanded(
-                                child: _buildMistakeHalfCard(
-                                  context,
-                                  mistakeCount,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: HanziDesignSpec.sectionGap.h + 8),
-                          _buildTip(),
-                          SizedBox(height: 14.h),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SliverFillRemaining(
-                hasScrollBody: false,
-                child: _buildBottomFiller(context),
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+    final points = ref.watch(learningNotifierProvider).totalStars;
 
-  Widget _buildHeader(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(
-          key: const Key('hanzi-pinyin-hub-header-chip'),
-          padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
-          decoration: BoxDecoration(
-            color: HanziDesignSpec.headerBlue.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(999),
-          ),
-          child: Text(
-            '拼音学习',
-            style: HanziDesignSpec.hubTitleStyle.copyWith(
-              color: HanziDesignSpec.headerBlue,
-              fontSize: 26.sp,
-              height: 1.15,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final scaledH = PinyinHubFigmaLayout.designH *
+            constraints.maxWidth /
+            PinyinHubFigmaLayout.designW;
+        final needsScroll = scaledH > constraints.maxHeight + 0.5;
+
+        final hub = SizedBox(
+          width: constraints.maxWidth,
+          height: scaledH,
+          child: FittedBox(
+            fit: BoxFit.fitWidth,
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: PinyinHubFigmaLayout.designW,
+              height: PinyinHubFigmaLayout.designH,
+              child: Stack(
+                key: const Key('hanzi-pinyin-hub-landscape'),
+                clipBehavior: Clip.hardEdge,
+                children: [
+            Positioned.fill(
+              child: Image.asset(
+                PinyinFigmaAssetPaths.canvasBackdrop,
+                fit: BoxFit.fill,
+                filterQuality: FilterQuality.high,
+              ),
+            ),
+            _watermark(
+              PinyinFigmaAssetPaths.watermarkA,
+              left: PinyinHubFigmaLayout.watermarkALeft,
+              top: PinyinHubFigmaLayout.watermarkATop,
+              width: PinyinHubFigmaLayout.watermarkAWidth,
+              height: PinyinHubFigmaLayout.watermarkAHeight,
+            ),
+            _watermark(
+              PinyinFigmaAssetPaths.watermarkE,
+              left: PinyinHubFigmaLayout.watermarkELeft,
+              top: PinyinHubFigmaLayout.watermarkETop,
+              width: PinyinHubFigmaLayout.watermarkEWidth,
+              height: PinyinHubFigmaLayout.watermarkEHeight,
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.decorDotLeft,
+              top: PinyinHubFigmaLayout.decorDotTop,
+              child: IgnorePointer(
+                child: _asset(
+                  PinyinFigmaAssetPaths.decorDot,
+                  PinyinHubFigmaLayout.decorDotSize,
+                  PinyinHubFigmaLayout.decorDotSize,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.headerPinyinLeft,
+              top: PinyinHubFigmaLayout.headerPinyinTop,
+              width: PinyinHubFigmaLayout.headerPinyinWidth,
+              height: PinyinHubFigmaLayout.headerPinyinHeight,
+              child: _headerPinyinChip(),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.headerBabyLeft,
+              top: PinyinHubFigmaLayout.headerBabyTop,
+              width: PinyinHubFigmaLayout.headerBabyWidth,
+              height: PinyinHubFigmaLayout.headerBabyHeight,
+              child: _headerBabyChip(points),
+            ),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: PinyinHubFigmaLayout.titleTop,
+              child: Text(
+                '拼音乐园',
+                key: const Key('hanzi-pinyin-hub-header-chip'),
+                textAlign: TextAlign.center,
+                style: HanziDesignSpec.hubTitleStyle.copyWith(
+                  color: _titleInk,
+                  fontSize: 28,
+                  fontWeight: FontWeight.w600,
+                  height: 34 / 28,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.subtitleLearnLeft,
+              top: PinyinHubFigmaLayout.subtitleTop,
+              child: const Text(
+                '快乐拼读',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: _subtitleMuted,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.subtitleOpenLeft,
+              top: PinyinHubFigmaLayout.subtitleTop,
+              child: const Text(
+                '自信开',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: _subtitleMuted,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.learnCardLeft,
+              top: PinyinHubFigmaLayout.learnCardTop,
+              width: PinyinHubFigmaLayout.learnCardWidth,
+              height: PinyinHubFigmaLayout.learnCardHeight,
+              child: _learnCard(context),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.quizCardLeft,
+              top: PinyinHubFigmaLayout.quizCardTop,
+              width: PinyinHubFigmaLayout.quizCardWidth,
+              height: PinyinHubFigmaLayout.quizCardHeight,
+              child: _quizCard(context),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.mistakeCardLeft,
+              top: PinyinHubFigmaLayout.mistakeCardTop,
+              width: PinyinHubFigmaLayout.mistakeCardWidth,
+              height: PinyinHubFigmaLayout.mistakeCardHeight,
+              child: _mistakeCard(context, mistakeCount),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.tipBarLeft,
+              top: PinyinHubFigmaLayout.tipBarTop,
+              width: PinyinHubFigmaLayout.tipBarWidth,
+              height: PinyinHubFigmaLayout.tipBarHeight,
+              child: _tipBar(),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.sloganLeft,
+              top: PinyinHubFigmaLayout.sloganTop,
+              child: _slogan(),
+            ),
+                ],
+              ),
             ),
           ),
-        ).animate().fadeIn(duration: 500.ms).scale(begin: const Offset(0.96, 0.96)),
-        SizedBox(height: 10.h),
-        Text(
-          '学好拼音，读好汉字！',
-          textAlign: TextAlign.center,
-          style: HanziDesignSpec.hubSubtitleStyle.copyWith(fontSize: 16.sp),
-        ).animate(delay: 120.ms).fadeIn(),
+        );
+
+        if (needsScroll) {
+          return SingleChildScrollView(
+            key: const Key('hanzi-pinyin-hub-scroll'),
+            physics: const ClampingScrollPhysics(),
+            child: hub,
+          );
+        }
+
+        return Align(
+          alignment: Alignment.topCenter,
+          child: hub,
+        );
+      },
+    );
+  }
+
+  static Widget _asset(
+    String path,
+    double width,
+    double height, {
+    BoxFit fit = BoxFit.contain,
+  }) {
+    return Image.asset(
+      path,
+      width: width,
+      height: height,
+      fit: fit,
+      filterQuality: FilterQuality.high,
+    );
+  }
+
+  static Widget _watermark(
+    String path, {
+    required double left,
+    required double top,
+    required double width,
+    required double height,
+  }) {
+    return Positioned(
+      left: left,
+      top: top,
+      child: IgnorePointer(
+        child: Opacity(
+          opacity: 0.35,
+          child: _asset(path, width, height),
+        ),
+      ),
+    );
+  }
+
+  Widget _headerPinyinChip() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: PinyinHubFigmaLayout.headerPinyinBgLeft,
+          top: PinyinHubFigmaLayout.headerPinyinBgTop,
+          child: _asset(
+            PinyinFigmaAssetPaths.headerPinyinBg,
+            PinyinHubFigmaLayout.headerPinyinBgWidth,
+            PinyinHubFigmaLayout.headerPinyinBgHeight,
+            fit: BoxFit.fill,
+          ),
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerPinyinIconLeft,
+          top: PinyinHubFigmaLayout.headerPinyinIconTop,
+          child: _asset(
+            PinyinFigmaAssetPaths.headerPinyinIcon,
+            PinyinHubFigmaLayout.headerPinyinIconWidth,
+            PinyinHubFigmaLayout.headerPinyinIconHeight,
+          ),
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerPinyinLabelLeft,
+          top: PinyinHubFigmaLayout.headerPinyinLabelTop,
+          child: const Text(
+            '拼音',
+            style: TextStyle(
+              color: _headerBlue,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildHeroLearnCard(BuildContext context) {
-    return _PictureBookCard(
-      accentColor: HanziDesignSpec.accentLearn,
-      iconKey: 'img_card_pinyin_learn',
-      iconDesc: '拼音学习',
-      title: '拼音学习',
-      subtitle: '认识声母·韵母·四声',
-      badgeLabel: null,
-      enabled: true,
-      delay: 0,
-      onTap: () => context.push('/pinyin-learn'),
-    );
-  }
-
-  Widget _buildQuizHalfCard(BuildContext context) {
-    return _PictureBookCard(
-      accentColor: HanziDesignSpec.accentQuiz,
-      iconKey: 'img_card_pinyin_quiz',
-      iconDesc: '拼音测验',
-      title: '拼音测验',
-      subtitle: '声母识别·10 题挑战',
-      badgeLabel: null,
-      enabled: true,
-      compact: true,
-      delay: 80,
-      onTap: () => context.push('/pinyin-exercise'),
-    );
-  }
-
-  Widget _buildMistakeHalfCard(BuildContext context, int mistakeCount) {
-    final hasMistakes = mistakeCount > 0;
-    return _PictureBookCard(
-      accentColor:
-          hasMistakes ? HanziDesignSpec.accentMistake : Colors.grey.shade500,
-      iconKey: hasMistakes
-          ? 'img_card_pinyin_mistakes_active'
-          : 'img_card_pinyin_mistakes_empty',
-      iconDesc: hasMistakes ? '有错题' : '无错题',
-      title: '错题重练',
-      subtitle: hasMistakes
-          ? '共 $mistakeCount 个声母需要复习'
-          : '太棒了！暂无错题',
-      badgeLabel: hasMistakes ? '$mistakeCount' : null,
-      enabled: hasMistakes,
-      compact: true,
-      delay: 160,
-      onTap: hasMistakes
-          ? () =>
-              context.push('/pinyin-exercise', extra: {'mistakeMode': true})
-          : null,
-    );
-  }
-
-  Widget _buildTip() {
-    return Container(
-      padding: EdgeInsets.all(HanziDesignSpec.cardPadding.w - 2),
-      decoration: BoxDecoration(
-        color: HanziDesignSpec.surfacePeach,
-        borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
-        border: Border.all(
-          color: const Color(0xFFFCF0D8),
-          width: 2,
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CsImage(
-            configKey: 'img_icon_tip',
-            description: '提示',
-            width: 28.w,
-            height: 28.w,
+  Widget _headerBabyChip(int points) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Positioned(
+          left: PinyinHubFigmaLayout.headerBabyBgLeft,
+          top: PinyinHubFigmaLayout.headerBabyBgTop,
+          child: _asset(
+            PinyinFigmaAssetPaths.headerBabyBg,
+            PinyinHubFigmaLayout.headerBabyBgWidth,
+            PinyinHubFigmaLayout.headerBabyBgHeight,
+            fit: BoxFit.fill,
           ),
-          SizedBox(width: 12.w),
-          Expanded(
-            child: Text(
-              '小提示：先学习拼音知识，再进行测验巩固；发现错题及时重练，加深记忆效果更好哦！',
-              style: HanziDesignSpec.cardBodyStyle.copyWith(
-                color: Colors.grey[800],
-                height: 1.45,
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerBabyAvatarLeft,
+          top: PinyinHubFigmaLayout.headerBabyAvatarTop,
+          child: _asset(
+            PinyinFigmaAssetPaths.headerBabyAvatar,
+            PinyinHubFigmaLayout.headerBabyAvatarWidth,
+            PinyinHubFigmaLayout.headerBabyAvatarHeight,
+          ),
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerBabyLabelLeft,
+          top: PinyinHubFigmaLayout.headerBabyLabelTop,
+          child: const Text(
+            '宝宝',
+            style: TextStyle(fontSize: 12, color: Color(0xFF7B7C7E)),
+          ),
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerBabyPointsLeft,
+          top: PinyinHubFigmaLayout.headerBabyPointsTop,
+          child: Text(
+            '$points',
+            style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF898A8D),
+            ),
+          ),
+        ),
+        Positioned(
+          left: PinyinHubFigmaLayout.headerBabyArrowLeft,
+          top: PinyinHubFigmaLayout.headerBabyArrowTop,
+          child: _asset(
+            PinyinFigmaAssetPaths.headerBabyArrow,
+            PinyinHubFigmaLayout.headerBabyArrowWidth,
+            PinyinHubFigmaLayout.headerBabyArrowHeight,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _learnCard(BuildContext context) {
+    return GestureDetector(
+      key: const Key('hanzi-pinyin-hub-learn'),
+      behavior: HitTestBehavior.opaque,
+      onTap: () => context.push('/pinyin-learn'),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: IgnorePointer(
+              child: _asset(
+                PinyinFigmaAssetPaths.cardLearnBg,
+                PinyinHubFigmaLayout.learnCardWidth,
+                PinyinHubFigmaLayout.learnCardHeight,
+                fit: BoxFit.contain,
+              ),
+            ),
+          ),
+          Positioned(
+            left: PinyinHubFigmaLayout.learnTitleLeft,
+            top: PinyinHubFigmaLayout.learnTitleTop,
+            child: const Text(
+              '开始学习',
+              style: TextStyle(
+                color: _accentLearn,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          Positioned(
+            left: PinyinHubFigmaLayout.learnSubtitleLeft,
+            top: PinyinHubFigmaLayout.learnSubtitleTop,
+            child: const Text(
+              '系统学拼音，打好基础',
+              style: TextStyle(
+                color: _cardSubtitle,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),
         ],
       ),
-    ).animate(delay: 320.ms).fadeIn();
+    );
   }
 
-  Widget _buildBottomFiller(BuildContext context) {
-    return const Align(
-      alignment: Alignment.bottomCenter,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 0, 20, 12),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: _footerDecorDots,
+  Widget _quizCard(BuildContext context) {
+    return GestureDetector(
+      key: const Key('hanzi-pinyin-hub-quiz'),
+      behavior: HitTestBehavior.opaque,
+      onTap: () => context.push('/pinyin-exercise'),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: const Color(0xFFFDFCFC),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: const Color(0xFFBDDDEE)),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+              left: PinyinHubFigmaLayout.quizTitleLeft,
+              top: PinyinHubFigmaLayout.quizTitleTop,
+              child: const Text(
+                '拼音测验',
+                style: TextStyle(
+                  color: _accentQuiz,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
-            SizedBox(height: 10),
-            Text(
-              '每天进步一点点，拼音学习更轻松！',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: Color(0xFF92918F),
-                height: 1.35,
+            Positioned(
+              left: PinyinHubFigmaLayout.quizSubtitleLeft,
+              top: PinyinHubFigmaLayout.quizSubtitleTop,
+              child: const Text(
+                '巩固拼音，检验掌握',
+                style: TextStyle(color: Color(0xFF969799), fontSize: 10),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.quizIllusLeft,
+              top: PinyinHubFigmaLayout.quizIllusTop,
+              child: IgnorePointer(
+                child: CsImage(
+                  configKey: 'img_card_pinyin_quiz',
+                  description: '拼音测验卡插画',
+                  width: PinyinHubFigmaLayout.quizIllusWidth,
+                  height: PinyinHubFigmaLayout.quizIllusHeight,
+                  fit: BoxFit.contain,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.quizArrowLeft,
+              top: PinyinHubFigmaLayout.quizArrowTop,
+              child: IgnorePointer(
+                child: _asset(
+                  PinyinFigmaAssetPaths.cardQuizArrow,
+                  PinyinHubFigmaLayout.quizArrowWidth,
+                  PinyinHubFigmaLayout.quizArrowHeight,
+                ),
               ),
             ),
           ],
         ),
       ),
-    ).animate(delay: 420.ms).fadeIn(duration: 400.ms);
+    );
   }
-}
 
-class _WatermarkLetter extends StatelessWidget {
-  final String letter;
-  final Color color;
+  Widget _mistakeCard(BuildContext context, int mistakeCount) {
+    final hasMistakes = mistakeCount > 0;
 
-  const _WatermarkLetter(this.letter, this.color);
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      letter,
-      style: TextStyle(
-        fontSize: 120,
-        fontWeight: FontWeight.w200,
-        color: color,
-        height: 1,
+    return GestureDetector(
+      key: const Key('hanzi-pinyin-hub-mistake'),
+      behavior: HitTestBehavior.opaque,
+      onTap: hasMistakes
+          ? () => context.push('/pinyin-exercise', extra: {'mistakeMode': true})
+          : null,
+      child: Opacity(
+        opacity: hasMistakes ? 1 : 0.58,
+        child: Stack(
+          children: [
+            if (hasMistakes)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: _asset(
+                    PinyinFigmaAssetPaths.cardMistakeBg,
+                    PinyinHubFigmaLayout.mistakeCardWidth,
+                    PinyinHubFigmaLayout.mistakeCardHeight,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              )
+            else
+              const ColoredBox(color: Color(0xFFF5F5F5)),
+            Positioned(
+              left: PinyinHubFigmaLayout.mistakeTitleLeft,
+              top: PinyinHubFigmaLayout.mistakeTitleTop,
+              child: Text(
+                '错题本',
+                style: TextStyle(
+                  color: hasMistakes ? _accentMistake : Colors.grey.shade500,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Positioned(
+              left: PinyinHubFigmaLayout.mistakeSubtitleLeft,
+              top: PinyinHubFigmaLayout.mistakeSubtitleTop,
+              child: const Text(
+                '错题回顾，查漏补缺',
+                style: TextStyle(color: Color(0xFF969698), fontSize: 10),
+              ),
+            ),
+            if (hasMistakes) ...[
+              Positioned(
+                left: PinyinHubFigmaLayout.mistakeIllusLeft,
+                top: PinyinHubFigmaLayout.mistakeIllusTop,
+                child: IgnorePointer(
+                  child: _asset(
+                    PinyinFigmaAssetPaths.cardMistakeIllus,
+                    PinyinHubFigmaLayout.mistakeIllusWidth,
+                    PinyinHubFigmaLayout.mistakeIllusHeight,
+                  ),
+                ),
+              ),
+              Positioned(
+                left: PinyinHubFigmaLayout.mistakeArrowLeft,
+                top: PinyinHubFigmaLayout.mistakeArrowTop,
+                child: IgnorePointer(
+                  child: _asset(
+                    PinyinFigmaAssetPaths.cardMistakeArrow,
+                    PinyinHubFigmaLayout.mistakeArrowWidth,
+                    PinyinHubFigmaLayout.mistakeArrowHeight,
+                  ),
+                ),
+              ),
+              if (mistakeCount > 0)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: _MistakeBadge('$mistakeCount'),
+                ),
+            ] else
+              Center(
+                child: CsImage(
+                  configKey: 'img_card_pinyin_mistakes_empty',
+                  description: '无错题',
+                  width: PinyinHubFigmaLayout.mistakesEmptyIconSize,
+                  height: PinyinHubFigmaLayout.mistakesEmptyIconSize,
+                ),
+              ),
+          ],
+        ),
       ),
+    );
+  }
+
+  Widget _tipBar() {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: _tipBg,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: _tipBorder),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          children: [
+            _asset(
+              PinyinFigmaAssetPaths.tipIcon,
+              PinyinHubFigmaLayout.tipIconWidth,
+              PinyinHubFigmaLayout.tipIconHeight,
+            ),
+            const SizedBox(width: 12),
+            const Expanded(
+              child: Text(
+                '每天坚持学习，拼音进步看得见!',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(color: _tipText, fontSize: 12, height: 15 / 12),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _slogan() {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _asset(
+          PinyinFigmaAssetPaths.sloganDecor,
+          PinyinHubFigmaLayout.sloganDecorWidth,
+          PinyinHubFigmaLayout.sloganDecorHeight,
+        ),
+        const SizedBox(width: 8),
+        const Text(
+          '拼得快乐，读得自信！',
+          style: TextStyle(
+            color: _sloganColor,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
     );
   }
 }
 
-/// Figma 风：红底圆角泡 + 白字
-class _PictureBookMistakeBadge extends StatelessWidget {
-  final String label;
+class _MistakeBadge extends StatelessWidget {
+  const _MistakeBadge(this.label);
 
-  const _PictureBookMistakeBadge({required this.label});
+  final String label;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
-      padding: const EdgeInsets.symmetric(horizontal: 2),
+      constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: const Color(0xFFFE4940),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0xFFFD5046), width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFFFE4940).withValues(alpha: 0.35),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Text(
         label,
-        textAlign: TextAlign.center,
         style: const TextStyle(
           color: Color(0xFFFFF3F1),
           fontWeight: FontWeight.w800,
-          fontSize: 18,
-          height: 1,
+          fontSize: 11,
         ),
       ),
     );
-  }
-}
-
-class _PictureBookCard extends StatelessWidget {
-  final Color accentColor;
-  final String iconKey;
-  final String iconDesc;
-  final String title;
-  final String subtitle;
-  final String? badgeLabel;
-  final bool enabled;
-  final bool compact;
-  final int delay;
-  final VoidCallback? onTap;
-
-  const _PictureBookCard({
-    required this.accentColor,
-    required this.iconKey,
-    required this.iconDesc,
-    required this.title,
-    required this.subtitle,
-    required this.badgeLabel,
-    required this.enabled,
-    this.compact = false,
-    required this.delay,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final titleSize = compact ? 17.0 : 20.0;
-    final subtitleSize = compact ? 12.5 : 13.0;
-    final iconSize = compact ? 44.0 : 52.0;
-    final verticalPad = compact ? 14.0 : 18.0;
-
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTap: onTap,
-      child: Opacity(
-        opacity: enabled ? 1.0 : 0.58,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              width: double.infinity,
-              constraints: BoxConstraints(minHeight: compact ? 128 : 116),
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFFCF8),
-                borderRadius: BorderRadius.circular(22),
-                boxShadow: [
-                  BoxShadow(
-                    color: HanziDesignSpec.cardShadowBlue.withValues(alpha: 0.12),
-                    blurRadius: 22,
-                    spreadRadius: 0,
-                    offset: const Offset(0, 8),
-                  ),
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.85),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 6,
-                    height: iconSize + verticalPad * 2,
-                    decoration: BoxDecoration(
-                      color: accentColor,
-                      borderRadius: const BorderRadius.horizontal(
-                        right: Radius.circular(6),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(4.w, verticalPad, 12.w, verticalPad),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CsImage(
-                            configKey: iconKey,
-                            description: iconDesc,
-                            width: iconSize,
-                            height: iconSize,
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  title,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: HanziDesignSpec.titleInk,
-                                    fontSize: titleSize,
-                                    fontWeight: FontWeight.w800,
-                                    height: 1.15,
-                                  ),
-                                ),
-                                SizedBox(height: compact ? 6 : 8),
-                                Text(
-                                  subtitle,
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: HanziDesignSpec.subtitleMuted,
-                                    fontSize: subtitleSize,
-                                    height: 1.28,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (onTap != null)
-                            Icon(
-                              Icons.chevron_right_rounded,
-                              color: HanziDesignSpec.subtitleMuted
-                                  .withValues(alpha: 0.75),
-                              size: compact ? 22 : 24,
-                            ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            if (badgeLabel != null)
-              Positioned(
-                top: -4,
-                right: 6,
-                child: _PictureBookMistakeBadge(label: badgeLabel!),
-              ),
-          ],
-        ),
-      ),
-    ).animate(delay: delay.ms).fadeIn().scale(begin: const Offset(0.96, 0.96));
   }
 }

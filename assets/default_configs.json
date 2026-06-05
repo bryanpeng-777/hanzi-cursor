@@ -65,15 +65,15 @@
   },
   "img_card_pinyin_learn": {
     "url": null,
-    "asset": "assets/images/img_card_pinyin_learn.png"
+    "asset": "assets/images/figma_pinyin_1_2/10f123dd231721d90b9eab51d4b9b64a.png"
   },
   "img_card_pinyin_quiz": {
     "url": null,
-    "asset": "assets/images/img_card_pinyin_quiz.png"
+    "asset": "assets/images/figma_pinyin_1_2/3426b6a5eb99c9c06d1b50c5bad50035.png"
   },
   "img_card_pinyin_mistakes_active": {
     "url": null,
-    "asset": "assets/images/img_card_pinyin_mistakes_active.png"
+    "asset": "assets/images/figma_pinyin_1_2/0ea4132d5631fec17ec59cf6de150138.png"
   },
   "img_card_pinyin_mistakes_empty": {
     "url": null,
@@ -658,5 +658,61 @@
   "figma_pinyin_checkin_icon": {
     "url": null,
     "asset": "assets/images/figma_pinyin_1_2/4aeccaa100625f527df32962f2c55120.png"
+  },
+  "pinyin_hub_canvas_backdrop_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/30a506d5b3d7b6823324bbc19c3dd7ff.png"
+  },
+  "img_card_pinyin_mistakes_illus": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/7f6e179a76917897b9c171a36234e395.png"
+  },
+  "pinyin_hub_tip_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/9819dd825f942200875bd15cb0e34694.png"
+  },
+  "pinyin_hub_watermark_a_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/e3d09f2bb28739793d7491a976a01ac5.png"
+  },
+  "pinyin_hub_watermark_e_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/60f8108da4a12340e00ad0a92f350db6.png"
+  },
+  "pinyin_hub_decor_dot_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/b8a714ff50a694fd4bbe8867a1ea3709.png"
+  },
+  "pinyin_hub_header_pinyin_chip_bg_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/6bd2747bec86659a50ed3df9ae7eb030.png"
+  },
+  "pinyin_hub_header_pinyin_icon_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/31ea81c61e05492caddcdfceb0a62716.png"
+  },
+  "pinyin_hub_header_baby_chip_bg_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/39ae97f33855f4b2bdcd82ab35f64398.png"
+  },
+  "pinyin_hub_header_baby_avatar_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/9354735af9faa1acff6782feaa7bebde.png"
+  },
+  "pinyin_hub_header_baby_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/25d57a9b0c496b1bb6a6a9ea6d8b25d9.png"
+  },
+  "pinyin_hub_quiz_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/43dbb09ef7e96adfca238ed9da115d79.png"
+  },
+  "pinyin_hub_mistake_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/bbaebe8f3f986fc85a92b130cf5fe811.png"
+  },
+  "pinyin_hub_slogan_decor_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/ca7cf75188a4ee3ad94f37cb1c63df1a.png"
   }
 }

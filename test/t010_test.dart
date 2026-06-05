@@ -1,4 +1,4 @@
-// TDD 合约：T010 - 拼音 Hub 横屏重设计
+// TDD 合约：T010 - 拼音 Hub 横屏重设计（Figma node 9-55）
 
 import 'package:cs_ui/cs_ui.dart';
 import 'package:flutter/material.dart';
@@ -6,11 +6,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hanzi_app/design/hanzi_design_spec.dart';
 import 'package:hanzi_app/models/learning_state.dart';
 import 'package:hanzi_app/providers/learning_provider.dart';
 import 'package:hanzi_app/screens/pinyin_screen.dart';
 import 'package:hanzi_app/utils/app_orientation.dart';
+
+late GoRouter _t010Router;
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ void main() {
     await tester.binding.setSurfaceSize(const Size(812, 375));
     addTearDown(() => tester.binding.setSurfaceSize(null));
 
-    final router = GoRouter(
+    _t010Router = GoRouter(
       initialLocation: '/',
       routes: [
         GoRoute(
@@ -68,7 +69,7 @@ void main() {
           builder: (context, child) => CsApp.router(
             title: 'T010',
             debugShowCheckedModeBanner: false,
-            routerConfig: router,
+            routerConfig: _t010Router,
           ),
         ),
       ),
@@ -83,38 +84,43 @@ void main() {
 
       expect(tester.takeException(), isNull);
       expect(find.byKey(const Key('hanzi-pinyin-hub-landscape')), findsOneWidget);
-      expect(find.text('学好拼音，读好汉字！'), findsOneWidget);
+      expect(find.text('拼音乐园'), findsOneWidget);
+      expect(find.text('快乐拼读'), findsOneWidget);
       expect(find.byType(Row), findsWidgets);
     });
 
     testWidgets('test_pinyin_hub_uses_design_spec_tokens', (tester) async {
       await pumpHub(tester);
 
-      final chip = tester.widget<Container>(
+      final title = tester.widget<Text>(
         find.byKey(const Key('hanzi-pinyin-hub-header-chip')),
       );
-      final decoration = chip.decoration! as BoxDecoration;
-      expect(
-        decoration.color,
-        HanziDesignSpec.headerBlue.withValues(alpha: 0.12),
-      );
+      expect(title.data, '拼音乐园');
+      expect(title.style?.color, const Color(0xFF202B34));
+      expect(title.style?.fontWeight, FontWeight.w600);
     });
 
     testWidgets('test_pinyin_hub_navigation', (tester) async {
       await pumpHub(tester);
 
-      await tester.tap(find.text('认识声母·韵母·四声'));
+      final learn = find.byKey(const Key('hanzi-pinyin-hub-learn'));
+      expect(learn, findsOneWidget);
+      await tester.ensureVisible(learn);
+      await tester.tap(learn);
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(_t010Router.state.uri.path, '/pinyin-learn');
       expect(find.text('T010_STUB_LEARN'), findsOneWidget);
 
       GoRouter.of(tester.element(find.text('T010_STUB_LEARN'))).go('/');
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 500));
 
-      await tester.tap(find.text('声母识别·10 题挑战'));
+      final quiz = find.byKey(const Key('hanzi-pinyin-hub-quiz'));
+      await tester.ensureVisible(quiz);
+      await tester.tap(quiz);
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 500));
       expect(find.text('T010_STUB_EXERCISE'), findsOneWidget);
     });
 
@@ -129,9 +135,11 @@ void main() {
         ],
       );
 
-      await tester.tap(find.textContaining('共 2 个声母'));
+      final mistake = find.byKey(const Key('hanzi-pinyin-hub-mistake'));
+      await tester.ensureVisible(mistake);
+      await tester.tap(mistake);
       await tester.pump();
-      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pump(const Duration(milliseconds: 500));
       expect(find.text('T010_STUB_EXERCISE_MISTAKE'), findsOneWidget);
     });
   });
