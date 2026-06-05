@@ -34,72 +34,210 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundPeach,
-      appBar: CsAppBar(
-        title: '拼音学习',
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(96),
-          child: Column(
+    return Stack(
+      children: [
+        // 背景图片
+        CsImage(
+          configKey: 'background_2ec5f780faf7ec52a5642285f649053e',
+          description: '全屏背景',
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+        ),
+        // 内容区域背景
+        Positioned(
+          left: 76,
+          top: 132,
+          child: CsImage(
+            configKey: 'background_49f603d8999b9bb221834e84b8f71696',
+            description: '内容区域背景',
+            width: 1273, // from figma.html
+            height: 817, // from figma.html
+            fit: BoxFit.fill,
+          ),
+        ),
+        // 顶部导航栏区域
+        Positioned(
+          left: 0,
+          top: 0,
+          right: 0,
+          height: 138, // from figma.html
+          child: Stack(
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-                child: SegmentedButton<bool>(
-                  segments: const [
-                    ButtonSegment(
-                        value: false,
-                        label: Text('手动模式'),
-                        icon: Icon(Icons.touch_app)),
-                    ButtonSegment(
-                        value: true,
-                        label: Text('自动模式'),
-                        icon: Icon(Icons.play_circle_outline)),
-                  ],
-                  selected: {_isAutoMode},
-                  onSelectionChanged: (s) =>
-                      setState(() => _isAutoMode = s.first),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return AppTheme.primaryOrange;
-                      }
-                      return Colors.white;
-                    }),
-                    foregroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return Colors.white;
-                      }
-                      return Colors.grey[700];
-                    }),
+              Positioned(
+                left: 20, // Adjusted for IconButton padding
+                top: 47, // Adjusted for visual alignment
+                child: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 28),
+                  onPressed: () {
+                    // TODO: implement back button logic
+                  },
+                ),
+              ),
+              Positioned(
+                left: 622, // from figma.html
+                top: 40, // from figma.html
+                child: const Text(
+                  '拼音学习',
+                  style: TextStyle(
+                    fontSize: 73, // from figma.html
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xFFE6F0F8), // from figma.html
                   ),
                 ),
               ),
-              if (!_isAutoMode)
-                TabBar(
-                  controller: _tabController,
-                  labelColor: AppTheme.primaryOrange,
-                  unselectedLabelColor: Colors.grey,
-                  indicatorColor: AppTheme.primaryOrange,
-                  tabs: const [
-                    Tab(text: '声母'),
-                    Tab(text: '韵母'),
-                    Tab(text: '四声'),
+              // 模式切换按钮组
+              Positioned(
+                left: 425, // start of manual button from figma.html
+                top: 27, // from figma.html
+                child: Row(
+                  children: [
+                    // 手动模式按钮
+                    GestureDetector(
+                      onTap: () => setState(() => _isAutoMode = false),
+                      child: Container(
+                        width: 268, // from figma.html
+                        height: 75, // from figma.html
+                        decoration: !_isAutoMode // Manual mode is active
+                            ? const BoxDecoration(
+                                image: DecorationImage(
+                                  image: CsAssetImage(configKey: 'background_b927aed5cb28a09cbb3a043e63bf60e8'), // Selected state background image
+                                  fit: BoxFit.fill,
+                                ),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
+                                  topRight: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                              )
+                            : BoxDecoration( // Manual mode is inactive
+                                color: const Color(0xFFE4E9EE), // Unselected state background color
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(30),
+                                  bottomLeft: Radius.circular(30),
+                                  topRight: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                              ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CsImage(
+                              configKey: 'icon_3399d0bd542056d96d0a7793d0d9923c', // Manual mode icon
+                              description: '手动模式图标',
+                              width: 37,
+                              height: 37,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '手动模式',
+                              style: TextStyle(
+                                fontSize: 26, // from figma.html
+                                fontWeight: FontWeight.w500,
+                                color: !_isAutoMode // Manual mode is active
+                                    ? const Color(0xFFD2F2EE) // Selected state text color
+                                    : const Color(0xFF75889E), // Unselected state text color
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // 自动模式按钮
+                    GestureDetector(
+                      onTap: () => setState(() => _isAutoMode = true),
+                      child: Container(
+                        width: 267, // from figma.html
+                        height: 75, // from figma.html
+                        decoration: _isAutoMode // Auto mode is active
+                            ? BoxDecoration(
+                                color: const Color(0xFFE4E9EE), // Selected state background
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  topRight: Radius.circular(30),
+                                  bottomRight: Radius.circular(28), // from Figma
+                                ),
+                              )
+                            : BoxDecoration( // Auto mode is inactive
+                                color: const Color(0xFFE4E9EE), // Unselected state background (solid color from Figma)
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(0),
+                                  bottomLeft: Radius.circular(0),
+                                  topRight: Radius.circular(30),
+                                  bottomRight: Radius.circular(28), // from Figma
+                                ),
+                              ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CsImage(
+                              configKey: 'icon_b7f7409d0c2317fec43f0c8e1d719ef1', // Auto mode icon
+                              description: '自动模式图标',
+                              width: 45,
+                              height: 40,
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '自动模式',
+                              style: TextStyle(
+                                fontSize: 25, // from figma.html
+                                fontWeight: FontWeight.w500,
+                                color: _isAutoMode // Auto mode is active
+                                    ? const Color(0xFF75889E) // Selected state text color
+                                    : const Color(0xFF75889E), // Unselected state text color (from Figma)
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
+              ),
             ],
           ),
         ),
-      ),
-      body: _isAutoMode
-          ? _AutoModeView()
-          : TabBarView(
-              controller: _tabController,
-              children: const [
-                _InitialsGrid(),
-                _FinalsGrid(),
-                _TonesView(),
-              ],
+        // TabBar (vertical or horizontal, depending on Figma interpretation)
+        if (!_isAutoMode)
+          Positioned(
+            left: 82, // from Figma.html
+            top: 116, // from Figma.html
+            child: Container(
+              width: 1358, // from Figma.html
+              height: 67, // from Figma.html
+              // color: Colors.purple.withOpacity(0.3), // for debug
+              child: TabBar(
+                controller: _tabController,
+                labelColor: const Color(0xFF42BAAC), // from figma.html (声母)
+                unselectedLabelColor: const Color(0xFF406485), // from figma.html (韵母, 四声)
+                indicatorColor: const Color(0xFF42BAAC), // from figma.html (声母)
+                indicatorSize: TabBarIndicatorSize.tab,
+                indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
+                tabs: const [
+                  Tab(text: '声母'),
+                  Tab(text: '韵母'),
+                  Tab(text: '四声'),
+                ],
+              ),
             ),
+          ),
+        // TabBarView
+        Positioned.fill(
+          top: 200, // Adjusted to be below the new TabBar and header
+          child: _isAutoMode
+              ? _AutoModeView()
+              : TabBarView(
+                  controller: _tabController,
+                  children: const [
+                    _InitialsGrid(),
+                    _FinalsGrid(),
+                    _TonesView(),
+                  ],
+                ),
+        ),
+      ],
     );
   }
 }
