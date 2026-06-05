@@ -7,8 +7,6 @@ import 'package:cs_ui/cs_ui.dart';
 import '../data/pinyin_data.dart';
 import '../providers/learning_provider.dart';
 import '../utils/app_theme.dart';
-import '../utils/cs_asset_image.dart';
-import 'package:go_router/go_router.dart';
 
 class PinyinLearnScreen extends ConsumerStatefulWidget {
   const PinyinLearnScreen({super.key});
@@ -36,223 +34,72 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      key: const Key('hanzi-pinyin-learn-landscape'), // TDD marker
-      children: [
-        // 背景图片
-        CsImage(
-          configKey: 'background_2ec5f780faf7ec52a5642285f649053e',
-          description: '全屏背景',
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-        ),
-        // 内容区域背景
-        Positioned(
-          left: 76,
-          top: 132,
-          child: CsImage(
-            configKey: 'background_49f603d8999b9bb221834e84b8f71696',
-            description: '内容区域背景',
-            width: 1273, // from figma.html
-            height: 817, // from figma.html
-            fit: BoxFit.fill,
-          ),
-        ),
-        // 顶部导航栏区域
-        Positioned(
-          left: 0,
-          top: 0,
-          right: 0,
-          height: 138, // from figma.html
-          child: Stack(
+    return Scaffold(
+      backgroundColor: AppTheme.backgroundPeach,
+      appBar: CsAppBar(
+        title: '拼音学习',
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(96),
+          child: Column(
             children: [
-              Positioned(
-                left: 20, // Adjusted for IconButton padding
-                top: 47, // Adjusted for visual alignment
-                child: IconButton(
-                  icon: const Icon(Icons.arrow_back_ios, color: Colors.white, size: 28),
-                  onPressed: () {
-                    context.pop();
-                  },
-                ),
-              ),
-              Positioned(
-                left: 622, // from figma.html
-                top: 40, // from figma.html
-                child: const Text(
-                  '拼音学习',
-                  style: TextStyle(
-                    fontSize: 73, // from figma.html
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFFE6F0F8), // from figma.html
-                    height: 88 / 73, // from figma.html
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                child: SegmentedButton<bool>(
+                  segments: const [
+                    ButtonSegment(
+                        value: false,
+                        label: Text('手动模式'),
+                        icon: Icon(Icons.touch_app)),
+                    ButtonSegment(
+                        value: true,
+                        label: Text('自动模式'),
+                        icon: Icon(Icons.play_circle_outline)),
+                  ],
+                  selected: {_isAutoMode},
+                  onSelectionChanged: (s) =>
+                      setState(() => _isAutoMode = s.first),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return AppTheme.primaryOrange;
+                      }
+                      return Colors.white;
+                    }),
+                    foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
+                        return Colors.white;
+                      }
+                      return Colors.grey[700];
+                    }),
                   ),
                 ),
               ),
-              // 模式切换按钮组
-              Positioned(
-                left: 425, // start of manual button from figma.html
-                top: 27, // from figma.html
-                child: Row(
-                  children: [
-                    // 手动模式按钮
-                    GestureDetector(
-                      onTap: () => setState(() => _isAutoMode = false),
-                      child: Container(
-                        width: 268, // from figma.html
-                        height: 75, // from figma.html
-                        decoration: !_isAutoMode // Manual mode is active
-                            ? const BoxDecoration(
-                                image: DecorationImage(
-                                  image: CsAssetImage(configKey: 'background_b927aed5cb28a09cbb3a043e63bf60e8'), // Selected state background image
-                                  fit: BoxFit.fill,
-                                ),
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30),
-                                  topRight: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
-                                ),
-                              )
-                            : BoxDecoration( // Manual mode is inactive
-                                color: const Color(0xFFE4E9EE), // Unselected state background color
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(30),
-                                  bottomLeft: Radius.circular(30),
-                                  topRight: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
-                                ),
-                              ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CsImage(
-                              configKey: 'icon_3399d0bd542056d96d0a7793d0d9923c', // Manual mode icon
-                              description: '手动模式图标',
-                              width: 37,
-                              height: 37,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '手动模式',
-                              style: TextStyle(
-                                fontSize: !_isAutoMode ? 26 : 25, // from figma.html
-                                fontWeight: FontWeight.w500,
-                                color: !_isAutoMode // Manual mode is active
-                                    ? const Color(0xFFD2F2EE) // Selected state text color
-                                    : const Color(0xFF75889E), // Unselected state text color
-                                height: !_isAutoMode ? 31 / 26 : 30 / 25, // from figma.html
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    // 自动模式按钮
-                    GestureDetector(
-                      onTap: () => setState(() => _isAutoMode = true),
-                      child: Container(
-                        width: 267, // from figma.html
-                        height: 75, // from figma.html
-                        decoration: _isAutoMode // Auto mode is active
-                            ? BoxDecoration(
-                                color: const Color(0xFFE4E9EE), // Selected state background
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(28), // from Figma
-                                ),
-                              )
-                            : BoxDecoration( // Auto mode is inactive
-                                color: const Color(0xFFE4E9EE), // Unselected state background (solid color from Figma)
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(0),
-                                  bottomLeft: Radius.circular(0),
-                                  topRight: Radius.circular(30),
-                                  bottomRight: Radius.circular(28), // from Figma
-                                ),
-                              ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CsImage(
-                              configKey: 'icon_b7f7409d0c2317fec43f0c8e1d719ef1', // Auto mode icon
-                              description: '自动模式图标',
-                              width: 45,
-                              height: 40,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              '自动模式',
-                              style: TextStyle(
-                                fontSize: _isAutoMode ? 25 : 26, // from figma.html
-                                fontWeight: FontWeight.w500,
-                                color: _isAutoMode // Auto mode is active
-                                    ? const Color(0xFF75889E) // Selected state text color
-                                    : const Color(0xFFD2F2EE), // Unselected state text color
-                                height: _isAutoMode ? 30 / 25 : 31 / 26, // from figma.html
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+              if (!_isAutoMode)
+                TabBar(
+                  controller: _tabController,
+                  labelColor: AppTheme.primaryOrange,
+                  unselectedLabelColor: Colors.grey,
+                  indicatorColor: AppTheme.primaryOrange,
+                  tabs: const [
+                    Tab(text: '声母'),
+                    Tab(text: '韵母'),
+                    Tab(text: '四声'),
                   ],
                 ),
-              ),
             ],
           ),
         ),
-        // TabBar (vertical or horizontal, depending on Figma interpretation)
-        if (!_isAutoMode)
-          Positioned(
-            left: 82, // from Figma.html
-            top: 116, // from Figma.html
-            child: Container(
-              width: 1358, // from Figma.html
-              height: 67, // from Figma.html
-              // color: Colors.purple.withOpacity(0.3), // for debug
-              child: TabBar(
-                controller: _tabController,
-                labelColor: const Color(0xFF42BAAC), // from figma.html (声母)
-                unselectedLabelColor: const Color(0xFF406485), // from figma.html (韵母, 四声)
-                indicatorColor: const Color(0xFF42BAAC), // from figma.html (声母)
-                indicatorSize: TabBarIndicatorSize.tab,
-                indicatorPadding: const EdgeInsets.symmetric(horizontal: 20),
-                tabs: const [
-                  Tab(
-                    key: Key('pinyin-tab-initials'), // TDD marker
-                    text: '声母',
-                  ),
-                  Tab(
-                    key: Key('pinyin-tab-finals'), // TDD marker
-                    text: '韵母',
-                  ),
-                  Tab(
-                    key: Key('pinyin-tab-tones'), // TDD marker
-                    text: '四声',
-                  ),
-                ],
-              ),
+      ),
+      body: _isAutoMode
+          ? _AutoModeView()
+          : TabBarView(
+              controller: _tabController,
+              children: const [
+                _InitialsGrid(),
+                _FinalsGrid(),
+                _TonesView(),
+              ],
             ),
-          ),
-        // TabBarView
-        Positioned.fill(
-          top: 315, // Adjusted to be below the new TabBar and header based on figma.html
-          child: _isAutoMode
-              ? _AutoModeView()
-              : TabBarView(
-                  controller: _tabController,
-                  children: const [
-                    _InitialsGrid(),
-                    _FinalsGrid(),
-                    _TonesView(),
-                  ],
-                ),
-        ),
-      ],
     );
   }
 }
@@ -266,11 +113,11 @@ class _InitialsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final mistakes = ref.watch(learningNotifierProvider).pinyinMistakes;
     return GridView.builder(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+          padding: const EdgeInsets.all(16),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
             childAspectRatio: 1.0,
           ),
           itemCount: allInitials.length,
@@ -296,11 +143,11 @@ class _FinalsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
         childAspectRatio: 1.0,
       ),
       itemCount: allFinals.length,
@@ -365,7 +212,7 @@ class _TonesView extends StatelessWidget {
     tts.setLanguage('zh-CN');
 
     return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: const EdgeInsets.all(16),
       itemCount: _toneData.length,
       itemBuilder: (context, i) {
         final data = _toneData[i];
@@ -373,15 +220,15 @@ class _TonesView extends StatelessWidget {
         return GestureDetector(
           onTap: () => tts.speak(data['example'] as String),
           child: Container(
-            margin: const EdgeInsets.only(bottom: 16), // from figma.html
+            margin: const EdgeInsets.only(bottom: 14),
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: const Color(0xFFFDFDFD), // from figma.html
-              borderRadius: BorderRadius.circular(16), // from figma.html
-              border: Border.all(color: const Color(0xFFB4E0DF), width: 1), // from figma.html
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: color.withOpacity(0.3), width: 2),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: color.withOpacity(0.12),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -390,20 +237,19 @@ class _TonesView extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 60, // Adjusted based on visual consistency
-                  height: 60, // Adjusted based on visual consistency
+                  width: 56,
+                  height: 56,
                   decoration: BoxDecoration(
-                    color: Colors.white, // Changed to white background for the mark container
-                    borderRadius: BorderRadius.circular(12), // Adjusted
-                    border: Border.all(color: const Color(0xFFB4E0DF), width: 1), // Added border for consistency
+                    color: color.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
                   child: Center(
                     child: Text(
                       data['mark'] as String,
                       style: TextStyle(
-                        fontSize: 32, // Adjusted for larger size
-                        fontWeight: FontWeight.w700, // Adjusted
-                        color: color, // Keep dynamic color
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: color,
                       ),
                     ),
                   ),
@@ -416,19 +262,16 @@ class _TonesView extends StatelessWidget {
                       Text(
                         data['tone'] as String,
                         style: TextStyle(
-                          fontSize: 20, // from figma.html
-                          fontWeight: FontWeight.w700, // from figma.html
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
                           color: color,
-                          height: 28 / 20, // from figma.html
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         data['desc'] as String,
                         style: TextStyle(
-                            fontSize: 16, // from figma.html
-                            color: Color(0xFF788799), // from figma.html
-                            height: 24 / 16), // from figma.html
+                            fontSize: 13, color: Colors.grey[600]),
                       ),
                       const SizedBox(height: 6),
                       Row(
@@ -436,16 +279,12 @@ class _TonesView extends StatelessWidget {
                           CsImage(
                             configKey: data['iconKey'] as String,
                             description: data['iconDesc'] as String,
-                            width: 20, height: 20, // from figma.html
+                            width: 16, height: 16,
                           ),
                           const SizedBox(width: 6),
                           Text(
                             data['example'] as String,
-                            style: const TextStyle(
-                                fontSize: 16, // from figma.html
-                                color: Color(0xFF5E83A0), // from figma.html
-                                height: 24 / 16 // from figma.html
-                            ),
+                            style: const TextStyle(fontSize: 16),
                           ),
                         ],
                       ),
@@ -453,8 +292,7 @@ class _TonesView extends StatelessWidget {
                   ),
                 ),
                 const Icon(Icons.volume_up_rounded,
-                    color: Color(0xFFBED2DF), // from figma.html
-                    size: 24), // from figma.html
+                    color: Colors.grey, size: 22),
               ],
             ),
           ).animate(delay: (i * 100).ms).fadeIn().slideX(begin: 0.1),
@@ -506,13 +344,13 @@ class _PinyinCardState extends State<_PinyinCard> {
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               color: _expanded
-                  ? const Color(0xFFE8F4FA) // Expanded state background color from Figma's overall light theme
-                  : const Color(0xFFFDFDFD), // Default background color from Figma
+                  ? AppTheme.primaryOrange.withOpacity(0.08)
+                  : Colors.white,
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _expanded
-                    ? const Color(0xFFA2D7D1) // Expanded state border color based on Figma
-                    : const Color(0xFFB4E0DF), // Default border color from Figma
+                    ? AppTheme.primaryOrange
+                    : Colors.grey.shade200,
                 width: _expanded ? 2 : 1,
               ),
               boxShadow: [
@@ -551,9 +389,9 @@ class _PinyinCardState extends State<_PinyinCard> {
         Text(
           widget.item.symbol,
           style: const TextStyle(
-            fontSize: 40, // from figma.html
-            fontWeight: FontWeight.w700,
-            color: Color(0xFF18496E), // from figma.html
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF333333),
           ),
         ),
         const SizedBox(height: 4),
@@ -573,24 +411,20 @@ class _PinyinCardState extends State<_PinyinCard> {
               Text(
                 widget.item.symbol,
                 style: const TextStyle(
-                  fontSize: 36, // from figma.html
-                  fontWeight: FontWeight.w700,
-                  color: Color(0xFF18496E), // from figma.html
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.primaryOrange,
                 ),
               ),
               const Spacer(),
-              CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 20, height: 20),
+              CsImage(configKey: 'pinyin_icon_${widget.item.symbol}', description: widget.item.iconHint, width: 16, height: 16),
             ],
           ),
           const SizedBox(height: 2),
           // 例字 + 拼音
           Text(
             '${widget.item.example}  ${widget.item.examplePinyin}',
-            style: const TextStyle(
-                fontSize: 18, // from figma.html
-                color: Color(0xFF5E83A0), // from figma.html
-                height: 26 / 18 // from figma.html
-            ),
+            style: const TextStyle(fontSize: 13, color: Color(0xFF555555)),
           ),
           const SizedBox(height: 4),
           // 四声行（韵母专用）
@@ -603,8 +437,8 @@ class _PinyinCardState extends State<_PinyinCard> {
                   .map((e) => Text(
                         e.value,
                         style: TextStyle(
-                          fontSize: 14, // from figma.html
-                          fontWeight: FontWeight.w600, // from figma.html
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
                           color: AppTheme.levelColors[
                               e.key.clamp(0, AppTheme.levelColors.length - 1)],
                         ),
@@ -616,10 +450,9 @@ class _PinyinCardState extends State<_PinyinCard> {
           Text(
             '「${widget.item.mnemonic}」',
             style: TextStyle(
-              fontSize: 16, // from figma.html
+              fontSize: 10,
               fontStyle: FontStyle.italic,
-              color: Color(0xFF788799), // from figma.html
-              height: 24 / 16, // from figma.html
+              color: Colors.grey[500],
             ),
           ),
           const SizedBox(height: 4),
@@ -630,22 +463,15 @@ class _PinyinCardState extends State<_PinyinCard> {
             children: widget.item.exampleWords
                 .map((w) => Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4), // from figma.html
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFF9FBFD), // from figma.html
-                        borderRadius: BorderRadius.circular(8), // from figma.html
-                        border: Border.all(
-                          color: const Color(0xFFBED2DF), // from figma.html
-                          width: 1, // from figma.html
-                        ),
+                        color: AppTheme.primaryYellow.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         w,
                         style: const TextStyle(
-                            fontSize: 14, // from figma.html
-                            color: Color(0xFF5E83A0), // from figma.html
-                            height: 20 / 14 // from figma.html
-                        ),
+                            fontSize: 10, color: Color(0xFF555555)),
                       ),
                     ))
                 .toList(),
