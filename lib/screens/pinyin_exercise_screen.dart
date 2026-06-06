@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
@@ -11,25 +10,44 @@ import '../providers/learning_provider.dart';
 import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
 
+// ─── Color palette from Figma design ───────────────────────────────────────
+const _skyBlue = Color(0xFF73C8F0);
+const _cardBg = Color(0xFFF8F9FB);
+const _cardBorder = Color(0xFFA9D4F0);
+const _timerBg = Color(0xFFF3F6FA);
+const _orangeAccent = Color(0xFFF8754A);
+const _feedbackBg = Color(0xFFF2F6FB);
+const _feedbackBorder = Color(0xFFB1D3E7);
+
+// Card accent colors per option position (orange / teal / blue / pink)
+const _optionColors = [
+  Color(0xFFFC6E4E),
+  Color(0xFF63C4AF),
+  Color(0xFF5FA1EA),
+  Color(0xFFFB8082),
+];
+
+// ─── Quick lookup: initial symbol → PinyinItem ─────────────────────────────
+final _initialBySymbol = <String, PinyinItem>{
+  for (final p in allInitials) p.symbol: p,
+};
+
 class PinyinExerciseScreen extends ConsumerStatefulWidget {
   final bool mistakeMode;
 
   const PinyinExerciseScreen({super.key, this.mistakeMode = false});
 
   @override
-  ConsumerState<PinyinExerciseScreen> createState() => _PinyinExerciseScreenState();
+  ConsumerState<PinyinExerciseScreen> createState() =>
+      _PinyinExerciseScreenState();
 }
 
 class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     with SingleTickerProviderStateMixin {
   final _random = Random();
-
   late AnimationController _timerController;
 
-  // 可用于出题的汉字（有声母的）
   late List<HanziCharacter> _candidateChars;
-
-  // 当前题目
   HanziCharacter? _currentHanzi;
   String _correctInitial = '';
   List<String> _options = [];
@@ -43,14 +61,10 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   int _totalQuestions = 10;
   int _score = 0;
 
-  // 记录每题作答耗时（秒）
   final List<double> _responseTimes = [];
   double _questionStartTime = 0;
-
-  // 本局新增 / 消灭的错题数
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
-
   double _timeLimit = 6.0;
 
   @override
@@ -88,7 +102,6 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     } else {
       _candidateChars =
           allHanzi.where((h) => extractInitial(h.pinyin) != null).toList();
-      // _totalQuestions 由后台配置决定，默认值 10 已在字段声明处设置
     }
   }
 
@@ -98,11 +111,11 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
       return;
     }
 
-    final shuffled = List<HanziCharacter>.from(_candidateChars)..shuffle(_random);
+    final shuffled = List<HanziCharacter>.from(_candidateChars)
+      ..shuffle(_random);
     _currentHanzi = shuffled.first;
     _correctInitial = extractInitial(_currentHanzi!.pinyin)!;
 
-    // 4 个选项：1 个正确 + 3 个随机错误声母
     final allSymbols = allInitials.map((p) => p.symbol).toList();
     final wrongOptions = allSymbols
         .where((s) => s != _correctInitial)
@@ -113,7 +126,6 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     _selectedAnswer = null;
     _answered = false;
     _timedOut = false;
-
     setState(() {});
 
     _questionStartTime = DateTime.now().millisecondsSinceEpoch / 1000.0;
@@ -126,15 +138,17 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     final elapsed =
         DateTime.now().millisecondsSinceEpoch / 1000.0 - _questionStartTime;
     _responseTimes.add(elapsed.clamp(0, _timeLimit));
-
     setState(() {
       _timedOut = true;
       _answered = true;
     });
-    ref.read(learningNotifierProvider.notifier).addPinyinMistake(_correctInitial).then((_) {
+    ref
+        .read(learningNotifierProvider.notifier)
+        .addPinyinMistake(_correctInitial)
+        .then((_) {
       if (mounted) setState(() => _mistakesAdded++);
     });
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    Future.delayed(const Duration(milliseconds: 1800), () {
       if (mounted) {
         setState(() => _questionNum++);
         _nextQuestion();
@@ -145,7 +159,6 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   void _selectAnswer(String initial) {
     if (_answered) return;
     _timerController.stop();
-
     final elapsed =
         DateTime.now().millisecondsSinceEpoch / 1000.0 - _questionStartTime;
     _responseTimes.add(elapsed.clamp(0, _timeLimit));
@@ -170,12 +183,11 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
         if (mounted) setState(() => _mistakesAdded++);
       });
     }
-    Future.delayed(const Duration(milliseconds: 1200), () {
-      if (mounted) {
-        setState(() => _questionNum++);
-        _nextQuestion();
-      }
-    });
+  }
+
+  void _goNext() {
+    setState(() => _questionNum++);
+    _nextQuestion();
   }
 
   @override
@@ -184,226 +196,549 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     super.dispose();
   }
 
+  // ─── Build ─────────────────────────────────────────────────────────────
+
   @override
   Widget build(BuildContext context) {
+    if (_gameComplete) return _buildCompletionScreen();
     return Scaffold(
-      backgroundColor: AppTheme.backgroundPeach,
-      appBar: CsAppBar(
-        title: widget.mistakeMode ? '错题重练' : '声母测验',
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Center(
-              child: Text(
-                '$_score/$_totalQuestions',
-                style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.bold),
+      backgroundColor: _skyBlue,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(),
+            Expanded(child: _buildGameBody()),
+            _buildBottomBar(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  // ─── Header ────────────────────────────────────────────────────────────
+
+  Widget _buildHeader() {
+    return SizedBox(
+      height: 58,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14),
+        child: Row(
+          children: [
+            _headerBackButton(),
+            const SizedBox(width: 8),
+            _headerTitlePill(),
+            const SizedBox(width: 8),
+            Expanded(child: _headerProgressBar()),
+            const SizedBox(width: 8),
+            _headerTimerPill(),
+            const SizedBox(width: 8),
+            _headerAvatarPill(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _headerBackButton() {
+    return GestureDetector(
+      onTap: () => context.pop(),
+      child: Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.92),
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.white, width: 2),
+        ),
+        child: const Icon(Icons.arrow_back_rounded,
+            color: _orangeAccent, size: 22),
+      ),
+    );
+  }
+
+  Widget _headerTitlePill() {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.92),
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: _cardBorder),
+      ),
+      child: Text(
+        widget.mistakeMode ? '错题重练' : '拼音测验',
+        style: const TextStyle(
+          color: _orangeAccent,
+          fontSize: 16,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+
+  Widget _headerProgressBar() {
+    return Container(
+      height: 42,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: _cardBg,
+        borderRadius: BorderRadius.circular(21),
+        border: Border.all(color: _cardBorder),
+      ),
+      child: Row(
+        children: [
+          const Icon(Icons.star_rounded, color: Colors.amber, size: 20),
+          const SizedBox(width: 6),
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: LinearProgressIndicator(
+                value: _questionNum / _totalQuestions,
+                backgroundColor: Colors.grey.shade200,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
+                minHeight: 10,
               ),
             ),
           ),
-        ],
-      ),
-      body: _gameComplete ? _buildCompletionScreen() : _buildGameBody(),
-    );
-  }
-
-  Widget _buildGameBody() {
-    if (_currentHanzi == null) return const SizedBox.shrink();
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          _buildProgressBar(),
-          const SizedBox(height: 20),
-          _buildTimerAndQuestion(),
-          const SizedBox(height: 32),
-          _buildOptions(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProgressBar() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('第 ${_questionNum + 1} 题',
-                style: const TextStyle(fontSize: 16)),
-            Text('共 $_totalQuestions 题',
-                style: const TextStyle(fontSize: 16, color: Colors.grey)),
-          ],
-        ),
-        const SizedBox(height: 8),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(10),
-          child: LinearProgressIndicator(
-            value: _questionNum / _totalQuestions,
-            backgroundColor: Colors.grey.shade200,
-            valueColor:
-                const AlwaysStoppedAnimation<Color>(AppTheme.primaryOrange),
-            minHeight: 10,
+          const SizedBox(width: 8),
+          Text(
+            '$_questionNum',
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Color(0xFF636363),
+            ),
           ),
-        ),
-      ],
+          Text(
+            '/$_totalQuestions题',
+            style: const TextStyle(fontSize: 13, color: Colors.grey),
+          ),
+        ],
+      ),
     );
   }
 
-  Widget _buildTimerAndQuestion() {
+  Widget _headerTimerPill() {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(28),
+      height: 42,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF667EEA), Color(0xFF764BA2)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF667EEA).withOpacity(0.4),
-            blurRadius: 16,
-            offset: const Offset(0, 8),
-          ),
-        ],
+        color: _timerBg,
+        borderRadius: BorderRadius.circular(21),
+        border: Border.all(color: _cardBorder, width: 3),
       ),
-      child: Column(
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // 倒计时环
+          const Icon(Icons.access_time_rounded,
+              color: Colors.redAccent, size: 18),
+          const SizedBox(width: 4),
           AnimatedBuilder(
             animation: _timerController,
             builder: (context, _) {
-              final remaining = 1.0 - _timerController.value;
-              final Color timerColor = remaining > 0.5
-                  ? AppTheme.primaryGreen
-                  : remaining > 0.2
-                      ? AppTheme.primaryYellow
-                      : Colors.red;
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  SizedBox(
-                    width: 64,
-                    height: 64,
-                    child: CircularProgressIndicator(
-                      value: remaining,
-                      strokeWidth: 6,
-                      backgroundColor: Colors.white.withOpacity(0.2),
-                      valueColor: AlwaysStoppedAnimation<Color>(timerColor),
-                    ),
-                  ),
-                  Text(
-                    '${(_timeLimit * remaining).ceil()}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              final remaining =
+                  (1.0 - _timerController.value) * _timeLimit;
+              final mins =
+                  (remaining ~/ 60).toString().padLeft(2, '0');
+              final secs =
+                  (remaining.toInt() % 60).toString().padLeft(2, '0');
+              return Text(
+                '$mins:$secs',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Color(0xFF636363),
+                ),
               );
             },
           ),
-          const SizedBox(height: 20),
-          // 汉字大字
-          Text(
-            _currentHanzi!.character,
-            style: const TextStyle(
-              fontSize: 80,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-            ),
-          ),
-          const SizedBox(height: 8),
-          CsImage(configKey: 'hanzi_icon_${_currentHanzi!.character}', description: _currentHanzi!.iconHint, width: 36, height: 36),
-          const SizedBox(height: 12),
-          Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Text(
-              '这个字的声母是什么？',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-          if (_timedOut)
-            Padding(
-              padding: const EdgeInsets.only(top: 12),
-              child: Text(
-                '时间到！正确答案是 $_correctInitial',
-                style: const TextStyle(
-                    color: Colors.yellowAccent, fontSize: 15),
-              ).animate().fadeIn().shake(),
-            ),
         ],
       ),
-    ).animate().fadeIn().scale(begin: const Offset(0.92, 0.92));
+    );
   }
 
-  Widget _buildOptions() {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 12,
-      mainAxisSpacing: 12,
-      childAspectRatio: 1.6,
-      children: _options.asMap().entries.map((entry) {
-        final initial = entry.value;
-        Color bgColor = Colors.white;
-        Color borderColor = Colors.grey.shade200;
-        Color textColor = const Color(0xFF333333);
+  Widget _headerAvatarPill() {
+    return Container(
+      height: 42,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.92),
+        borderRadius: BorderRadius.circular(21),
+        border: Border.all(color: _cardBorder),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 14,
+            backgroundColor: _cardBorder,
+            child: const Icon(Icons.person_rounded,
+                size: 16, color: Colors.white),
+          ),
+          const SizedBox(width: 6),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('宝宝',
+                  style: TextStyle(fontSize: 11, color: Colors.grey)),
+              Row(
+                children: [
+                  const Icon(Icons.star_rounded,
+                      color: Colors.amber, size: 12),
+                  Text('$_score',
+                      style: const TextStyle(
+                          fontSize: 11, color: Colors.grey)),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
-        if (_answered) {
-          if (initial == _correctInitial) {
-            bgColor = AppTheme.primaryGreen.withOpacity(0.15);
-            borderColor = AppTheme.primaryGreen;
-            textColor = AppTheme.primaryGreen;
-          } else if (_selectedAnswer == initial) {
-            bgColor = Colors.red.withOpacity(0.08);
-            borderColor = Colors.red;
-            textColor = Colors.red;
-          }
-        }
+  // ─── Game body ─────────────────────────────────────────────────────────
 
-        return GestureDetector(
-          onTap: () => _selectAnswer(initial),
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: borderColor, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
+  Widget _buildGameBody() {
+    if (_currentHanzi == null) return const SizedBox.shrink();
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF7FD4F5),
+            Color(0xFFB5E8F7),
+            Color(0xFFDDF3FC),
+          ],
+        ),
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Expanded(flex: 4, child: _buildQuestionCard()),
+          const SizedBox(height: 10),
+          Expanded(flex: 6, child: _buildOptionsRow()),
+          const SizedBox(height: 10),
+        ],
+      ),
+    );
+  }
+
+  // ─── Question card ─────────────────────────────────────────────────────
+
+  Widget _buildQuestionCard() {
+    final pinyin = _currentHanzi!.pinyin;
+    // Derive the vowel/final part by stripping the initial
+    final vowelPart = _correctInitial.isNotEmpty
+        ? pinyin.replaceFirst(_correctInitial, '')
+        : pinyin;
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Container(
+        width: double.infinity,
+        padding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.95),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: _cardBorder.withOpacity(0.5)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              '读一读，选出正确的声母',
+              style: TextStyle(
+                fontSize: 14,
+                color: Color(0xFF666667),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Pinyin display: "?- ā" style
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.baseline,
+              textBaseline: TextBaseline.alphabetic,
+              children: [
+                const Text(
+                  '?-',
+                  style: TextStyle(
+                    fontSize: 38,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF4D4D4E),
+                    letterSpacing: -1,
+                  ),
+                ),
+                if (vowelPart.isNotEmpty) ...[
+                  const SizedBox(width: 6),
+                  Text(
+                    vowelPart,
+                    style: const TextStyle(
+                      fontSize: 46,
+                      fontWeight: FontWeight.w700,
+                      color: _orangeAccent,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+            const SizedBox(height: 4),
+            // Character with circular timer progress ring
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: 64,
+                  height: 64,
+                  child: AnimatedBuilder(
+                    animation: _timerController,
+                    builder: (context, _) {
+                      final remaining = 1.0 - _timerController.value;
+                      final timerColor = remaining > 0.5
+                          ? AppTheme.primaryGreen
+                          : remaining > 0.2
+                              ? AppTheme.primaryYellow
+                              : Colors.red;
+                      return CircularProgressIndicator(
+                        value: remaining,
+                        strokeWidth: 4,
+                        backgroundColor:
+                            Colors.grey.shade200,
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            timerColor),
+                      );
+                    },
+                  ),
+                ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _currentHanzi!.character,
+                      style: const TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF333334),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-            child: Center(
-              child: Text(
-                initial,
+            if (_timedOut)
+              Padding(
+                padding: const EdgeInsets.only(top: 6),
+                child: Text(
+                  '时间到！正确声母是 $_correctInitial',
+                  style: const TextStyle(
+                      color: Colors.redAccent, fontSize: 13),
+                ).animate().fadeIn().shake(),
+              ),
+          ],
+        ),
+      ).animate().fadeIn(duration: 280.ms).scale(
+            begin: const Offset(0.94, 0.94),
+          ),
+    );
+  }
+
+  // ─── Answer option cards ────────────────────────────────────────────────
+
+  Widget _buildOptionsRow() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14),
+      child: Row(
+        children: _options.asMap().entries.map((entry) {
+          final idx = entry.key;
+          final initial = entry.value;
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: _buildOptionCard(idx, initial),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
+
+  Widget _buildOptionCard(int idx, String initial) {
+    final isCorrect = initial == _correctInitial;
+    final isSelected = _selectedAnswer == initial;
+    final accentColor = _optionColors[idx];
+
+    Color cardColor = Colors.white;
+    Color borderColor = accentColor.withOpacity(0.35);
+    Color textColor = const Color(0xFF333335);
+    Color numBgColor = accentColor;
+
+    if (_answered) {
+      if (isCorrect) {
+        cardColor = AppTheme.primaryGreen.withOpacity(0.10);
+        borderColor = AppTheme.primaryGreen;
+        textColor = AppTheme.primaryGreen;
+        numBgColor = AppTheme.primaryGreen;
+      } else if (isSelected) {
+        cardColor = Colors.red.withOpacity(0.07);
+        borderColor = Colors.red;
+        textColor = Colors.red;
+        numBgColor = Colors.red;
+      } else {
+        numBgColor = accentColor.withOpacity(0.5);
+      }
+    }
+
+    // Use the example character for this initial (if found)
+    final pinyinItem = _initialBySymbol[initial];
+    final exampleChar = pinyinItem?.example ?? '';
+    final iconHint = pinyinItem?.iconHint ?? '声母$initial示意图';
+
+    return GestureDetector(
+      onTap: () => _selectAnswer(initial),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 220),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: borderColor, width: 2),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Numbered badge
+            Container(
+              width: 28,
+              height: 28,
+              decoration: BoxDecoration(
+                color: numBgColor,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '${idx + 1}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 6),
+            // Example character image
+            CsImage(
+              configKey: 'hanzi_icon_$exampleChar',
+              description: iconHint,
+              width: 52,
+              height: 52,
+            ),
+            const SizedBox(height: 4),
+            // Initial text
+            Text(
+              initial,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: textColor,
+              ),
+            ),
+            // Example character name
+            if (exampleChar.isNotEmpty)
+              Text(
+                exampleChar,
                 style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: textColor,
+                  fontSize: 12,
+                  color: textColor.withOpacity(0.6),
+                ),
+              ),
+          ],
+        ),
+      ).animate(delay: (idx * 80).ms).fadeIn().scale(
+            begin: const Offset(0.85, 0.85),
+          ),
+    );
+  }
+
+  // ─── Bottom bar ─────────────────────────────────────────────────────────
+
+  Widget _buildBottomBar() {
+    if (!_answered) return const SizedBox(height: 8);
+
+    final isCorrect = _selectedAnswer == _correctInitial;
+    final message = _timedOut
+        ? '⏰ 时间到！正确声母是 $_correctInitial'
+        : isCorrect
+            ? '加油哦！你真棒，继续努力！'
+            : '别灰心！正确声母是 $_correctInitial';
+
+    return Container(
+      height: 64,
+      margin: const EdgeInsets.fromLTRB(14, 0, 14, 8),
+      child: Row(
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18),
+              decoration: BoxDecoration(
+                color: _feedbackBg,
+                borderRadius: BorderRadius.circular(32),
+                border: Border.all(color: _feedbackBorder, width: 2),
+              ),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Text(
+                      message,
+                      style: TextStyle(
+                        color: isCorrect && !_timedOut
+                            ? const Color(0xFF5592DB)
+                            : Colors.redAccent,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          GestureDetector(
+            onTap: _goNext,
+            child: Container(
+              width: 100,
+              height: 60,
+              decoration: BoxDecoration(
+                color: _orangeAccent,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const Center(
+                child: Text(
+                  '下一题',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),
           ),
-        ).animate(delay: (entry.key * 80).ms).fadeIn().scale(
-              begin: const Offset(0.85, 0.85),
-            );
-      }).toList(),
-    );
+        ],
+      ),
+    ).animate().slideY(
+          begin: 1.2,
+          end: 0.0,
+          duration: 280.ms,
+          curve: Curves.easeOutCubic,
+        );
   }
+
+  // ─── Completion screen ──────────────────────────────────────────────────
 
   Widget _buildCompletionScreen() {
     final percent = (_score / _totalQuestions * 100).toInt();
@@ -427,73 +762,64 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
       message = '多练练就好了！';
     }
 
-    return Center(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CsImage(configKey: resultKey, description: message, width: 80, height: 80)
-                .animate()
-                .scale(curve: Curves.elasticOut, duration: 600.ms),
-            const SizedBox(height: 16),
-            Text(message,
-                    style: const TextStyle(
-                        fontSize: 32, fontWeight: FontWeight.bold))
-                .animate(delay: 300.ms)
-                .fadeIn(),
-            const SizedBox(height: 8),
-            Text('正确率：$percent%',
-                    style: const TextStyle(fontSize: 22, color: Colors.grey))
-                .animate(delay: 400.ms)
-                .fadeIn(),
-            Text('$_score / $_totalQuestions 题正确',
-                    style: const TextStyle(fontSize: 18, color: Colors.grey))
-                .animate(delay: 500.ms)
-                .fadeIn(),
-            const SizedBox(height: 8),
-            Text('平均用时：${avgTime.toStringAsFixed(1)} 秒',
-                    style: const TextStyle(fontSize: 16, color: Colors.grey))
-                .animate(delay: 600.ms)
-                .fadeIn(),
-            const SizedBox(height: 12),
-            // 错题摘要
-            if (widget.mistakeMode)
-              _buildStatChip(
-                  '已消灭 $_mistakesCleared 个错题',
-                  AppTheme.primaryGreen)
-            else if (_mistakesAdded > 0)
-              _buildStatChip(
-                  '本次新增 $_mistakesAdded 个错题',
-                  Colors.redAccent),
-            const SizedBox(height: 28),
-            Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              alignment: WrapAlignment.center,
+    return Scaffold(
+      backgroundColor: _skyBlue,
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                ShadButton(
-                  onPressed: () {
-                    setState(() {
-                      _score = 0;
-                      _questionNum = 0;
-                      _mistakesAdded = 0;
-                      _mistakesCleared = 0;
-                      _responseTimes.clear();
-                      _gameComplete = false;
-                    });
-                    _buildCandidateList();
-                    _nextQuestion();
-                  },
-                  leading: CsImage(configKey: 'img_icon_refresh', description: '重新练习', width: 20, height: 20),
-                  child: const Text('再来一次'),
-                ),
-                if (widget.mistakeMode && _mistakesCleared > 0)
-                  ShadButton(
-                    onPressed: () {
-                      final remaining =
-                          ref.read(learningNotifierProvider).pinyinMistakes.length;
-                      if (remaining > 0) {
+                CsImage(
+                  configKey: resultKey,
+                  description: message,
+                  width: 80,
+                  height: 80,
+                ).animate().scale(
+                      curve: Curves.elasticOut,
+                      duration: 600.ms,
+                    ),
+                const SizedBox(height: 16),
+                Text(message,
+                        style: const TextStyle(
+                            fontSize: 32, fontWeight: FontWeight.bold))
+                    .animate(delay: 300.ms)
+                    .fadeIn(),
+                const SizedBox(height: 8),
+                Text('正确率：$percent%',
+                        style: const TextStyle(
+                            fontSize: 22, color: Colors.white70))
+                    .animate(delay: 400.ms)
+                    .fadeIn(),
+                Text('$_score / $_totalQuestions 题正确',
+                        style: const TextStyle(
+                            fontSize: 18, color: Colors.white70))
+                    .animate(delay: 500.ms)
+                    .fadeIn(),
+                const SizedBox(height: 8),
+                Text('平均用时：${avgTime.toStringAsFixed(1)} 秒',
+                        style: const TextStyle(
+                            fontSize: 16, color: Colors.white60))
+                    .animate(delay: 600.ms)
+                    .fadeIn(),
+                const SizedBox(height: 12),
+                if (widget.mistakeMode)
+                  _buildStatChip(
+                      '已消灭 $_mistakesCleared 个错题',
+                      AppTheme.primaryGreen)
+                else if (_mistakesAdded > 0)
+                  _buildStatChip(
+                      '本次新增 $_mistakesAdded 个错题',
+                      Colors.redAccent),
+                const SizedBox(height: 28),
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 12,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    ShadButton(
+                      onPressed: () {
                         setState(() {
                           _score = 0;
                           _questionNum = 0;
@@ -504,22 +830,54 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
                         });
                         _buildCandidateList();
                         _nextQuestion();
-                        } else {
-                        context.pop();
-                      }
-                    },
-                    backgroundColor: Colors.redAccent,
-                    leading: CsImage(configKey: 'img_icon_lightning', description: '继续错题', width: 20, height: 20),
-                    child: const Text('继续错题'),
-                  ),
-                ShadButton.outline(
-                  onPressed: () => context.pop(),
-                  leading: const Icon(Icons.home),
-                  child: const Text('返回'),
-                ),
+                      },
+                      leading: CsImage(
+                          configKey: 'img_icon_refresh',
+                          description: '重新练习',
+                          width: 20,
+                          height: 20),
+                      child: const Text('再来一次'),
+                    ),
+                    if (widget.mistakeMode && _mistakesCleared > 0)
+                      ShadButton(
+                        onPressed: () {
+                          final remaining = ref
+                              .read(learningNotifierProvider)
+                              .pinyinMistakes
+                              .length;
+                          if (remaining > 0) {
+                            setState(() {
+                              _score = 0;
+                              _questionNum = 0;
+                              _mistakesAdded = 0;
+                              _mistakesCleared = 0;
+                              _responseTimes.clear();
+                              _gameComplete = false;
+                            });
+                            _buildCandidateList();
+                            _nextQuestion();
+                          } else {
+                            context.pop();
+                          }
+                        },
+                        backgroundColor: Colors.redAccent,
+                        leading: CsImage(
+                            configKey: 'img_icon_lightning',
+                            description: '继续错题',
+                            width: 20,
+                            height: 20),
+                        child: const Text('继续错题'),
+                      ),
+                    ShadButton.outline(
+                      onPressed: () => context.pop(),
+                      leading: const Icon(Icons.home),
+                      child: const Text('返回'),
+                    ),
+                  ],
+                ).animate(delay: 700.ms).fadeIn(),
               ],
-            ).animate(delay: 700.ms).fadeIn(),
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -537,7 +895,9 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
       child: Text(
         text,
         style: TextStyle(
-            fontSize: 15, color: color, fontWeight: FontWeight.w600),
+            fontSize: 15,
+            color: color,
+            fontWeight: FontWeight.w600),
       ),
     ).animate(delay: 650.ms).fadeIn();
   }
