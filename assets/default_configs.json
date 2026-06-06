@@ -714,5 +714,97 @@
   "pinyin_hub_slogan_decor_icon": {
     "url": null,
     "asset": "assets/images/figma_pinyin_1_2/ca7cf75188a4ee3ad94f37cb1c63df1a.png"
+  },
+  "hanzi_icon_爸": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
+  },
+  "hanzi_icon_苹": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ping.png"
+  },
+  "hanzi_icon_目": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
+  },
+  "hanzi_icon_飞": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fei.png"
+  },
+  "hanzi_icon_大": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
+  },
+  "hanzi_icon_土": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
+  },
+  "hanzi_icon_鸟": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
+  },
+  "hanzi_icon_龙": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_long.png"
+  },
+  "hanzi_icon_瓜": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_gua.png"
+  },
+  "hanzi_icon_口": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
+  },
+  "hanzi_icon_火": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
+  },
+  "hanzi_icon_鸡": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ji.png"
+  },
+  "hanzi_icon_球": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_qiu.png"
+  },
+  "hanzi_icon_小": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
+  },
+  "hanzi_icon_猪": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zhu.png"
+  },
+  "hanzi_icon_车": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_che.png"
+  },
+  "hanzi_icon_山": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
+  },
+  "hanzi_icon_人": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
+  },
+  "hanzi_icon_字": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zi.png"
+  },
+  "hanzi_icon_草": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_cao.png"
+  },
+  "hanzi_icon_三": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
+  },
+  "hanzi_icon_鱼": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
+  },
+  "hanzi_icon_蛙": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_wa.png"
   }
 }
