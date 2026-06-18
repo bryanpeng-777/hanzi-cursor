@@ -306,14 +306,14 @@ packages:
     source: hosted
     version: "3.0.7"
   cs_auth:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "../cs/cs_auth"
       relative: true
     source: path
     version: "1.0.0"
   cs_core:
-    dependency: "direct main"
+    dependency: "direct overridden"
     description:
       path: "../cs/cs_core"
       relative: true
