@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../design/hanzi_design_spec.dart';
 import '../design/hanzi_shared_widgets.dart';
@@ -28,9 +29,40 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: HanziDesignSpec.surfaceWarm,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
+      body: Stack(
+        children: [
+          IndexedStack(
+            index: _currentIndex,
+            children: _pages,
+          ),
+          if (_currentIndex == 0)
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 6,
+              right: 8,
+              child: Material(
+                color: Colors.white.withValues(alpha: 0.94),
+                elevation: 2,
+                borderRadius: BorderRadius.circular(20),
+                child: TextButton.icon(
+                  key: const Key('hanzi-pinyin-codia-test-entry'),
+                  onPressed: () => context.push('/pinyin-hub-codia-test'),
+                  icon: const Icon(Icons.compare_arrows_rounded, size: 18),
+                  label: const Text('Codia 对比'),
+                  style: TextButton.styleFrom(
+                    foregroundColor: const Color(0xFF2C91F1),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    textStyle: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       bottomNavigationBar: HanziBottomNavBar(
         currentIndex: _currentIndex,
