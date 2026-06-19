@@ -1,7 +1,20 @@
+import 'dart:convert';
+
+import 'package:flutter/services.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:cs_core/cs_core.dart';
 
 part 'game_config_provider.g.dart';
+
+Future<int> _bundledQuizTimeLimitSeconds() async {
+  try {
+    final jsonStr = await rootBundle.loadString('assets/default_configs.json');
+    final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
+    return (decoded['quiz_time_limit_seconds'] as num?)?.toInt() ?? 10;
+  } catch (_) {
+    return 10;
+  }
+}
 
 @Riverpod(keepAlive: true)
 class GameConfig extends _$GameConfig {
@@ -12,7 +25,8 @@ class GameConfig extends _$GameConfig {
       matchGameWordCount: await ConfigManager.getInt('match_game_word_count') ?? 5,
       listenGameQuestionsCount:
           await ConfigManager.getInt('listen_game_questions_count') ?? 8,
-      quizTimeLimitSeconds: await ConfigManager.getInt('quiz_time_limit_seconds') ?? 10,
+      // 以随包 default_configs 为准，避免 Supabase/Hive 旧值 6 覆盖新配置
+      quizTimeLimitSeconds: await _bundledQuizTimeLimitSeconds(),
       quizQuestionsCount: await ConfigManager.getInt('quiz_questions_count') ?? 10,
       quizPassThreshold: await ConfigManager.getInt('quiz_pass_threshold') ?? 70,
     );
