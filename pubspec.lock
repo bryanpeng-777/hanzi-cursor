@@ -306,25 +306,31 @@ packages:
     source: hosted
     version: "3.0.7"
   cs_auth:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../cs/cs_auth"
-      relative: true
-    source: path
+      path: cs_auth
+      ref: b571e67a0d00053de7aec32bb24b3783345dd849
+      resolved-ref: b571e67a0d00053de7aec32bb24b3783345dd849
+      url: "https://github.com/bryanpeng-777/cs.git"
+    source: git
     version: "1.0.0"
   cs_core:
-    dependency: "direct overridden"
+    dependency: transitive
     description:
-      path: "../cs/cs_core"
-      relative: true
-    source: path
+      path: cs_core
+      ref: b571e67a0d00053de7aec32bb24b3783345dd849
+      resolved-ref: b571e67a0d00053de7aec32bb24b3783345dd849
+      url: "https://github.com/bryanpeng-777/cs.git"
+    source: git
     version: "1.0.0"
   cs_ui:
     dependency: "direct main"
     description:
-      path: "../cs/cs_ui"
-      relative: true
-    source: path
+      path: cs_ui
+      ref: main
+      resolved-ref: b571e67a0d00053de7aec32bb24b3783345dd849
+      url: "https://github.com/bryanpeng-777/cs.git"
+    source: git
     version: "1.0.0"
   csslib:
     dependency: transitive
