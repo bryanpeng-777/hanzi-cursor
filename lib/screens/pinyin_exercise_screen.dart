@@ -6,6 +6,7 @@ import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../data/pinyin_data.dart';
 import '../models/hanzi_model.dart';
+import '../constants/quiz_constants.dart';
 import '../providers/learning_provider.dart';
 import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
@@ -60,17 +61,14 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   double _questionStartTime = 0;
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
-  double _timeLimit = 20.0;
+  double _timeLimit = kQuizTimeLimitSeconds.toDouble();
 
   @override
   void initState() {
     super.initState();
     final config = ref.read(gameConfigProvider).valueOrNull;
-    if (config != null) {
-      _timeLimit = config.quizTimeLimitSeconds.toDouble();
-      if (!widget.mistakeMode) {
-        _totalQuestions = config.quizQuestionsCount;
-      }
+    if (config != null && !widget.mistakeMode) {
+      _totalQuestions = config.quizQuestionsCount;
     }
     _timerController = AnimationController(
       vsync: this,

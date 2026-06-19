@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import '../data/hanzi_data.dart';
 import '../models/hanzi_model.dart';
+import '../constants/quiz_constants.dart';
 import '../providers/learning_provider.dart';
 import '../providers/game_config_provider.dart';
 import '../utils/app_theme.dart';
@@ -46,7 +47,7 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
 
-  double _timeLimit = 20.0;
+  double _timeLimit = kQuizTimeLimitSeconds.toDouble();
   int _passThreshold = 70;
 
   @override
@@ -54,7 +55,6 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
     super.initState();
     final config = ref.read(gameConfigProvider).valueOrNull;
     if (config != null) {
-      _timeLimit = config.quizTimeLimitSeconds.toDouble();
       _passThreshold = config.quizPassThreshold;
     }
     _timerController = AnimationController(
