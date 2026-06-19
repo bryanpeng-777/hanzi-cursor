@@ -193,11 +193,11 @@
   },
   "img_icon_refresh": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_icon_lightning": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_icon_star": {
     "url": null,
@@ -205,31 +205,31 @@
   },
   "img_result_excellent": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_result_good": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_result_ok": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_result_study_more": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_icon_celebration": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "img_tab_initials": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_pinyin.png"
   },
   "img_tab_finals": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_nav_learn.png"
   },
   "img_section_pinyin_progress": {
     "url": null,
@@ -253,15 +253,15 @@
   },
   "hanzi_icon_三": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
   },
   "hanzi_icon_人": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
   },
   "hanzi_icon_口": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
   },
   "hanzi_icon_手": {
     "url": null,
@@ -269,7 +269,7 @@
   },
   "hanzi_icon_目": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
   },
   "hanzi_icon_日": {
     "url": null,
@@ -281,19 +281,19 @@
   },
   "hanzi_icon_山": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
   },
   "hanzi_icon_大": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
   },
   "hanzi_icon_小": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
   },
   "hanzi_icon_火": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
   },
   "hanzi_icon_水": {
     "url": null,
@@ -305,7 +305,7 @@
   },
   "hanzi_icon_土": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
   },
   "hanzi_icon_天": {
     "url": null,
@@ -325,7 +325,7 @@
   },
   "hanzi_icon_鱼": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
   },
   "hanzi_icon_花": {
     "url": null,
@@ -341,7 +341,7 @@
   },
   "hanzi_icon_鸟": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
   },
   "hanzi_icon_虫": {
     "url": null,
@@ -437,7 +437,7 @@
   },
   "hanzi_icon_爸": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
   },
   "hanzi_icon_妈": {
     "url": null,
@@ -509,111 +509,111 @@
   },
   "pinyin_icon_b": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
   },
   "pinyin_icon_p": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ping.png"
   },
   "pinyin_icon_m": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
   },
   "pinyin_icon_f": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fei.png"
   },
   "pinyin_icon_d": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
   },
   "pinyin_icon_t": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
   },
   "pinyin_icon_n": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
   },
   "pinyin_icon_l": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_long.png"
   },
   "pinyin_icon_g": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_gua.png"
   },
   "pinyin_icon_k": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
   },
   "pinyin_icon_h": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
   },
   "pinyin_icon_j": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ji.png"
   },
   "pinyin_icon_q": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_qiu.png"
   },
   "pinyin_icon_x": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
   },
   "pinyin_icon_zh": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zhu.png"
   },
   "pinyin_icon_ch": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_che.png"
   },
   "pinyin_icon_sh": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
   },
   "pinyin_icon_r": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
   },
   "pinyin_icon_z": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zi.png"
   },
   "pinyin_icon_c": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_cao.png"
   },
   "pinyin_icon_s": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
   },
   "pinyin_icon_y": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
   },
   "pinyin_icon_w": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/pinyin_icons/hanzi_icon_wa.png"
   },
   "pinyin_tone_1": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "pinyin_tone_2": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "pinyin_tone_3": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "pinyin_tone_4": {
     "url": null,
-    "asset": null
+    "asset": "assets/images/img_icon_star.png"
   },
   "figma_pinyin_canvas_backdrop": {
     "url": null,
@@ -715,33 +715,13 @@
     "url": null,
     "asset": "assets/images/figma_pinyin_1_2/ca7cf75188a4ee3ad94f37cb1c63df1a.png"
   },
-  "hanzi_icon_爸": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
-  },
   "hanzi_icon_苹": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_ping.png"
   },
-  "hanzi_icon_目": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
-  },
   "hanzi_icon_飞": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_fei.png"
-  },
-  "hanzi_icon_大": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
-  },
-  "hanzi_icon_土": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
-  },
-  "hanzi_icon_鸟": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
   },
   "hanzi_icon_龙": {
     "url": null,
@@ -751,14 +731,6 @@
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_gua.png"
   },
-  "hanzi_icon_口": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
-  },
-  "hanzi_icon_火": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
-  },
   "hanzi_icon_鸡": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_ji.png"
@@ -766,10 +738,6 @@
   "hanzi_icon_球": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_qiu.png"
-  },
-  "hanzi_icon_小": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
   },
   "hanzi_icon_猪": {
     "url": null,
@@ -779,14 +747,6 @@
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_che.png"
   },
-  "hanzi_icon_山": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
-  },
-  "hanzi_icon_人": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
-  },
   "hanzi_icon_字": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_zi.png"
@@ -794,14 +754,6 @@
   "hanzi_icon_草": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_cao.png"
-  },
-  "hanzi_icon_三": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
-  },
-  "hanzi_icon_鱼": {
-    "url": null,
-    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
   },
   "hanzi_icon_蛙": {
     "url": null,
