@@ -1,0 +1,16 @@
+{
+  "id": "freezed",
+  "name": "Freezed 数据模型",
+  "version": "1.0.0",
+  "description": "freezed + json_annotation + json_serializable，不可变数据类 + JSON 序列化",
+  "category": "data",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "freezed_annotation": "^2.4.0", "json_annotation": "^4.9.0" },
+    "dev_dependencies": { "freezed": "^2.4.0", "json_serializable": "^6.7.0", "build_runner": "^2.4.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["D1", "D2", "D3"],
+  "presets": ["standard", "full"]
+}

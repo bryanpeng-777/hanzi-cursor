@@ -1,0 +1,15 @@
+{
+  "id": "local-storage",
+  "name": "本地存储",
+  "version": "1.0.0",
+  "description": "shared_preferences（用户偏好）+ flutter_secure_storage（敏感凭证 API Key/Token）",
+  "category": "storage",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "shared_preferences": "^2.3.0", "flutter_secure_storage": "^9.2.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["H2", "H3"],
+  "presets": ["standard", "full"]
+}

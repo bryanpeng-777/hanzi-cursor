@@ -1,0 +1,623 @@
+{
+  "_comment": "CS 框架插件注册表。新增插件只需在此追加一条记录，无需修改主机逻辑。",
+  "_version": "2.0.0",
+  "_naming_convention": {
+    "cs-src-*": "CS 自研源码包（框架功能模块）",
+    "cs-src-tool-*": "CS 自研工具向源码包（图片/动画/视频资源管理）",
+    "cs-*": "CS 封装的第三方 pub.dev 包"
+  },
+  "presets": {
+    "core-only": ["cs-src-core"],
+    "auth": ["cs-src-core", "cs-src-auth", "cs-src-ui", "cs-src-auth-ui"],
+    "payment": ["cs-src-core", "cs-src-payment"],
+    "standard": [
+      "cs-src-core", "cs-src-auth", "cs-src-ui", "cs-src-auth-ui",
+      "cs-riverpod", "cs-freezed", "cs-go-router", "cs-dio", "cs-local-storage", "cs-logger"
+    ],
+    "full": [
+      "cs-src-core", "cs-src-auth", "cs-src-ui", "cs-src-auth-ui",
+      "cs-src-push", "cs-src-payment", "cs-src-ads",
+      "cs-riverpod", "cs-freezed", "cs-go-router", "cs-dio", "cs-local-storage", "cs-logger",
+      "cs-screen-util", "cs-src-tool-image", "cs-src-tool-lottie", "cs-src-tool-video"
+    ],
+    "_deprecated_minimal": ["cs-src-core", "cs-src-auth", "cs-riverpod", "cs-go-router"],
+    "_deprecated_standard_v1": ["cs-src-core", "cs-src-auth", "cs-src-ui", "cs-src-auth-ui", "cs-riverpod", "cs-freezed", "cs-go-router", "cs-dio", "cs-local-storage", "cs-logger"]
+  },
+  "plugins": [
+    {
+      "id": "cs-src-core",
+      "name": "CS Core 核心基座",
+      "version": "1.0.0",
+      "description": "Supabase 连接、配置下发（三级缓存）、业务数据 CRUD、文件存储",
+      "category": "infrastructure",
+      "source": "cs_monorepo",
+      "cs_package": "cs_core",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_core": { "path": "../cs/cs_core" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_core": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_core", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["E1", "E2", "E3"],
+      "presets": ["core-only", "auth", "payment", "standard", "full"],
+      "skill": "cs-plugins/cs-src-core/SKILL.md",
+      "agent_id": "cs-src-core-plugin"
+    },
+    {
+      "id": "cs-src-auth",
+      "name": "CS Auth 认证模块",
+      "version": "1.0.0",
+      "description": "AuthManager（匿名/邮箱登录、账号升级、密码重置）+ AuthGuard 路由守卫",
+      "category": "infrastructure",
+      "source": "cs_monorepo",
+      "cs_package": "cs_auth",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_auth": { "path": "../cs/cs_auth" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_auth": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_auth", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-core"],
+      "conflicts": [],
+      "verify_points": ["E4"],
+      "presets": ["auth", "standard", "full"],
+      "skill": "cs-plugins/cs-src-auth/SKILL.md",
+      "agent_id": "cs-src-auth-plugin"
+    },
+    {
+      "id": "cs-src-push",
+      "name": "CS Push 推送通知",
+      "version": "1.0.0",
+      "description": "Firebase FCM token 注册、前台/后台消息接收、silent push 配置同步",
+      "category": "infrastructure",
+      "source": "cs_monorepo",
+      "cs_package": "cs_push",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_push": { "path": "../cs/cs_push" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_push": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_push", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-core", "cs-src-auth"],
+      "conflicts": [],
+      "verify_points": ["P1", "P2"],
+      "presets": ["full"],
+      "skill": "cs-plugins/cs-src-push/SKILL.md",
+      "agent_id": "cs-src-push-plugin"
+    },
+    {
+      "id": "cs-src-payment",
+      "name": "CS Payment 支付模块",
+      "version": "1.0.0",
+      "description": "PaymentManager 插件路由层 + RevenueCatPlugin 内置支持（iOS App Store + Google Play）",
+      "category": "business",
+      "source": "cs_monorepo",
+      "cs_package": "cs_payment",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_payment": { "path": "../cs/cs_payment" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_payment": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_payment", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-core"],
+      "conflicts": [],
+      "verify_points": ["PAY1", "PAY2"],
+      "presets": ["payment", "full"],
+      "skill": "cs-plugins/cs-src-payment/SKILL.md",
+      "agent_id": "cs-src-payment-plugin"
+    },
+    {
+      "id": "cs-src-ads",
+      "name": "CS Ads 广告模块",
+      "version": "1.0.0",
+      "description": "AdManager 插件路由层 + AdMobPlugin 内置支持（Banner / 插屏 / 激励视频）",
+      "category": "business",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ads",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_ads": { "path": "../cs/cs_ads" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_ads": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ads", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-core"],
+      "conflicts": [],
+      "verify_points": ["AD1", "AD2"],
+      "presets": ["full"],
+      "skill": "cs-plugins/cs-src-ads/SKILL.md",
+      "agent_id": "cs-src-ads-plugin"
+    },
+    {
+      "id": "cs-src-ui",
+      "name": "CS UI 组件系统",
+      "version": "1.0.0",
+      "description": "shadcn_ui 封装组件、CsApp 主题（清新简约/卡通风）、CsAppBar、通用 Widget",
+      "category": "ui",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_ui": { "path": "../cs/cs_ui" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_ui": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ui", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-core"],
+      "conflicts": [],
+      "verify_points": ["G1", "G2", "G3"],
+      "presets": ["auth", "standard", "full"],
+      "skill": "cs-plugins/cs-ui/SKILL.md",
+      "agent_id": "cs-ui-plugin"
+    },
+    {
+      "id": "cs-src-auth-ui",
+      "name": "CS Auth UI 登录界面",
+      "version": "1.0.0",
+      "description": "CsLoginPage（完整登录页）+ CsLoginForm（可嵌入表单积木）+ 密码找回流程",
+      "category": "ui",
+      "source": "cs_monorepo",
+      "cs_package": "cs_auth_ui",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_auth_ui": { "path": "../cs/cs_auth_ui" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_auth_ui": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_auth_ui", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-auth", "cs-src-ui"],
+      "conflicts": [],
+      "verify_points": ["G4", "G5"],
+      "presets": ["auth", "standard", "full"],
+      "skill": "cs-plugins/cs-src-auth-ui/SKILL.md",
+      "agent_id": "cs-src-auth-ui-plugin"
+    },
+    {
+      "id": "cs-src-tool-image",
+      "name": "CS 图片资源管理",
+      "version": "1.0.0",
+      "description": "CsImage 控件 + image_manifest.json，统一管理图片生命周期（本地/远程/占位）",
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_ui": { "path": "../cs/cs_ui" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_ui": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ui", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-ui"],
+      "conflicts": [],
+      "verify_points": ["G4"],
+      "presets": ["full"],
+      "skill": "cs-plugins/cs-image/SKILL.md",
+      "agent_id": "cs-image-plugin"
+    },
+    {
+      "id": "cs-src-tool-lottie",
+      "name": "CS Lottie 动画管理",
+      "version": "1.0.0",
+      "description": "CsLottie 控件 + lottie_manifest.json，统一管理动画生命周期（本地/远程/占位）",
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_ui": { "path": "../cs/cs_ui" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_ui": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ui", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-ui"],
+      "conflicts": [],
+      "verify_points": ["LA1"],
+      "presets": ["full"],
+      "skill": "cs-plugins/cs-lottie/SKILL.md",
+      "agent_id": "cs-lottie-plugin"
+    },
+    {
+      "id": "cs-src-tool-video",
+      "name": "CS 视频资源管理",
+      "version": "1.0.0",
+      "description": "CsVideo 控件 + video_manifest.json，统一管理视频生命周期（本地/远程/占位）",
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": {
+        "dependencies": {
+          "cs_ui": { "path": "../cs/cs_ui" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_ui": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ui", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": ["cs-src-ui"],
+      "conflicts": [],
+      "verify_points": ["V1"],
+      "presets": ["full"],
+      "skill": "cs-plugins/cs-video/SKILL.md",
+      "agent_id": "cs-video-plugin"
+    },
+    {
+      "id": "cs-riverpod",
+      "name": "Riverpod 状态管理",
+      "version": "1.0.0",
+      "description": "flutter_riverpod + riverpod_annotation + 代码生成，替代 setState 业务逻辑",
+      "category": "state",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "flutter_riverpod": "^2.5.0",
+          "riverpod_annotation": "^2.4.0"
+        },
+        "dev_dependencies": {
+          "riverpod_generator": "^2.4.0",
+          "build_runner": "^2.4.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["B1", "B2", "B3", "B4"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/riverpod/SKILL.md",
+      "agent_id": "riverpod-plugin"
+    },
+    {
+      "id": "cs-freezed",
+      "name": "Freezed 数据模型",
+      "version": "1.0.0",
+      "description": "freezed + json_annotation + json_serializable，不可变数据类 + JSON 序列化",
+      "category": "data",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "freezed_annotation": "^2.4.0",
+          "json_annotation": "^4.9.0"
+        },
+        "dev_dependencies": {
+          "freezed": "^2.4.0",
+          "json_serializable": "^6.7.0",
+          "build_runner": "^2.4.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["D1", "D2", "D3"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/freezed/SKILL.md",
+      "agent_id": "freezed-plugin"
+    },
+    {
+      "id": "cs-go-router",
+      "name": "go_router 路由",
+      "version": "1.0.0",
+      "description": "声明式路由，替代 Navigator.push/pop",
+      "category": "navigation",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "go_router": "^14.0.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["C1", "C2", "C3"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/go-router/SKILL.md",
+      "agent_id": "go-router-plugin"
+    },
+    {
+      "id": "cs-dio",
+      "name": "Dio HTTP 客户端",
+      "version": "1.0.0",
+      "description": "第三方/自建后端 HTTP 请求，含拦截器、错误处理",
+      "category": "network",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "dio": "^5.7.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["N1", "N2"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/dio/SKILL.md",
+      "agent_id": "dio-plugin"
+    },
+    {
+      "id": "cs-local-storage",
+      "name": "本地存储",
+      "version": "1.0.0",
+      "description": "shared_preferences（用户偏好）+ flutter_secure_storage（敏感凭证）",
+      "category": "storage",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "shared_preferences": "^2.3.0",
+          "flutter_secure_storage": "^9.2.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["H2", "H3"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/local-storage/SKILL.md",
+      "agent_id": "local-storage-plugin"
+    },
+    {
+      "id": "cs-logger",
+      "name": "日志系统",
+      "version": "1.0.0",
+      "description": "logger 包替代 print/debugPrint，分级输出，Release 自动关闭",
+      "category": "utility",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "logger": "^2.4.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["H1"],
+      "presets": ["standard", "full"],
+      "skill": "cs-plugins/logger/SKILL.md",
+      "agent_id": "logger-plugin"
+    },
+    {
+      "id": "cs-screen-util",
+      "name": "屏幕适配",
+      "version": "1.0.0",
+      "description": "flutter_screenutil 按比例缩放尺寸，仅接入初始化，业务按需使用",
+      "category": "utility",
+      "source": "pubdev",
+      "pubspec_local": {
+        "dependencies": {
+          "flutter_screenutil": "^5.9.0"
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["SU1"],
+      "presets": ["full"],
+      "skill": "cs-plugins/screen-util/SKILL.md",
+      "agent_id": "screen-util-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，保留用于检测旧版项目并提示迁移到新命名",
+      "id": "cs-backend",
+      "name": "[已弃用] CS 后台框架",
+      "version": "1.0.0",
+      "description": "等效于 cs-src-core + cs-src-auth。请迁移到新插件 ID。",
+      "category": "infrastructure",
+      "source": "cs_monorepo",
+      "cs_package": "cs_framework",
+      "migrates_to": ["cs-src-core", "cs-src-auth"],
+      "pubspec_local": {
+        "dependencies": {
+          "cs_framework": { "path": "../cs/cs_framework" }
+        }
+      },
+      "pubspec_git": {
+        "dependencies": {
+          "cs_framework": {
+            "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_framework", "ref": "main" }
+          }
+        }
+      },
+      "dependencies": [],
+      "conflicts": [],
+      "verify_points": ["E1", "E2", "E3", "E4"],
+      "skill": "cs-plugins/cs-backend/SKILL.md",
+      "agent_id": "cs-backend-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-src-ui",
+      "id": "cs-ui",
+      "name": "[已弃用] CS UI 组件系统",
+      "version": "1.0.0",
+      "description": "已重命名为 cs-src-ui",
+      "migrates_to": ["cs-src-ui"],
+      "category": "ui",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": { "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } } },
+      "pubspec_git": { "dependencies": { "cs_ui": { "git": { "url": "https://github.com/bryanpeng-777/cs.git", "path": "cs_ui", "ref": "main" } } } },
+      "dependencies": ["cs-src-core"],
+      "verify_points": ["G1", "G2", "G3", "G4"],
+      "skill": "cs-plugins/cs-ui/SKILL.md",
+      "agent_id": "cs-ui-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-riverpod",
+      "id": "riverpod",
+      "name": "[已弃用] Riverpod",
+      "description": "已重命名为 cs-riverpod",
+      "migrates_to": ["cs-riverpod"],
+      "category": "state",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "flutter_riverpod": "^2.5.0", "riverpod_annotation": "^2.4.0" }, "dev_dependencies": { "riverpod_generator": "^2.4.0", "build_runner": "^2.4.0" } },
+      "skill": "cs-plugins/riverpod/SKILL.md",
+      "agent_id": "riverpod-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-freezed",
+      "id": "freezed",
+      "name": "[已弃用] Freezed",
+      "description": "已重命名为 cs-freezed",
+      "migrates_to": ["cs-freezed"],
+      "category": "data",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "freezed_annotation": "^2.4.0", "json_annotation": "^4.9.0" }, "dev_dependencies": { "freezed": "^2.4.0", "json_serializable": "^6.7.0", "build_runner": "^2.4.0" } },
+      "skill": "cs-plugins/freezed/SKILL.md",
+      "agent_id": "freezed-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-go-router",
+      "id": "go-router",
+      "name": "[已弃用] go_router",
+      "description": "已重命名为 cs-go-router",
+      "migrates_to": ["cs-go-router"],
+      "category": "navigation",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "go_router": "^14.0.0" } },
+      "skill": "cs-plugins/go-router/SKILL.md",
+      "agent_id": "go-router-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-dio",
+      "id": "dio",
+      "name": "[已弃用] Dio",
+      "description": "已重命名为 cs-dio",
+      "migrates_to": ["cs-dio"],
+      "category": "network",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "dio": "^5.7.0" } },
+      "skill": "cs-plugins/dio/SKILL.md",
+      "agent_id": "dio-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-local-storage",
+      "id": "local-storage",
+      "name": "[已弃用] 本地存储",
+      "description": "已重命名为 cs-local-storage",
+      "migrates_to": ["cs-local-storage"],
+      "category": "storage",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "shared_preferences": "^2.3.0", "flutter_secure_storage": "^9.2.0" } },
+      "skill": "cs-plugins/local-storage/SKILL.md",
+      "agent_id": "local-storage-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-logger",
+      "id": "logger",
+      "name": "[已弃用] 日志系统",
+      "description": "已重命名为 cs-logger",
+      "migrates_to": ["cs-logger"],
+      "category": "utility",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "logger": "^2.4.0" } },
+      "skill": "cs-plugins/logger/SKILL.md",
+      "agent_id": "logger-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-screen-util",
+      "id": "screen-util",
+      "name": "[已弃用] 屏幕适配",
+      "description": "已重命名为 cs-screen-util",
+      "migrates_to": ["cs-screen-util"],
+      "category": "utility",
+      "source": "pubdev",
+      "pubspec_local": { "dependencies": { "flutter_screenutil": "^5.9.0" } },
+      "skill": "cs-plugins/screen-util/SKILL.md",
+      "agent_id": "screen-util-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-src-tool-image",
+      "id": "cs-image",
+      "name": "[已弃用] CS 图片资源管理",
+      "description": "已重命名为 cs-src-tool-image",
+      "migrates_to": ["cs-src-tool-image"],
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": { "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } } },
+      "skill": "cs-plugins/cs-image/SKILL.md",
+      "agent_id": "cs-image-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-src-tool-lottie",
+      "id": "cs-lottie",
+      "name": "[已弃用] CS Lottie 动画管理",
+      "description": "已重命名为 cs-src-tool-lottie",
+      "migrates_to": ["cs-src-tool-lottie"],
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": { "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } } },
+      "skill": "cs-plugins/cs-lottie/SKILL.md",
+      "agent_id": "cs-lottie-plugin"
+    },
+    {
+      "_deprecated": true,
+      "_note": "旧插件 ID，已重命名为 cs-src-tool-video",
+      "id": "cs-video",
+      "name": "[已弃用] CS 视频资源管理",
+      "description": "已重命名为 cs-src-tool-video",
+      "migrates_to": ["cs-src-tool-video"],
+      "category": "media",
+      "source": "cs_monorepo",
+      "cs_package": "cs_ui",
+      "pubspec_local": { "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } } },
+      "skill": "cs-plugins/cs-video/SKILL.md",
+      "agent_id": "cs-video-plugin"
+    }
+  ]
+}

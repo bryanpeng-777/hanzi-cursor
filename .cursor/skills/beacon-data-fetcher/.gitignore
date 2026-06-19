@@ -1,0 +1,4 @@
+runtime/beacon_auth_state.json
+runtime/qr_code.png
+runtime/*.png
+scripts/__pycache__/

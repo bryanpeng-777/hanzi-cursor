@@ -1,0 +1,44 @@
+{
+  "name": "datong-report",
+  "author": "bryanpeng",
+  "maintainers": [],
+  "type": "skill",
+  "version": "1.0.0",
+  "shortDescription": "大同数据埋点与看板一站式接入",
+  "description": "自动完成埋点代码生成（SDK 检测、应用注册、埋点信息获取、上报代码生成、实时联调）和指标看板创建（项目分析、指标规划、看板布局设计）全流程。支持 H5/Android/iOS 多端技术栈，可从零设计方案或基于平台已有埋点生成代码，并自动生成看板 Prompt 引导用户一键创建数据看板。",
+  "category": "devops",
+  "tags": [
+    "data-tracking",
+    "analytics",
+    "dashboard",
+    "sdk-integration",
+    "event-tracking",
+    "monitoring"
+  ],
+  "capabilities": [
+    "自动检测项目技术栈并识别已引入的大同 SDK 类型",
+    "基于用户选择路径（已有设计/从零开始）获取或设计埋点方案",
+    "根据埋点信息生成多端上报代码（H5/Android/iOS）",
+    "自动注册大同应用并获取 appkey 配置到初始化代码",
+    "上传埋点方案到大同平台并自动生成看板 Prompt",
+    "开启可视化实时联调验证埋点数据上报",
+    "分析项目场景并规划指标体系、设计看板布局"
+  ],
+  "triggers": [
+    "用户需要为项目接入埋点上报能力时",
+    "用户提到埋点、上报、接入、指标、看板、Dashboard、数据分析等关键词时",
+    "用户需要从零设计埋点方案或基于平台已有埋点生成代码时",
+    "用户需要创建数据看板进行业务指标监控时",
+    "用户需要验证埋点数据上报是否正常时"
+  ],
+  "updatedAt": "2026-06-09",
+  "versions": {
+    "1.0.0": {
+      "tag": "skill/datong-report/v1.0.0",
+      "date": "2026-06-09",
+      "changelog": "初始版本",
+      "minCampAIVersion": "0.12.0"
+    }
+  },
+  "minCampAIVersion": "0.12.0"
+}

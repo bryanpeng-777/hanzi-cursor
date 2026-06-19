@@ -1,0 +1,741 @@
+{
+  "_comment": "灯塔看板巡检配置。版本 url=Panel 114739（card 不变，灯塔侧已改小时粒度）；全量 url_all=Panel 114800 小时看板。",
+  "settings": {
+    "lookback_hours": 12,
+    "comparison_strategy": "same_period",
+    "granularity": "hour",
+    "output_dir": "/tmp/beacon_inspector",
+    "wework_robot_key": "4d4d7090-3a52-4ca7-b859-df3ecf5b1271"
+  },
+  "dashboards": [
+    {
+      "name": "营地业务大盘",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680453",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681097",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "APP启动[总人数]",
+          "display_name": "APP启动总人数",
+          "threshold_pct": 10,
+          "event_code": "20000",
+          "enum_name": "MTAEventIdAppStart",
+          "report_location": "WEGAppLaunchEssentialServices.m → gameHelperStart:YES",
+          "aggregation": "NDV(uin)",
+          "meaning": "当日启动 App 的去重用户数（DAU 近似值，含冷启动与热启动）"
+        },
+        {
+          "column_keyword": "进入主界面[总次数]",
+          "display_name": "进入主界面总次数",
+          "threshold_pct": 10,
+          "event_code": "11009",
+          "enum_name": "MTAEventIdEnterSideController",
+          "report_location": "SideViewController.m:223 → commonTrackEvent:MTAEventIdEnterSideController",
+          "aggregation": "COUNT(*)",
+          "meaning": "进入 App 主界面（SideViewController）的总次数，含重复进入"
+        },
+        {
+          "column_keyword": "进入主界面[总人数]",
+          "display_name": "进入主界面总人数",
+          "threshold_pct": 10,
+          "event_code": "11009",
+          "enum_name": "MTAEventIdEnterSideController",
+          "report_location": "SideViewController.m:223 → commonTrackEvent:MTAEventIdEnterSideController",
+          "aggregation": "NDV(uin)",
+          "meaning": "进入 App 主界面的去重用户数"
+        },
+        {
+          "column_keyword": "启动次数",
+          "display_name": "启动次数",
+          "threshold_pct": 10,
+          "event_code": "20000",
+          "enum_name": "MTAEventIdAppStart",
+          "report_location": "WEGAppLaunchEssentialServices.m → gameHelperStart:YES",
+          "aggregation": "COUNT，条件 first='1'（字段 c38）",
+          "meaning": "冷启动次数（gameHelperStart:YES），排除热启动重入"
+        },
+        {
+          "column_keyword": "进入主界面【新】",
+          "display_name": "进入主界面（新口径）",
+          "threshold_pct": 30,
+          "event_code": "11009",
+          "enum_name": "MTAEventIdEnterSideController",
+          "report_location": "SideViewController.m:223 → commonTrackEvent:MTAEventIdEnterSideController",
+          "aggregation": "COUNT，条件 isLatestApp='1'（字段 C37）",
+          "meaning": "使用最新版本 App 进入主界面的次数；isLatestApp 由 Beacon SDK 自动打标，随版本扩量而增长，灰度期间正常波动较大"
+        },
+        {
+          "column_keyword": "启动次数【新】",
+          "display_name": "启动次数（新口径）",
+          "threshold_pct": 30,
+          "event_code": "20000",
+          "enum_name": "MTAEventIdAppStart",
+          "report_location": "WEGAppLaunchEssentialServices.m → gameHelperStart:YES",
+          "aggregation": "COUNT，条件 first='1' AND isLatestApp='1'（字段 c38+c39）",
+          "meaning": "最新版本 App 的冷启动次数；isLatestApp 由 Beacon SDK 自动打标，灰度期间正常波动较大"
+        }
+      ]
+    },
+    {
+      "name": "用户反馈",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680461",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681105",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "反馈[总次数]",
+          "display_name": "反馈总次数",
+          "threshold_pct": 50,
+          "small_count_threshold": 100,
+          "event_code": "11001",
+          "enum_name": "MTAEventIdFeedback",
+          "report_location": "WEGFeedbackViewController.m:207 → commonTrackEvent:MTAEventIdFeedback，在 feedbackWithContent 成功回调中触发",
+          "aggregation": "COUNT(event_code='11001')",
+          "meaning": "用户反馈提交成功的总次数（含同一用户多次提交）；反馈数量天然波动大，阈值设 50%"
+        },
+        {
+          "column_keyword": "反馈[总人数]",
+          "display_name": "反馈总人数",
+          "threshold_pct": 50,
+          "small_count_threshold": 100,
+          "event_code": "11001",
+          "enum_name": "MTAEventIdFeedback",
+          "report_location": "WEGFeedbackViewController.m:207 → commonTrackEvent:MTAEventIdFeedback，在 feedbackWithContent 成功回调中触发",
+          "aggregation": "NDV(uin) where event_code='11001'",
+          "meaning": "当日提交过反馈的去重用户数；反馈人数天然波动大，阈值设 50%"
+        },
+        {
+          "column_keyword": "带日志",
+          "display_name": "带日志反馈次数",
+          "threshold_pct": 50,
+          "small_count_threshold": 100,
+          "event_code": "11001",
+          "enum_name": "MTAEventIdFeedback",
+          "report_location": "WEGFeedbackViewController.m:207 → param:@{@\"hasLog\":@(logUrl.length>0)}，hasLog='1' 表示上传了日志",
+          "aggregation": "COUNT where event_code='11001' AND hasLog='1'",
+          "meaning": "反馈时附带了日志上传的次数；logUrl 不为空时 hasLog=1；可辅助判断反馈质量"
+        },
+        {
+          "column_keyword": "反馈【新】",
+          "display_name": "反馈（新口径）",
+          "threshold_pct": 30,
+          "event_code": "11001",
+          "enum_name": "MTAEventIdFeedback",
+          "report_location": "WEGFeedbackViewController.m:207 → commonTrackEvent:MTAEventIdFeedback，Beacon SDK 自动打标 isLatestApp",
+          "aggregation": "COUNT where event_code='11001' AND isLatestApp='1'",
+          "meaning": "使用最新版本 App 的用户提交反馈的次数；isLatestApp 由 Beacon SDK 自动打标，灰度期间随版本扩量自然增长，阈值设 30%"
+        }
+      ]
+    },
+    {
+      "name": "登录成功",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680455",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681099",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "登录成功[总人数]",
+          "display_name": "登录成功总人数",
+          "threshold_pct": 10,
+          "event_code": "60719+20213",
+          "enum_name": "auto:60719, manual:MTAEventIdQRCodeLoginSuccess(20213)",
+          "report_location": "SplashViewController.m:1197 → loginOperator:didLoginWithUser: | LoginOperator.m:1567, SelectLoginViewController.m:671 → QRCodeLoginSuccess",
+          "aggregation": "NDV(uin) where event_code IN (60719, 20213) 及其他登录方式",
+          "meaning": "当日登录成功的去重用户数（含自动登录+手动扫码登录等全部登录方式）"
+        },
+        {
+          "column_keyword": "登录成功[总次数]",
+          "display_name": "登录成功总次数",
+          "threshold_pct": 10,
+          "event_code": "60719+20213",
+          "enum_name": "auto:60719, manual:MTAEventIdQRCodeLoginSuccess(20213)",
+          "report_location": "SplashViewController.m:1197 → loginOperator:didLoginWithUser: | LoginOperator.m:1567, SelectLoginViewController.m:671 → QRCodeLoginSuccess",
+          "aggregation": "COUNT(*) where event_code IN (60719, 20213) 及其他登录方式",
+          "meaning": "当日登录成功总次数（含重复登录，不去重）"
+        },
+        {
+          "column_keyword": "手动登录[总人数]",
+          "display_name": "手动登录总人数",
+          "threshold_pct": 10,
+          "event_code": "20213",
+          "enum_name": "MTAEventIdQRCodeLoginSuccess",
+          "report_location": "LoginOperator.m:1567, SelectLoginViewController.m:671 → commonTrackEvent:MTAEventIdQRCodeLoginSuccess",
+          "aggregation": "NDV(uin) where event_code=20213",
+          "meaning": "当日通过手动扫码（QQ/微信）登录成功的去重用户数"
+        },
+        {
+          "column_keyword": "手动登录[总次数]",
+          "display_name": "手动登录总次数",
+          "threshold_pct": 10,
+          "event_code": "20213",
+          "enum_name": "MTAEventIdQRCodeLoginSuccess",
+          "report_location": "LoginOperator.m:1567, SelectLoginViewController.m:671 → commonTrackEvent:MTAEventIdQRCodeLoginSuccess",
+          "aggregation": "COUNT(*) where event_code=20213",
+          "meaning": "当日通过手动扫码登录成功的总次数"
+        },
+        {
+          "column_keyword": "切换账号[总次数]",
+          "display_name": "切换账号总次数",
+          "threshold_pct": 20,
+          "event_code": "33209",
+          "enum_name": "MTAEventIdSwitchAccountCount",
+          "report_location": "LoginOperator.m:1216 → commonTrackEvent:MTAEventIdSwitchAccountCount param:{count, isLogin}",
+          "aggregation": "COUNT(*) where event_code=33209",
+          "meaning": "当日切换账号操作的总次数；count 字段记录历史账号数量，isLogin 区分是否在登录流程中切换"
+        },
+        {
+          "column_keyword": "切换账号[总人数]",
+          "display_name": "切换账号总人数",
+          "threshold_pct": 20,
+          "event_code": "33209",
+          "enum_name": "MTAEventIdSwitchAccountCount",
+          "report_location": "LoginOperator.m:1216 → commonTrackEvent:MTAEventIdSwitchAccountCount",
+          "aggregation": "NDV(uin) where event_code=33209",
+          "meaning": "当日发生切换账号操作的去重用户数"
+        },
+        {
+          "column_keyword": "【新】登录成功率",
+          "display_name": "登录成功率（新口径）",
+          "threshold_pct": 30,
+          "event_code": "60719+20213+11012",
+          "enum_name": "success:60719+20213, start:MTAEventIdAutoLgoinStart(11012)",
+          "report_location": "成功: SplashViewController.m:1197 | 开始: SplashViewController.m:694",
+          "aggregation": "COUNT 成功 / COUNT 开始，条件 isLatestApp='1'（字段 C37）",
+          "meaning": "最新版本 App 的登录成功率 = 登录成功次数 / 登录尝试次数；isLatestApp 由 Beacon SDK 自动打标，灰度期间随版本扩量正常波动"
+        },
+        {
+          "column_keyword": "登录成功率",
+          "display_name": "登录成功率",
+          "threshold_pct": 5,
+          "event_code": "60719+20213+11012",
+          "enum_name": "success:60719+20213, start:MTAEventIdAutoLgoinStart(11012)",
+          "report_location": "成功: SplashViewController.m:1197 | 开始: SplashViewController.m:694",
+          "aggregation": "COUNT 成功 / COUNT 开始（全量版本）",
+          "meaning": "全量版本的登录成功率 = 登录成功次数 / 登录尝试次数；稳定性指标，波动超 5% 需关注"
+        },
+        {
+          "column_keyword": "自动登录[总人数]",
+          "display_name": "自动登录总人数",
+          "threshold_pct": 10,
+          "event_code": "60719",
+          "enum_name": "60719（无枚举名，硬编码）",
+          "report_location": "SplashViewController.m:1197 → loginOperator:didLoginWithUser: → commonTrackEvent:60719（注释：自动登录成功上报）",
+          "aggregation": "NDV(uin) where event_code=60719",
+          "meaning": "当日通过自动登录（App 启动时使用本地缓存 token 静默登录）成功的去重用户数"
+        },
+        {
+          "column_keyword": "自动登录[总次数]",
+          "display_name": "自动登录总次数",
+          "threshold_pct": 10,
+          "event_code": "60719",
+          "enum_name": "60719（无枚举名，硬编码）",
+          "report_location": "SplashViewController.m:1197 → loginOperator:didLoginWithUser: → commonTrackEvent:60719",
+          "aggregation": "COUNT(*) where event_code=60719",
+          "meaning": "当日自动登录成功的总次数"
+        }
+      ]
+    },
+    {
+      "name": "cos上传",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680452",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681096",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "失败次数",
+          "display_name": "COS上传失败次数",
+          "threshold_pct": 50,
+          "event_code": "10998",
+          "enum_name": "MTAEventIdCOSError",
+          "report_location": "WEGFileUploadHandler.m:161 → onUploadFinishWithUploadService:resultUrl:error: → param:{retCode, resultUrl, retMsg}，retCode<0 为失败",
+          "aggregation": "sum(if(event_code='10998', cast(retCode as int)<0, null))",
+          "meaning": "COS 文件上传失败次数（retCode<0）；天然波动较大，阈值设 50%"
+        },
+        {
+          "column_keyword": "成功次数",
+          "display_name": "COS上传成功次数",
+          "threshold_pct": 10,
+          "event_code": "10998",
+          "enum_name": "MTAEventIdCOSError",
+          "report_location": "WEGFileUploadHandler.m:161 → onUploadFinishWithUploadService:resultUrl:error: → param:{retCode, resultUrl, retMsg}，retCode>=0 为成功",
+          "aggregation": "sum(if(event_code='10998', cast(retCode as int)>=0, null))",
+          "meaning": "COS 文件上传成功次数（retCode>=0）；成功与失败均通过 MTAEventIdCOSError 上报，用 retCode 区分"
+        },
+        {
+          "column_keyword": "COS上传成功率",
+          "display_name": "COS上传成功率",
+          "threshold_pct": 5,
+          "event_code": "10998",
+          "enum_name": "MTAEventIdCOSError",
+          "report_location": "WEGFileUploadHandler.m:161 → onUploadFinishWithUploadService:resultUrl:error:",
+          "aggregation": "sum(retCode=0) / sum(total) where event_code='10998'（全量版本）",
+          "meaning": "全量版本的 COS 上传成功率（retCode=0 / 总上传次数）；稳定性指标，超过 5% 下降需关注"
+        },
+        {
+          "column_keyword": "【新】COS上传成功率",
+          "display_name": "COS上传成功率（新口径）",
+          "threshold_pct": 30,
+          "event_code": "10998",
+          "enum_name": "MTAEventIdCOSError",
+          "report_location": "WEGFileUploadHandler.m:161 → onUploadFinishWithUploadService:resultUrl:error:，isLatestApp 由 Beacon SDK 自动打标（字段 C38）",
+          "aggregation": "sum(retCode=0 AND isLatestApp='1') / sum(isLatestApp='1') where event_code='10998'",
+          "meaning": "最新版本 App 的 COS 上传成功率；isLatestApp 由 Beacon SDK 自动打标，灰度期间随版本扩量正常波动，阈值设 30%"
+        }
+      ]
+    },
+    {
+      "name": "Web容器",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680458",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681102",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "开始加载[总次数]",
+          "display_name": "WebView开始加载总次数",
+          "threshold_pct": 10,
+          "event_code": "11006",
+          "enum_name": "MTAEventIdWebViewLoadStart",
+          "report_location": "WebViewController.m:270 → commonTrackEvent:MTAEventIdWebViewLoadStart（webViewDidStartLoad 回调时上报）",
+          "aggregation": "COUNT(CASE WHEN event_code='11006' THEN 1 END)",
+          "meaning": "当日 WebView 容器触发加载的总次数（按次统计），反映 WebView 访问量基线，可用于和成功次数做对比"
+        },
+        {
+          "column_keyword": "开始加载[总人数]",
+          "display_name": "WebView开始加载总人数",
+          "threshold_pct": 10,
+          "event_code": "11006",
+          "enum_name": "MTAEventIdWebViewLoadStart",
+          "report_location": "WebViewController.m:270 → commonTrackEvent:MTAEventIdWebViewLoadStart",
+          "aggregation": "NDV(uin) WHERE event_code='11006'",
+          "meaning": "当日触发过 WebView 容器加载的去重用户数，反映使用 WebView 功能的用户覆盖面"
+        },
+        {
+          "column_keyword": "加载成功[总次数]",
+          "display_name": "WebView加载成功总次数",
+          "threshold_pct": 10,
+          "event_code": "11007",
+          "enum_name": "MTAEventIdWebViewLoadSuccess",
+          "report_location": "WebViewController.m:2977 → commonTrackEvent:MTAEventIdWebViewLoadSuccess（webViewDidFinishLoad 回调时上报）",
+          "aggregation": "COUNT(CASE WHEN event_code='11007' THEN 1 END)",
+          "meaning": "当日 WebView 容器加载成功的总次数，与开始加载次数的比值即为加载完成率"
+        },
+        {
+          "column_keyword": "加载成功[总人数]",
+          "display_name": "WebView加载成功总人数",
+          "threshold_pct": 10,
+          "event_code": "11007",
+          "enum_name": "MTAEventIdWebViewLoadSuccess",
+          "report_location": "WebViewController.m:2977 → commonTrackEvent:MTAEventIdWebViewLoadSuccess",
+          "aggregation": "NDV(uin) WHERE event_code='11007'",
+          "meaning": "当日 WebView 容器加载成功的去重用户数"
+        },
+        {
+          "column_keyword": "Web容器加载完成率",
+          "display_name": "Web容器加载完成率",
+          "threshold_pct": 5,
+          "event_code": "11006+11007",
+          "enum_name": "MTAEventIdWebViewLoadStart(11006) / MTAEventIdWebViewLoadSuccess(11007)",
+          "report_location": "WebViewController.m:270（start）/ 2977（success）/ 2761,2771,3042（failure=MTAEventIdWebViewLoadFailure=11017）",
+          "aggregation": "COUNT(if(event_code='11007' and userId != '', 1, null)) / COUNT(if(event_code='11006', 1, null))",
+          "meaning": "WebView 容器加载成功次数 / 开始加载次数，反映 WebView 整体可用性；成功率下降可能意味着网络问题、H5页面加载异常或 WebView 初始化失败"
+        },
+        {
+          "column_keyword": "Web容器加载完成率【新】",
+          "display_name": "Web容器加载完成率【新】",
+          "threshold_pct": 5,
+          "event_code": "11006+11007",
+          "enum_name": "MTAEventIdWebViewLoadStart(11006) / MTAEventIdWebViewLoadSuccess(11007)，限 isLatestApp='1'",
+          "report_location": "WebViewController.m:270（start）/ 2977（success）",
+          "aggregation": "COUNT(if(event_code='11007' and userId != '' and isLatestApp='1', 1, null)) / COUNT(if(event_code='11006' and isLatestApp='1', 1, null))",
+          "meaning": "同 Web容器加载完成率，但仅统计最新版本用户（isLatestApp='1'），用于精准评估灰度新版本中 WebView 加载质量"
+        }
+      ]
+    },
+    {
+      "name": "观战事件分析",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680474",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681118",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "观战的总人数",
+          "display_name": "观战的总人数",
+          "threshold_pct": 10,
+          "event_code": "watch_battle",
+          "enum_name": "watch_battle（大同平台字符串事件，非 MTAEventId）",
+          "report_location": "flutter_module/lib/watchbattle_living/loading/index.dart:267-276 → useEffect 初始化时 TencentDtreport.reportEventIOS(event:'watch_battle', udfParams:{battleId})",
+          "aggregation": "NDV(qimei) WHERE event_code='watch_battle' AND platform='iPhone'",
+          "meaning": "当日进入观战加载页面的去重设备数（iOS端，以 qimei 设备指纹去重），代表用户主动发起观战的基线人数。下降可能表示观战入口曝光减少或路由跳转失败。"
+        },
+        {
+          "column_keyword": "观战报错的总人数",
+          "display_name": "观战报错的总人数",
+          "threshold_pct": 20,
+          "event_code": "watch_battle_error",
+          "enum_name": "watch_battle_error（大同平台字符串事件）",
+          "report_location": "flutter_module/lib/watchbattle_living/loading/index.dart:153-161（type=4 用户数过多）/ 219-228（type=3 加载超时）；index_ad.dart:208-214（广告场景报错）",
+          "aggregation": "NDV(qimei) WHERE event_code='watch_battle_error' AND platform='iPhone'",
+          "meaning": "当日观战失败的去重设备数（iOS端）。报错类型：type=3 加载超时（limit 秒内未拉到流）、type=4 当前对局观战人数过多被拒。持续升高需排查游戏服务器侧限流或网络质量。"
+        },
+        {
+          "column_keyword": "观战的总次数",
+          "display_name": "观战的总次数",
+          "threshold_pct": 10,
+          "event_code": "watch_battle",
+          "enum_name": "watch_battle（大同平台字符串事件）",
+          "report_location": "flutter_module/lib/watchbattle_living/loading/index.dart:267-276",
+          "aggregation": "COUNT(CASE WHEN event_code='watch_battle' AND platform='iPhone' THEN 1 END)",
+          "meaning": "当日进入观战加载页面的总次数（iOS端，含同一用户多次观战）。结合总人数可判断用户平均观战次数。"
+        },
+        {
+          "column_keyword": "观战报错的总次数",
+          "display_name": "观战报错的总次数",
+          "threshold_pct": 20,
+          "event_code": "watch_battle_error",
+          "enum_name": "watch_battle_error（大同平台字符串事件）",
+          "report_location": "flutter_module/lib/watchbattle_living/loading/index.dart:153-161 / 219-228；index_ad.dart:208-214",
+          "aggregation": "COUNT(CASE WHEN event_code='watch_battle_error' AND platform='iPhone' THEN 1 END)",
+          "meaning": "当日观战失败的总次数（iOS端）。报错次数 / 观战次数即隐含的失败率；阈值 20% 因为报错量本身偏小天然波动大，需结合绝对值判断。"
+        }
+      ]
+    },
+    {
+      "name": "iOS系统占比",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680467",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681111",
+      "page_type": "tv",
+      "is_distribution": true,
+      "metrics": [
+        {
+          "column_keyword": "20004[总次数]",
+          "display_name": "App启动次数（按iOS版本分布）",
+          "threshold_pct": 15,
+          "event_code": "20004",
+          "enum_name": "MTAEventIdAppDailyFirstStart",
+          "report_location": "MTAManager.h:47 → MTAEventIdAppDailyFirstStart = 20004；每日首次启动上报事件",
+          "aggregation": "COUNT(CASE WHEN event_code='20000' THEN 1 END)，按 操作系统版本(cSystemVersionCode) + cClientVersionName 分组",
+          "meaning": "这是系统版本分布看板，无传统成功率概念。dim_0=操作系统版本（如 OS26.3）、dim_1=App版本。指标代表各 iOS 版本 × App版本组合下的日启动次数，用于掌握用户 iOS 版本分布、指导兼容性优化和最低版本策略。某版本占比骤升可能是新 iOS 推送更新波，骤降可能是该版本崩溃导致启动失败。"
+        }
+      ]
+    },
+    {
+      "name": "iOS机型占比",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680469",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681113",
+      "page_type": "tv",
+      "is_distribution": true,
+      "metrics": [
+        {
+          "column_keyword": "20004",
+          "display_name": "DAU（按iOS机型分布）",
+          "threshold_pct": 15,
+          "event_code": "20004",
+          "enum_name": "MTAEventIdAppDailyFirstStart",
+          "report_location": "MTAManager.m:747 → gameHelperFirstStartInToday → commonTrackEvent:20004 param:{modId:1, eventStartTime, eventOverTime}；每日首次冷启动时触发",
+          "aggregation": "NDV(uin) WHERE event_code='20004'，按 机型名称(model 字段经 REGEXP CASE-WHEN 映射为 iPhone 15 Pro 等) + cClientVersionName 分组",
+          "meaning": "这是机型分布看板，dim_0=设备机型（如 iPhone 15 Pro，由底层 model 字段如 iPhone16,1 经正则映射为可读名称），dim_1=App版本。指标为当日首次启动去重用户数（DAU），反映各机型用户规模分布，指导 UI 适配和性能优化优先级。某机型 DAU 骤降需结合 Bugly 排查该机型特有崩溃。"
+        }
+      ]
+    },
+    {
+      "name": "用户注册",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680457",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681101",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "注册取消",
+          "display_name": "注册取消次数",
+          "threshold_pct": 20,
+          "event_code": "11011",
+          "enum_name": "MTAEventIdUserRegisterResult (success=0)",
+          "report_location": "WEGCampLoginDispatcher.m:360 → commonTrackEvent:MTAEventIdUserRegisterResult param:{success:false}；LoginOperator.m:1517 同",
+          "aggregation": "count(if(event_code='11011' and success='0', 1, null))",
+          "meaning": "注册流程中用户主动取消（success=0）的次数；天然波动较大，阈值设 20%，持续升高需排查注册页面体验问题"
+        },
+        {
+          "column_keyword": "注册成功",
+          "display_name": "注册成功次数",
+          "threshold_pct": 10,
+          "event_code": "11011",
+          "enum_name": "MTAEventIdUserRegisterResult (success=1)",
+          "report_location": "WEGCampLoginDispatcher.m:356 → commonTrackEvent:MTAEventIdUserRegisterResult param:{success:true}；LoginOperator.m:1517 同",
+          "aggregation": "count(if(event_code='11011' and success='1', 1, null))",
+          "meaning": "注册流程成功完成的次数（success=1）；与开始注册次数的比即为注册完成率"
+        },
+        {
+          "column_keyword": "开始注册[总人数]",
+          "display_name": "开始注册总人数",
+          "threshold_pct": 10,
+          "event_code": "11010",
+          "enum_name": "MTAEventIdUserRegisterStart",
+          "report_location": "WEGCampLoginDispatcher.m:318 → commonTrackEvent:MTAEventIdUserRegisterStart；LoginOperator.m:1508 同（用户进入注册流程时触发）",
+          "aggregation": "NDV(uin) WHERE event_code='11010'",
+          "meaning": "当日触发注册流程的去重用户数，反映新用户意愿基线"
+        },
+        {
+          "column_keyword": "开始注册[总次数]",
+          "display_name": "开始注册总次数",
+          "threshold_pct": 10,
+          "event_code": "11010",
+          "enum_name": "MTAEventIdUserRegisterStart",
+          "report_location": "WEGCampLoginDispatcher.m:318；LoginOperator.m:1508",
+          "aggregation": "COUNT(CASE WHEN event_code='11010' THEN 1 END)",
+          "meaning": "当日触发注册流程的总次数（含同一用户多次）"
+        },
+        {
+          "column_keyword": "注册完成率",
+          "display_name": "注册完成率",
+          "threshold_pct": 5,
+          "event_code": "11010+11011",
+          "enum_name": "MTAEventIdUserRegisterStart(11010) / MTAEventIdUserRegisterResult(11011, success=1)",
+          "report_location": "WEGCampLoginDispatcher.m:318/356；LoginOperator.m:1508/1517",
+          "aggregation": "count(if(event_code='11011' and success='1', 1, null)) / count(if(event_code='11010', 1, null))",
+          "meaning": "注册成功次数 / 开始注册次数，反映注册漏斗整体转化效率；下降需排查注册服务端错误或 UI 阻塞问题"
+        },
+        {
+          "column_keyword": "【新】注册完成率",
+          "display_name": "【新】注册完成率",
+          "threshold_pct": 5,
+          "event_code": "11010+11011",
+          "enum_name": "MTAEventIdUserRegisterStart(11010) / MTAEventIdUserRegisterResult(11011, success=1)，限 isLatestApp='1'",
+          "report_location": "WEGCampLoginDispatcher.m:318/356；LoginOperator.m:1508/1517",
+          "aggregation": "count(if(event_code='11011' and success='1' and isLatestApp='1', 1, null)) / count(if(event_code='11010' and isLatestApp='1', 1, null))",
+          "meaning": "同注册完成率，仅限最新版本用户（isLatestApp='1'），用于评估新版本注册流程改动的影响"
+        }
+      ]
+    },
+    {
+      "name": "充值",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680460",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681104",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "发起充值[总次数]",
+          "display_name": "发起充值总次数",
+          "threshold_pct": 10,
+          "event_code": "11002",
+          "enum_name": "MTAEventIdRechargeStart",
+          "report_location": "MidasManager.m:364 → commonTrackEvent:MTAEventIdRechargeStart（用户发起 IAP 支付流程时上报）",
+          "aggregation": "COUNT(CASE WHEN event_code='11002' THEN 1 END)",
+          "meaning": "当日用户发起充值的总次数，是支付漏斗的基线入口"
+        },
+        {
+          "column_keyword": "发起充值[总人数]",
+          "display_name": "发起充值总人数",
+          "threshold_pct": 10,
+          "event_code": "11002",
+          "enum_name": "MTAEventIdRechargeStart",
+          "report_location": "MidasManager.m:364",
+          "aggregation": "NDV(uin) WHERE event_code='11002'",
+          "meaning": "当日发起充值的去重用户数"
+        },
+        {
+          "column_keyword": "充值失败",
+          "display_name": "充值失败次数",
+          "threshold_pct": 20,
+          "event_code": "11003",
+          "enum_name": "MTAEventIdRechargeResult (success=0, 含所有失败原因)",
+          "report_location": "MidasManager.m:596 → commonTrackEvent:MTAEventIdRechargeResult param:{success:0, reason:IAPPay/DistributeGoods, code, innerErrorCode}",
+          "aggregation": "count(if(event_code='11003' and success='0', 1, null))",
+          "meaning": "所有充值失败次数（含支付失败 + 发货失败），波动较大阈值设 20%"
+        },
+        {
+          "column_keyword": "充值成功",
+          "display_name": "充值成功次数",
+          "threshold_pct": 10,
+          "event_code": "11003",
+          "enum_name": "MTAEventIdRechargeResult (success=1)",
+          "report_location": "MidasManager.m:523 → commonTrackEvent:MTAEventIdRechargeResult param:{success:1}",
+          "aggregation": "count(if(event_code='11003' and success='1', 1, null))",
+          "meaning": "充值完整成功（IAP 支付成功且发货完成）的次数"
+        },
+        {
+          "column_keyword": "发货失败",
+          "display_name": "发货失败次数",
+          "threshold_pct": 50,
+          "event_code": "11003",
+          "enum_name": "MTAEventIdRechargeResult (success=0, reason=DistributeGoods)",
+          "report_location": "MidasManager.m:596 → reason='DistributeGoods'（支付成功但道具发货失败）",
+          "aggregation": "count(if(event_code='11003' and success='0' and reason='DistributeGoods', 1, null))",
+          "meaning": "IAP 支付成功但游戏道具发货失败的次数；正常情况应持续为 0，任何非 0 值都需立即排查服务端发货流程"
+        },
+        {
+          "column_keyword": "支付失败",
+          "display_name": "支付失败次数",
+          "threshold_pct": 20,
+          "event_code": "11003",
+          "enum_name": "MTAEventIdRechargeResult (success=0, reason=IAPPay, code!=2)",
+          "report_location": "MidasManager.m:596 → reason='IAPPay', code!=2（code=2 为用户主动取消，已排除）",
+          "aggregation": "count(if(event_code='11003' and success='0' and reason='IAPPay' and code!='2', 1, null))",
+          "meaning": "苹果 IAP 支付环节失败次数（排除 code=2 用户主动取消）；持续升高需排查 StoreKit 或 Midas 接口异常"
+        },
+        {
+          "column_keyword": "充值完成率",
+          "display_name": "充值完成率",
+          "threshold_pct": 5,
+          "event_code": "11002+11003",
+          "enum_name": "MTAEventIdRechargeStart(11002) / MTAEventIdRechargeResult(11003, success=1)",
+          "report_location": "MidasManager.m:364（start）/ 523（success）",
+          "aggregation": "count(if(event_code='11003' and success='1', 1, null)) / count(if(event_code='11002', 1, null))",
+          "meaning": "充值成功次数 / 发起充值次数，反映整体支付漏斗转化效率"
+        },
+        {
+          "column_keyword": "支付失败率",
+          "display_name": "支付失败率",
+          "threshold_pct": 10,
+          "event_code": "11002+11003",
+          "enum_name": "MTAEventIdRechargeResult(success=0, reason=IAPPay, code!=2) / MTAEventIdRechargeStart(11002)",
+          "report_location": "MidasManager.m:596（reason=IAPPay, code!=2）/ 364（start）",
+          "aggregation": "count(if(event_code='11003' and success='0' and reason='IAPPay' and code!='2', 1, null)) / count(if(event_code='11002', 1, null))",
+          "meaning": "IAP 非用户取消的支付失败率；异常升高通常由苹果侧服务异常或 Midas 接口问题引起"
+        },
+        {
+          "column_keyword": "支付完成率【新版本】",
+          "display_name": "支付完成率【新版本】",
+          "threshold_pct": 5,
+          "event_code": "11002+11003",
+          "enum_name": "同充值完成率，限 isLatestApp='1'",
+          "report_location": "MidasManager.m:364/523",
+          "aggregation": "count(if(event_code='11003' and success='1' and isLatestApp='1', 1, null)) / count(if(event_code='11002' and isLatestApp='1', 1, null))",
+          "meaning": "最新版本用户的充值完成率，用于评估新版本发布后支付流程是否受影响"
+        },
+        {
+          "column_keyword": "支付失败率【新版本】",
+          "display_name": "支付失败率【新版本】",
+          "threshold_pct": 10,
+          "event_code": "11002+11003",
+          "enum_name": "同支付失败率，限 isLatestApp='1'",
+          "report_location": "MidasManager.m:596/364",
+          "aggregation": "count(if(event_code='11003' and success='0' and reason='IAPPay' and code!='2' and isLatestApp='1', 1, null)) / count(if(event_code='11002' and isLatestApp='1', 1, null))",
+          "meaning": "最新版本用户的 IAP 支付失败率，与全量失败率对比可判断是否为版本引入的支付回归"
+        }
+      ]
+    },
+    {
+      "name": "新视频报错上报",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680482",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681125",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "50201的总人数",
+          "display_name": "视频播放总人数",
+          "threshold_pct": 10,
+          "event_code": "50201",
+          "enum_name": "onVideoEvent:50201（新架构 WEGPlayer 播放事件，由 logResumePlayer 触发）",
+          "report_location": "WEGPlayerLogHandlerModule.m:113 → logResumePlayer",
+          "aggregation": "NDV(uin) WHERE event_code='50201'",
+          "meaning": "当日触发新视频播放（继续播放）的去重用户数，作为播放基础量用于计算报错率"
+        },
+        {
+          "column_keyword": "50201的总次数",
+          "display_name": "视频播放总次数",
+          "threshold_pct": 10,
+          "event_code": "50201",
+          "enum_name": "onVideoEvent:50201（新架构 WEGPlayer 播放事件）",
+          "report_location": "WEGPlayerLogHandlerModule.m:113 → logResumePlayer",
+          "aggregation": "COUNT(CASE WHEN event_code='50201' THEN 1 END)",
+          "meaning": "当日新视频播放请求的总次数，是视频播放成功率的分母"
+        },
+        {
+          "column_keyword": "50260的总人数",
+          "display_name": "视频播放报错总人数",
+          "threshold_pct": 20,
+          "event_code": "50260",
+          "enum_name": "onClickBtnWithId:50260（新架构 WEGPlayer 网络报错事件，由 logShowPlayerNetErrorView: 触发）",
+          "report_location": "WEGPlayerLogHandlerModule.m:278 → logShowPlayerNetErrorView:，param: {videoType, videoId, videoUrl, errorCode}",
+          "aggregation": "NDV(uin) WHERE event_code='50260'",
+          "meaning": "当日遭遇新视频播放器网络报错的去重用户数"
+        },
+        {
+          "column_keyword": "50260的总次数",
+          "display_name": "视频播放报错总次数",
+          "threshold_pct": 20,
+          "event_code": "50260",
+          "enum_name": "onClickBtnWithId:50260（新架构 WEGPlayer 网络报错事件）",
+          "report_location": "WEGPlayerLogHandlerModule.m:278 → logShowPlayerNetErrorView:",
+          "aggregation": "COUNT(CASE WHEN event_code='50260' THEN 1 END)",
+          "meaning": "当日新视频播放器网络报错弹出的总次数"
+        },
+        {
+          "column_keyword": "50260的t_视频播放成功率",
+          "display_name": "视频播放成功率",
+          "threshold_pct": 5,
+          "event_code": "50201+50260",
+          "enum_name": "50201(播放请求) / 50260(网络报错，有效视频 userId != '')",
+          "report_location": "WEGPlayerLogHandlerModule.m:113（50201播放）/ 278（50260报错）",
+          "aggregation": "1 - COUNT(if(event_code='50260' and userId != '', 1, null)) / COUNT(if(event_code='50201', 1, null))",
+          "meaning": "新视频播放成功率 = 1 - 有效报错次数 / 播放次数；下降超 5% 需排查视频 SDK 或 CDN 异常"
+        },
+        {
+          "column_keyword": "50260的t_【新】视频播放成功率",
+          "display_name": "视频播放成功率【新版本】",
+          "threshold_pct": 5,
+          "event_code": "50201+50260",
+          "enum_name": "同视频播放成功率，限 isLatestApp='1'",
+          "report_location": "WEGPlayerLogHandlerModule.m:113 / 278",
+          "aggregation": "1 - COUNT(if(event_code='50260' and userId != '' and isLatestApp='1', 1, null)) / COUNT(if(event_code='50201' and isLatestApp='1', 1, null))",
+          "meaning": "最新版本用户的新视频播放成功率，用于分离版本变更引入的报错"
+        }
+      ]
+    },
+    {
+      "name": "iOS更新弹窗",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680486",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681129",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "检测到有新版本的总人数",
+          "display_name": "检测到有新版本的总人数",
+          "threshold_pct": 25,
+          "event_code": "20006",
+          "enum_name": "MTAEventIdAppDetectVersionUpdate",
+          "report_location": "UpdateChecker.m:_checkAndShowUpdateDialog: + WEGUpdateDialog.m:50（TF强更场景）；param: {newversion, pkgType, newversioncode, force, isTestFlight}",
+          "aggregation": "NDV(uin) WHERE event_code='20006'",
+          "meaning": "当日检测到有新版本并展示更新弹窗的去重用户数；受版本发布节奏影响自然波动大，发版当日通常显著升高"
+        },
+        {
+          "column_keyword": "版本更新取消按钮点击的总人数",
+          "display_name": "版本更新取消人数",
+          "threshold_pct": 25,
+          "event_code": "20007",
+          "enum_name": "MTAEventIdAppVersionUpdateCancel",
+          "report_location": "WEGUpdateDialog.m:167 → showDialogWithUpdate: 非强制更新弹窗用户点击「取消」",
+          "aggregation": "NDV(uin) WHERE event_code='20007'",
+          "meaning": "当日点击「取消」拒绝更新的去重用户数（仅非强制更新弹窗有取消按钮）"
+        },
+        {
+          "column_keyword": "版本更新更新按钮点击的总人数",
+          "display_name": "版本更新接受人数",
+          "threshold_pct": 25,
+          "event_code": "20008",
+          "enum_name": "MTAEventIdAppVersionUpdateAccept",
+          "report_location": "WEGUpdateDialog.m:202 → jumpToUpdateAppWithUpdate:（主路径）/ 68（TF强更）/ 102（API强更 handleForceUpdate:）",
+          "aggregation": "NDV(uin) WHERE event_code='20008'",
+          "meaning": "当日点击「去更新」/「优先体验」按钮接受更新并跳转 AppStore 的去重用户数"
+        }
+      ]
+    },
+    {
+      "name": "进入首页",
+      "url": "https://beacon.woa.com/datainsight/camp/PanelMax/114739/New_event_Card_Max/680562",
+      "url_all": "https://beacon.woa.com/datainsight/camp/PanelMax/114800/New_event_Card_Max/681139",
+      "page_type": "tv",
+      "metrics": [
+        {
+          "column_keyword": "30001的总人数",
+          "display_name": "进入首页总人数",
+          "threshold_pct": 10,
+          "event_code": "30001",
+          "enum_name": "kDefaultPageViewEventID=30001（OneAPI PV 默认事件，pageName='资讯（推荐）'）",
+          "report_location": "WEGOneReportAPI.m:82 → _reportPageView:isBegin:YES → trackEventBegin:30001 params:{pageName:'资讯（推荐）'}；由 H5/Hippy 层调用 OneAPI reportPageStart 触发",
+          "aggregation": "NDV(uin) WHERE event_code='30001' AND c01='资讯（推荐）'",
+          "meaning": "当日进入首页「资讯推荐」Tab 的去重用户数（DAU 级别指标），突降代表首页入口或加载异常"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+#!/bin/bash
+# post-commit hook: 检测 3 个 Knot 技能目录是否有改动，有则自动同步到 Knot
+
+KNOT_TOKEN="812f19721d3a4c4eaa5f2c3c293ed70b"
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+
+# 获取本次提交改动的文件
+CHANGED_FILES=$(git diff-tree --no-commit-id -r --name-only HEAD)
+
+# 检查是否命中监听目录
+HIT_GALILEO=$(echo "$CHANGED_FILES" | grep -c "^galileo-alert-stat-analyzer/" || true)
+HIT_USERLOG=$(echo "$CHANGED_FILES" | grep -c "^user-log-investigator/" || true)
+HIT_CODELOCATOR=$(echo "$CHANGED_FILES" | grep -c "^camp/code-locator/" || true)
+
+TOTAL=$((HIT_GALILEO + HIT_USERLOG + HIT_CODELOCATOR))
+
+if [ "$TOTAL" -eq 0 ]; then
+  exit 0
+fi
+
+echo ""
+echo "🔄 检测到 Knot 技能改动，开始同步..."
+
+python3 - "$REPO_ROOT" "$KNOT_TOKEN" "$HIT_GALILEO" "$HIT_USERLOG" "$HIT_CODELOCATOR" << 'PYEOF'
+import requests, os, zipfile, base64, tempfile, sys
+
+REPO_ROOT  = sys.argv[1]
+TOKEN      = sys.argv[2]
+HIT_GAL    = int(sys.argv[3])
+HIT_USR    = int(sys.argv[4])
+HIT_CODE   = int(sys.argv[5])
+
+BASE_URL = "https://knot.woa.com/apigw"
+HEADERS  = {"Content-Type": "application/json", "X-knot-api-token": TOKEN}
+
+SKILL_MATRIX = [
+    {"rel": "galileo-alert-stat-analyzer", "inner": "galileo-alert-stat-analyzer", "id": "15484", "hit": HIT_GAL},
+    {"rel": "user-log-investigator",       "inner": "user-log-investigator",        "id": "15432", "hit": HIT_USR},
+    {"rel": "camp/code-locator",           "inner": "code-locator",                 "id": "15431", "hit": HIT_CODE},
+]
+
+def pack(skill_dir, inner_name):
+    tmp = tempfile.NamedTemporaryFile(suffix='.zip', delete=False)
+    tmp.close()
+    with zipfile.ZipFile(tmp.name, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for root, dirs, files in os.walk(skill_dir):
+            dirs[:] = [d for d in dirs if not d.startswith('.') and d != '__pycache__']
+            for f in files:
+                if f.startswith('.') or f.endswith('.pyc'):
+                    continue
+                fp = os.path.join(root, f)
+                zf.write(fp, os.path.join(inner_name, os.path.relpath(fp, skill_dir)))
+    size = os.path.getsize(tmp.name)
+    with open(tmp.name, 'rb') as f:
+        b64 = base64.b64encode(f.read()).decode()
+    os.remove(tmp.name)
+    return b64, size
+
+for s in SKILL_MATRIX:
+    if s["hit"] == 0:
+        continue
+    skill_dir = os.path.join(REPO_ROOT, s["rel"])
+    b64, size = pack(skill_dir, s["inner"])
+    up = requests.post(f"{BASE_URL}/openapi/v1/skills/update_file", headers=HEADERS,
+        json={"id": s["id"], "file_data": b64, "file_name": f"{s['inner']}.zip"})
+    if up.json().get("code") == 0:
+        print(f"  ✅ {s['inner']} (ID={s['id']})  {size/1024:.1f}KB → Knot 同步完成")
+    else:
+        print(f"  ❌ {s['inner']} 同步失败: {up.json()}", file=sys.stderr)
+
+PYEOF

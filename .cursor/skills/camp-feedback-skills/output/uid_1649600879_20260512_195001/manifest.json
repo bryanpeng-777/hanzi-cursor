@@ -1,0 +1,14 @@
+{
+  "logs": [
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1649600879_20260512_195001/attachments/20260512/smoba_20260512.xlog"
+  ],
+  "screenshots": [
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1649600879_20260512_195001/attachments/0ABFB6E1F747B5EFE82097F37CD7FC59.png"
+  ],
+  "platform": "ios",
+  "feedback_id": "BncFHJ4B5YmzxBn_yorf",
+  "source": "ifeedback",
+  "plain_logs": [
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1649600879_20260512_195001/decoded_logs/smoba_20260512.xlog.log"
+  ]
+}

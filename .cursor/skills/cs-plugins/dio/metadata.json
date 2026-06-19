@@ -1,0 +1,15 @@
+{
+  "id": "dio",
+  "name": "Dio HTTP 客户端",
+  "version": "1.0.0",
+  "description": "第三方/自建后端 HTTP 请求，含拦截器、统一错误处理",
+  "category": "network",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "dio": "^5.7.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["N1", "N2"],
+  "presets": ["standard", "full"]
+}

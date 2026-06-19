@@ -1,0 +1,21 @@
+{
+  "id": "cs-video",
+  "name": "CS 视频资源管理",
+  "version": "1.0.0",
+  "description": "CsVideo 控件 + video_manifest.json，统一管理视频生命周期（本地/远程/占位），禁止直接使用 VideoPlayerController 写死路径",
+  "category": "media",
+  "source": "cs_repo",
+  "cs_package": "cs_ui",
+  "pubspec_local": {
+    "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } }
+  },
+  "pubspec_git": {
+    "dependencies": {
+      "cs_ui": { "git": { "url": "https://github.com/bryanpeng-777/cs_ui.git", "ref": "main" } }
+    }
+  },
+  "dependencies": ["cs-ui"],
+  "conflicts": [],
+  "verify_points": ["V1"],
+  "presets": ["full"]
+}

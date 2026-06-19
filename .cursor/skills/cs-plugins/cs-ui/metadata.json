@@ -1,0 +1,21 @@
+{
+  "id": "cs-ui",
+  "name": "CS UI 组件系统",
+  "version": "1.0.0",
+  "description": "shadcn_ui 封装组件、CsApp 主题、CsAppBar、ShadButton 等",
+  "category": "ui",
+  "source": "cs_repo",
+  "cs_package": "cs_ui",
+  "pubspec_local": {
+    "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } }
+  },
+  "pubspec_git": {
+    "dependencies": {
+      "cs_ui": { "git": { "url": "https://github.com/bryanpeng-777/cs_ui.git", "ref": "main" } }
+    }
+  },
+  "dependencies": ["cs-backend"],
+  "conflicts": [],
+  "verify_points": ["G1", "G2", "G3", "G4"],
+  "presets": ["standard", "full"]
+}

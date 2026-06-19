@@ -1,0 +1,51 @@
+{
+  "name": "camp-datong-tracking",
+  "author": "bryanpeng",
+  "maintainers": [],
+  "type": "skill",
+  "version": "1.1.0",
+  "shortDescription": "王者营地大同埋点三端自动化接入工具",
+  "description": "为王者营地项目提供 iOS、Android、Flutter 三端大同埋点自动化接入能力。支持从大同平台获取埋点方案、自动检测技术栈、按营地代码风格生成上报代码，并强制定位真实业务接入点完成页面曝光、元素曝光、点击和自定义事件接入，最后通过静态自检与可视化联调验证。",
+  "category": "dev-tools",
+  "tags": [
+    "datong",
+    "tracking",
+    "analytics",
+    "flutter",
+    "ios",
+    "android",
+    "code-generation",
+    "camp"
+  ],
+  "capabilities": [
+    "自动检测 iOS/Android/Flutter 技术栈和 SDK 集成状态",
+    "从大同平台获取埋点方案或支持从零设计埋点结构",
+    "按营地代码风格生成并接入三端上报代码（DTPageBox/VideoReport/BeaconReport）",
+    "定位真实业务页面、组件、点击回调和业务状态变化节点完成埋点接入",
+    "自动注册应用 appkey 并上传埋点方案到大同平台",
+    "提供可视化联调 debugId 配置指导和验证流程"
+  ],
+  "triggers": [
+    "用户需要在王者营地项目中接入大同埋点",
+    "需要为新页面或模块生成埋点上报代码",
+    "需要开启大同可视化联调验证数据上报",
+    "需要从大同平台同步已有埋点设计到代码",
+    "需要创建大同指标看板或上传埋点方案"
+  ],
+  "updatedAt": "2026-06-09",
+  "versions": {
+    "1.0.0": {
+      "tag": "skill/camp-datong-tracking/v1.0.0",
+      "date": "2026-06-09",
+      "changelog": "初始版本",
+      "minCampAIVersion": "0.12.0"
+    },
+    "1.1.0": {
+      "tag": "skill/camp-datong-tracking/v1.1.0",
+      "date": "2026-06-09",
+      "changelog": "新增强制定位真实业务接入点、静态自检和三端接入规范，新增 Flutter SDK 快速开始文档与营地代码风格规范，升级埋点接入能力由代码生成扩展为完整业务接入闭环。",
+      "minCampAIVersion": "0.12.0"
+    }
+  },
+  "minCampAIVersion": "0.12.0"
+}

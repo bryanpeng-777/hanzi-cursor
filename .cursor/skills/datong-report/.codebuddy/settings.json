@@ -1,0 +1,38 @@
+{
+  "hooks": {
+    "on_skill_invoked": {
+      "command": "python3 hooks/on_skill_invoked.py",
+      "trigger": "skill_load",
+      "description": "Skill 被加载时上报 skill_invoked 事件（旧版兼容）"
+    },
+    "on_task_completed": {
+      "command": "python3 hooks/on_task_completed.py",
+      "trigger": "skill_unload",
+      "description": "Skill 任务结束时上报 task_completed 事件（旧版兼容）"
+    },
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python3 hooks/hooks.py session_start"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "type": "command",
+        "command": "python3 hooks/hooks.py session_end"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python3 hooks/hooks.py tool_used"
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python3 hooks/hooks.py agent_stop"
+      }
+    ]
+  }
+}

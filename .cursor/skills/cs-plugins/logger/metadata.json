@@ -1,0 +1,15 @@
+{
+  "id": "logger",
+  "name": "日志系统",
+  "version": "1.0.0",
+  "description": "logger 包替代 print/debugPrint，分级输出（verbose/debug/info/warning/error），Release 自动关闭",
+  "category": "utility",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "logger": "^2.4.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["H1"],
+  "presets": ["standard", "full"]
+}

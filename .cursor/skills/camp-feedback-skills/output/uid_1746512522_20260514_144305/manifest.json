@@ -1,0 +1,16 @@
+{
+  "lego_status": "skipped",
+  "lego_task_id": null,
+  "lego_message": "lego MCP 未配置 token（未设置 LEGO_MCP_TOKEN），跳过补日志拉取。\n  申请太湖个人令牌：https://tai.it.woa.com/user/pat",
+  "plain_logs": [
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1746512522_20260514_144305/decoded_logs/smoba_20260513.xlog.log",
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1746512522_20260514_144305/decoded_logs/smoba_20260514.xlog.log"
+  ],
+  "logs": [
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1746512522_20260514_144305/attachments/20260513-20260514/smoba_20260513.xlog",
+    "/Users/bryanpeng/.claude/skills/camp-feedback-skills/output/uid_1746512522_20260514_144305/attachments/20260513-20260514/smoba_20260514.xlog"
+  ],
+  "platform": "ios",
+  "feedback_id": "GAo5JZ4BYJJDOVMofZSt",
+  "source": "ifeedback"
+}

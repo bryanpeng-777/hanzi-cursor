@@ -1,0 +1,25 @@
+{
+  "id": "cs-backend",
+  "name": "CS 后台框架",
+  "version": "1.0.0",
+  "description": "Supabase 认证、配置下发、数据存储、推送通知",
+  "category": "infrastructure",
+  "source": "cs_repo",
+  "cs_package": "cs_framework",
+  "pubspec_local": {
+    "dependencies": {
+      "cs_framework": { "path": "../cs/cs_framework" }
+    }
+  },
+  "pubspec_git": {
+    "dependencies": {
+      "cs_framework": {
+        "git": { "url": "https://github.com/bryanpeng-777/cs_framework.git", "ref": "main" }
+      }
+    }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["E1", "E2", "E3", "E4"],
+  "presets": ["minimal", "standard", "full"]
+}

@@ -1,0 +1,273 @@
+{
+  "_comment": "营地 Knot Agent 技能同步配置。本地有修改后运行 sync-to-knot.sh 同步到 Knot 平台。",
+  "agent": "营地终端告警分析 Agent",
+  "token_hint": "Token 获取地址: https://knot.woa.com/settings/token",
+  "last_full_sync": "2026-06-17",
+  "skills": [
+    {
+      "local_path": "~/.claude/skills/camp-knowledge-base",
+      "inner_name": "camp-knowledge-base",
+      "display_name": "camp-knowledge-base",
+      "knot_id": "33468",
+      "knot_url": "https://knot.woa.com/skills/detail/33468",
+      "last_uploaded": "2026-06-17",
+      "description": "营地问题分析共享知识库，包含企业微信文档缓存（问题看板、伽利略告警记录）和静态规范（各域 reference/patterns）",
+      "note": "每周一运行 build-knowledge.sh 重新打包上传"
+    },
+    {
+      "local_path": "~/.claude/skills/bugly-user-investigator",
+      "inner_name": "bugly-user-investigator",
+      "display_name": "bugly-user-investigator",
+      "knot_id": "20106",
+      "knot_url": "https://knot.woa.com/skills/detail/20106",
+      "description": "基于userId查询Bugly Crash/ANR/FOOM事件，返回精确时间戳和堆栈摘要"
+    },
+    {
+      "local_path": "~/.claude/skills/galileo-alert-user-extractor",
+      "inner_name": "galileo-alert-user-extractor",
+      "display_name": "galileo-alert-user-extractor",
+      "knot_id": "33469",
+      "knot_url": "https://knot.woa.com/skills/detail/33469",
+      "description": "从伽利略告警链接中提取主因错误码和代表性userId"
+    },
+    {
+      "local_path": "~/.claude/skills/bugly-issue-user-extractor",
+      "inner_name": "bugly-issue-user-extractor",
+      "display_name": "bugly-issue-user-extractor",
+      "knot_id": "33470",
+      "knot_url": "https://knot.woa.com/skills/detail/33470",
+      "description": "从Bugly Issue链接中提取代表性userId、问题描述和发生时间"
+    },
+    {
+      "local_path": "~/.claude/skills/code-owner-assigner",
+      "inner_name": "code-owner-assigner",
+      "display_name": "code-owner-assigner",
+      "knot_id": "33471",
+      "knot_url": "https://knot.woa.com/skills/detail/33471",
+      "description": "给定代码文件路径，通过git log回溯找出最近有提交的开发者，输出责任人排名"
+    },
+    {
+      "local_path": "~/.claude/skills/galileo-alert-stat-analyzer",
+      "inner_name": "galileo-alert-stat-analyzer",
+      "display_name": "galileo-alert-stat-analyzer",
+      "knot_id": "15484",
+      "knot_url": "https://knot.woa.com/skills/detail/15484",
+      "description": "伽利略告警分析：输入告警链接，自动完成错误码分布、版本分布、Trace关联分析，输出结构化8节报告"
+    },
+    {
+      "local_path": "~/.claude/skills/user-log-investigator",
+      "inner_name": "user-log-investigator",
+      "display_name": "user-log-investigator",
+      "knot_id": "15432",
+      "knot_url": "https://knot.woa.com/skills/detail/15432",
+      "description": "基于userId的伽利略日志拉取与问题定位，自动聚合userId+campUid双维度日志，输出结构化诊断报告"
+    },
+    {
+      "local_path": "~/.claude/skills/camp/code-locator",
+      "inner_name": "code-locator",
+      "display_name": "code-locator",
+      "knot_id": "15431",
+      "knot_url": "https://knot.woa.com/skills/detail/15431",
+      "description": "营地代码快速定位，四层索引体系精确锁定模块路径，支持iOS/Flutter"
+    },
+    {
+      "local_path": "~/.claude/skills/camp/multigame-coverage-checker",
+      "inner_name": "multigame-coverage-checker",
+      "display_name": "multigame-coverage-checker",
+      "knot_id": "16935",
+      "knot_url": "https://knot.woa.com/skills/detail/16935",
+      "description": "王者营地多游灰度保障每日巡检，结合伽利略数据+代码溯源判断各模块上报是否符合预期"
+    },
+    {
+      "local_path": "~/.claude/skills/galileo-shared",
+      "inner_name": "galileo-shared",
+      "display_name": "galileo-shared",
+      "knot_id": "47055",
+      "knot_url": "https://knot.woa.com/skills/detail/47055",
+      "last_uploaded": "2026-06-17",
+      "description": "伽利略 CLI 环境初始化与鉴权，所有伽利略 CLI 技能调用前必须先调用本技能"
+    },
+    {
+      "local_path": "~/.claude/skills/galileo-log",
+      "inner_name": "galileo-log",
+      "display_name": "galileo-log",
+      "knot_id": "47056",
+      "knot_url": "https://knot.woa.com/skills/detail/47056",
+      "last_uploaded": "2026-06-17",
+      "description": "伽利略日志查询/导出/分析（CLI），支持 logs query、logs export、logs analyze 命令"
+    },
+    {
+      "local_path": "~/.claude/skills/galileo-trace",
+      "inner_name": "galileo-trace",
+      "display_name": "galileo-trace",
+      "knot_id": "47057",
+      "knot_url": "https://knot.woa.com/skills/detail/47057",
+      "last_uploaded": "2026-06-17",
+      "description": "伽利略 trace 查询（CLI），支持 trace list、trace list-spans、trace batch-get 命令"
+    },
+    {
+      "local_path": "~/.claude/skills/camp-feedback-skills/camp-feedback-analyzer",
+      "inner_name": "camp-feedback-analyzer",
+      "display_name": "camp-feedback-analyzer",
+      "knot_id": "47058",
+      "knot_url": "https://knot.woa.com/skills/detail/47058",
+      "last_uploaded": "2026-06-17",
+      "description": "反馈日志端到端分析编排（三阶法）"
+    },
+    {
+      "local_path": "~/.claude/skills/camp-feedback-skills/camp-ifeedback-feedback-fetcher",
+      "inner_name": "camp-ifeedback-feedback-fetcher",
+      "display_name": "camp-ifeedback-feedback-fetcher",
+      "knot_id": "47059",
+      "knot_url": "https://knot.woa.com/skills/detail/47059",
+      "last_uploaded": "2026-06-17",
+      "description": "从 iFeedback 拉取用户反馈、附件和 xlog"
+    },
+    {
+      "local_path": "~/.claude/skills/camp-feedback-skills/camp-crystal-feedback-fetcher",
+      "inner_name": "camp-crystal-feedback-fetcher",
+      "display_name": "camp-crystal-feedback-fetcher",
+      "knot_id": "47060",
+      "knot_url": "https://knot.woa.com/skills/detail/47060",
+      "last_uploaded": "2026-06-17",
+      "description": "从水晶反馈平台拉取反馈和附件"
+    },
+    {
+      "local_path": "~/.claude/skills/camp-feedback-skills/camp-xlog-decoder",
+      "inner_name": "camp-xlog-decoder",
+      "display_name": "camp-xlog-decoder",
+      "knot_id": "47061",
+      "knot_url": "https://knot.woa.com/skills/detail/47061",
+      "last_uploaded": "2026-06-17",
+      "description": "mars xlog 解码"
+    },
+    {
+      "local_path": "~/.claude/skills/camp-feedback-skills/camp-lego-log-fetcher",
+      "inner_name": "camp-lego-log-fetcher",
+      "display_name": "camp-lego-log-fetcher",
+      "knot_id": "47062",
+      "knot_url": "https://knot.woa.com/skills/detail/47062",
+      "last_uploaded": "2026-06-17",
+      "description": "通过 Lego MCP 补拉客户端日志"
+    }
+  ],
+  "agents": {
+    "camp-problem-analyzer": {
+      "name": "营地问题分析小助手",
+      "knot_display_name": "营地问题排查总控",
+      "knot_id": "4e9e3a7f6cac48c2b124cab597b4d628",
+      "knot_url": "https://knot.woa.com/agent/detail/4e9e3a7f6cac48c2b124cab597b4d628",
+      "prompt_file": "agents/camp-problem-analyzer.md",
+      "skills": ["camp-knowledge-base"],
+      "sub_agents": [
+        "营地问题线索提取",
+        "营地崩溃排查",
+        "营地伽利略日志分析",
+        "营地反馈日志分析",
+        "营地后台问题排查",
+        "营地代码调用链分析",
+        "营地根因可信度验证",
+        "营地代码责任人查找"
+      ],
+      "note": "主入口，调度所有子 Agent。Prompt 需手动粘贴到 Knot UI。",
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "camp-info-extractor": {
+      "name": "营地问题前置信息提取助手",
+      "knot_display_name": "营地问题线索提取",
+      "knot_id": "111f686d440c4a0e881550ededeea41f",
+      "knot_url": "https://knot.woa.com/agent/detail/111f686d440c4a0e881550ededeea41f",
+      "prompt_file": "agents/camp-info-extractor.md",
+      "skills": ["galileo-alert-user-extractor", "bugly-issue-user-extractor"],
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "camp-verdict-agent": {
+      "name": "营地问题分析审判小助手",
+      "knot_display_name": "营地根因可信度验证",
+      "knot_id": "2d33fb7eae31418cb5db1ff9f17ad8e7",
+      "knot_url": "https://knot.woa.com/agent/detail/2d33fb7eae31418cb5db1ff9f17ad8e7",
+      "prompt_file": "agents/camp-verdict-agent.md",
+      "skills": [],
+      "note": "Galileo MCP + Read/Grep",
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "bugly-assistant": {
+      "name": "bugly-assistant",
+      "knot_display_name": "营地崩溃排查",
+      "knot_id": "a577ec95d72e482cbee3cfe4289d6afa",
+      "knot_url": "https://knot.woa.com/agent/detail/a577ec95d72e482cbee3cfe4289d6afa",
+      "prompt_file": "agents/bugly-assistant.md",
+      "skills": ["camp-knowledge-base", "bugly-user-investigator"],
+      "sub_agents": ["bugly智能修复", "营地代码责任人查找"],
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "dev-assistant": {
+      "name": "dev-assistant",
+      "knot_display_name": "营地代码调用链分析",
+      "knot_id": "7d8d9fa5b73d4a939f9a4f4a3569d35d",
+      "knot_url": "https://knot.woa.com/agent/detail/7d8d9fa5b73d4a939f9a4f4a3569d35d",
+      "prompt_file": "agents/dev-assistant.md",
+      "skills": ["camp-knowledge-base", "code-locator"],
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "tech-lead-assistant": {
+      "name": "tech-lead-assistant",
+      "knot_display_name": "营地代码责任人查找",
+      "knot_id": "62088338280547909af2c75eaaf60ddb",
+      "knot_url": "https://knot.woa.com/agent/detail/62088338280547909af2c75eaaf60ddb",
+      "prompt_file": "agents/tech-lead-assistant.md",
+      "skills": ["code-owner-assigner"],
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "伽利略告警登记小助手": {
+      "name": "伽利略告警登记小助手",
+      "knot_display_name": "营地伽利略日志分析",
+      "knot_id": "edaaf2677d0240b59909a493b3c52a0e",
+      "knot_url": "https://knot.woa.com/agent/detail/edaaf2677d0240b59909a493b3c52a0e",
+      "prompt_file": "agents/伽利略告警登记小助手.md",
+      "skills": [
+        "camp-knowledge-base",
+        "galileo-alert-stat-analyzer",
+        "user-log-investigator",
+        "galileo-shared",
+        "galileo-log",
+        "galileo-trace"
+      ],
+      "last_synced": "2026-06-17",
+      "created": "2026-05-11"
+    },
+    "camp-feedback-log-analyst": {
+      "name": "反馈日志分析小助手",
+      "knot_display_name": "营地反馈日志分析",
+      "knot_id": "d8b55c0fc04d4f33ab2b402c807aabbc",
+      "knot_url": "https://knot.woa.com/agent/detail/d8b55c0fc04d4f33ab2b402c807aabbc",
+      "prompt_file": "agents/camp-feedback-log-analyst.md",
+      "skills": [
+        "camp-feedback-analyzer",
+        "camp-ifeedback-feedback-fetcher",
+        "camp-crystal-feedback-fetcher",
+        "camp-xlog-decoder",
+        "camp-lego-log-fetcher"
+      ],
+      "note": "已创建 2026-06-17",
+      "created": "2026-06-17"
+    },
+    "camp-backend-agent": {
+      "name": "营地后台问题助手",
+      "knot_display_name": "营地后台问题排查",
+      "knot_id": "a9c60534600647b3af8780db42ea6743",
+      "knot_url": "https://knot.woa.com/agent/detail/a9c60534600647b3af8780db42ea6743",
+      "prompt_file": "agents/camp-backend-agent.md",
+      "skills": [],
+      "mcp_required": ["user-camp-server"],
+      "note": "已创建 2026-06-17，需确认工作区已配置 user-camp-server MCP",
+      "created": "2026-06-17"
+    }
+  }
+}

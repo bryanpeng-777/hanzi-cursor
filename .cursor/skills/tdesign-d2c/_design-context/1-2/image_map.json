@@ -1,0 +1,389 @@
+[
+  {
+    "configKey": "figma_pinyin_learn_canvas_backdrop",
+    "type": "image_slot",
+    "src_file": "2ec5f780faf7ec52a5642285f649053e.png",
+    "src_path": "/Users/pengchao/assets/1-2/2ec5f780faf7ec52a5642285f649053e.png",
+    "width": 1536,
+    "height": 1024,
+    "description": "拼音学习页全屏衬底"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_01414ca8",
+    "type": "icon",
+    "src_file": "01414ca818df926e180a0309a671a98c.png",
+    "src_path": "/Users/pengchao/assets/1-2/01414ca818df926e180a0309a671a98c.png",
+    "width": 12,
+    "height": 24,
+    "description": "拼音学习页图标 01414ca8"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_72372fc7",
+    "type": "icon",
+    "src_file": "72372fc7cfdb025f1584a99a022de74e.png",
+    "src_path": "/Users/pengchao/assets/1-2/72372fc7cfdb025f1584a99a022de74e.png",
+    "width": 14,
+    "height": 31,
+    "description": "拼音学习页图标 72372fc7"
+  },
+  {
+    "configKey": "figma_pinyin_learn_side_chip",
+    "type": "image_slot",
+    "src_file": "25b517f74c7e2b879d9a437492465a34.png",
+    "src_path": "/Users/pengchao/assets/1-2/25b517f74c7e2b879d9a437492465a34.png",
+    "width": 106,
+    "height": 64,
+    "description": "右侧小标签"
+  },
+  {
+    "configKey": "figma_pinyin_learn_side_deco",
+    "type": "image_slot",
+    "src_file": "98880f68be320b5c2213b8dcdd70c384.png",
+    "src_path": "/Users/pengchao/assets/1-2/98880f68be320b5c2213b8dcdd70c384.png",
+    "width": 116,
+    "height": 130,
+    "description": "右侧装饰"
+  },
+  {
+    "configKey": "figma_pinyin_learn_panel_bg",
+    "type": "image_slot",
+    "src_file": "49f603d8999b9bb221834e84b8f71696.png",
+    "src_path": "/Users/pengchao/assets/1-2/49f603d8999b9bb221834e84b8f71696.png",
+    "width": 1273,
+    "height": 817,
+    "description": "主内容面板背景"
+  },
+  {
+    "configKey": "figma_pinyin_learn_image_3872bca6",
+    "type": "image_slot",
+    "src_file": "3872bca67cb7a4c5ba36bb0f71b41295.png",
+    "src_path": "/Users/pengchao/assets/1-2/3872bca67cb7a4c5ba36bb0f71b41295.png",
+    "width": 42,
+    "height": 50,
+    "description": "拼音学习页图片 3872bca6"
+  },
+  {
+    "configKey": "figma_pinyin_learn_image_4f85c75c",
+    "type": "image_slot",
+    "src_file": "4f85c75c7e5d50690f8a1806b4efa4ff.png",
+    "src_path": "/Users/pengchao/assets/1-2/4f85c75c7e5d50690f8a1806b4efa4ff.png",
+    "width": 51,
+    "height": 52,
+    "description": "拼音学习页图片 4f85c75c"
+  },
+  {
+    "configKey": "figma_pinyin_learn_tip_icon",
+    "type": "icon",
+    "src_file": "1dc74b03f67150892f6cc0fbd72c15c5.png",
+    "src_path": "/Users/pengchao/assets/1-2/1dc74b03f67150892f6cc0fbd72c15c5.png",
+    "width": 76,
+    "height": 73,
+    "description": "底部提示图标"
+  },
+  {
+    "configKey": "figma_pinyin_learn_grid_bg",
+    "type": "image_slot",
+    "src_file": "687ecdfc7d6432edba31fe9f403cfb31.png",
+    "src_path": "/Users/pengchao/assets/1-2/687ecdfc7d6432edba31fe9f403cfb31.png",
+    "width": 1218,
+    "height": 531,
+    "description": "拼音卡片网格区背景"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_c29a910d",
+    "type": "icon",
+    "src_file": "c29a910df6b40535272cdabf7f60ceb7.png",
+    "src_path": "/Users/pengchao/assets/1-2/c29a910df6b40535272cdabf7f60ceb7.png",
+    "width": 38,
+    "height": 37,
+    "description": "拼音学习页图标 c29a910d"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_15d9e10d",
+    "type": "icon",
+    "src_file": "15d9e10dca921e4c3eda79a32e0be517.png",
+    "src_path": "/Users/pengchao/assets/1-2/15d9e10dca921e4c3eda79a32e0be517.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 15d9e10d"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_08bc2dfd",
+    "type": "icon",
+    "src_file": "08bc2dfdade23ef0a1c9abcca8bec229.png",
+    "src_path": "/Users/pengchao/assets/1-2/08bc2dfdade23ef0a1c9abcca8bec229.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 08bc2dfd"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_51fed9e1",
+    "type": "icon",
+    "src_file": "51fed9e10824d57a7efdae66b9930aab.png",
+    "src_path": "/Users/pengchao/assets/1-2/51fed9e10824d57a7efdae66b9930aab.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 51fed9e1"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_136a9133",
+    "type": "icon",
+    "src_file": "136a9133db19f534c2414aaa0d1d187c.png",
+    "src_path": "/Users/pengchao/assets/1-2/136a9133db19f534c2414aaa0d1d187c.png",
+    "width": 36,
+    "height": 37,
+    "description": "拼音学习页图标 136a9133"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_757dc165",
+    "type": "icon",
+    "src_file": "757dc165d2cfbed54974664c3f6fd852.png",
+    "src_path": "/Users/pengchao/assets/1-2/757dc165d2cfbed54974664c3f6fd852.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 757dc165"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_3afa31d6",
+    "type": "icon",
+    "src_file": "3afa31d666e7bf6f51d7094637425505.png",
+    "src_path": "/Users/pengchao/assets/1-2/3afa31d666e7bf6f51d7094637425505.png",
+    "width": 39,
+    "height": 38,
+    "description": "拼音学习页图标 3afa31d6"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_9ccca81f",
+    "type": "icon",
+    "src_file": "9ccca81fb433140d59a806b01f0f29d3.png",
+    "src_path": "/Users/pengchao/assets/1-2/9ccca81fb433140d59a806b01f0f29d3.png",
+    "width": 38,
+    "height": 38,
+    "description": "拼音学习页图标 9ccca81f"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_5e2f6618",
+    "type": "icon",
+    "src_file": "5e2f6618592c5f6708730410581cf95e.png",
+    "src_path": "/Users/pengchao/assets/1-2/5e2f6618592c5f6708730410581cf95e.png",
+    "width": 37,
+    "height": 38,
+    "description": "拼音学习页图标 5e2f6618"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_104c66ae",
+    "type": "icon",
+    "src_file": "104c66ae80331a4c74d13fa76e5afb3d.png",
+    "src_path": "/Users/pengchao/assets/1-2/104c66ae80331a4c74d13fa76e5afb3d.png",
+    "width": 37,
+    "height": 38,
+    "description": "拼音学习页图标 104c66ae"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_ce7bff1d",
+    "type": "icon",
+    "src_file": "ce7bff1d53e70a8e6a15e76c308ccf45.png",
+    "src_path": "/Users/pengchao/assets/1-2/ce7bff1d53e70a8e6a15e76c308ccf45.png",
+    "width": 37,
+    "height": 36,
+    "description": "拼音学习页图标 ce7bff1d"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_720421d6",
+    "type": "icon",
+    "src_file": "720421d6e516c2794251d476e80b41e4.png",
+    "src_path": "/Users/pengchao/assets/1-2/720421d6e516c2794251d476e80b41e4.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 720421d6"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_5dcc9e19",
+    "type": "icon",
+    "src_file": "5dcc9e19cd9fc18e1baccad1fe9de56c.png",
+    "src_path": "/Users/pengchao/assets/1-2/5dcc9e19cd9fc18e1baccad1fe9de56c.png",
+    "width": 38,
+    "height": 38,
+    "description": "拼音学习页图标 5dcc9e19"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_e3957c01",
+    "type": "icon",
+    "src_file": "e3957c01a49a396fbae0c71b2598ea55.png",
+    "src_path": "/Users/pengchao/assets/1-2/e3957c01a49a396fbae0c71b2598ea55.png",
+    "width": 37,
+    "height": 36,
+    "description": "拼音学习页图标 e3957c01"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_8a91801f",
+    "type": "icon",
+    "src_file": "8a91801f7436db722f3d9c1dc495905e.png",
+    "src_path": "/Users/pengchao/assets/1-2/8a91801f7436db722f3d9c1dc495905e.png",
+    "width": 37,
+    "height": 38,
+    "description": "拼音学习页图标 8a91801f"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_d5fce16f",
+    "type": "icon",
+    "src_file": "d5fce16f9c365ee96022e8c252d23275.png",
+    "src_path": "/Users/pengchao/assets/1-2/d5fce16f9c365ee96022e8c252d23275.png",
+    "width": 38,
+    "height": 38,
+    "description": "拼音学习页图标 d5fce16f"
+  },
+  {
+    "configKey": "figma_pinyin_learn_image_fe36c046",
+    "type": "image_slot",
+    "src_file": "fe36c046359e02b2e4b2e0af4f3d2f1c.png",
+    "src_path": "/Users/pengchao/assets/1-2/fe36c046359e02b2e4b2e0af4f3d2f1c.png",
+    "width": 7,
+    "height": 41,
+    "description": "拼音学习页图片 fe36c046"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_0b61af61",
+    "type": "icon",
+    "src_file": "0b61af61badf118757e728de96d41fc3.png",
+    "src_path": "/Users/pengchao/assets/1-2/0b61af61badf118757e728de96d41fc3.png",
+    "width": 39,
+    "height": 39,
+    "description": "拼音学习页图标 0b61af61"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_272de3e4",
+    "type": "icon",
+    "src_file": "272de3e4e1d1338a2cd064dbb4a5b90c.png",
+    "src_path": "/Users/pengchao/assets/1-2/272de3e4e1d1338a2cd064dbb4a5b90c.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 272de3e4"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_3a573976",
+    "type": "icon",
+    "src_file": "3a5739761c39be4042a0d01da4cd5f1a.png",
+    "src_path": "/Users/pengchao/assets/1-2/3a5739761c39be4042a0d01da4cd5f1a.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 3a573976"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_2ffe4570",
+    "type": "icon",
+    "src_file": "2ffe4570d163a0b7b6a8219e1a067814.png",
+    "src_path": "/Users/pengchao/assets/1-2/2ffe4570d163a0b7b6a8219e1a067814.png",
+    "width": 39,
+    "height": 38,
+    "description": "拼音学习页图标 2ffe4570"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_11a3f74b",
+    "type": "icon",
+    "src_file": "11a3f74b3970a0bc01ed1a15d2d6172f.png",
+    "src_path": "/Users/pengchao/assets/1-2/11a3f74b3970a0bc01ed1a15d2d6172f.png",
+    "width": 38,
+    "height": 37,
+    "description": "拼音学习页图标 11a3f74b"
+  },
+  {
+    "configKey": "figma_pinyin_learn_icon_90d112b0",
+    "type": "icon",
+    "src_file": "90d112b0e2a3f1dfed8c018b606aa614.png",
+    "src_path": "/Users/pengchao/assets/1-2/90d112b0e2a3f1dfed8c018b606aa614.png",
+    "width": 37,
+    "height": 37,
+    "description": "拼音学习页图标 90d112b0"
+  },
+  {
+    "configKey": "figma_pinyin_learn_tts_icon_b",
+    "type": "icon",
+    "src_file": "9426e1085ec86d7712d1261d9e729134.png",
+    "src_path": "/Users/pengchao/assets/1-2/9426e1085ec86d7712d1261d9e729134.png",
+    "width": 37,
+    "height": 37,
+    "description": "声母 b 卡片 TTS 喇叭"
+  },
+  {
+    "configKey": "figma_pinyin_learn_tab_indicator",
+    "type": "image_slot",
+    "src_file": "736976f58c7b72f5f83540869000dda1.png",
+    "src_path": "/Users/pengchao/assets/1-2/736976f58c7b72f5f83540869000dda1.png",
+    "width": 76,
+    "height": 6,
+    "description": "声母 Tab 下划线指示"
+  },
+  {
+    "configKey": "figma_pinyin_learn_auto_mode_icon",
+    "type": "icon",
+    "src_file": "b7f7409d0c2317fec43f0c8e1d719ef1.png",
+    "src_path": "/Users/pengchao/assets/1-2/b7f7409d0c2317fec43f0c8e1d719ef1.png",
+    "width": 45,
+    "height": 40,
+    "description": "自动模式图标"
+  },
+  {
+    "configKey": "figma_pinyin_learn_manual_mode_bg",
+    "type": "image_slot",
+    "src_file": "b927aed5cb28a09cbb3a043e63bf60e8.png",
+    "src_path": "/Users/pengchao/assets/1-2/b927aed5cb28a09cbb3a043e63bf60e8.png",
+    "width": 261,
+    "height": 66,
+    "description": "手动模式选中背景"
+  },
+  {
+    "configKey": "figma_pinyin_learn_manual_mode_icon",
+    "type": "icon",
+    "src_file": "3399d0bd542056d96d0a7793d0d9923c.png",
+    "src_path": "/Users/pengchao/assets/1-2/3399d0bd542056d96d0a7793d0d9923c.png",
+    "width": 37,
+    "height": 37,
+    "description": "手动模式图标"
+  },
+  {
+    "configKey": "figma_pinyin_learn_bottom_bar",
+    "type": "image_slot",
+    "src_file": "93f6a10acd02edf8f9937cd2f60ae86c.png",
+    "src_path": "/Users/pengchao/assets/1-2/93f6a10acd02edf8f9937cd2f60ae86c.png",
+    "width": 527,
+    "height": 77,
+    "description": "底部进度条区域"
+  },
+  {
+    "configKey": "figma_pinyin_learn_header_avatar",
+    "type": "icon",
+    "src_file": "d0306bda627008c12f86aa2d5ea41843.png",
+    "src_path": "/Users/pengchao/assets/1-2/d0306bda627008c12f86aa2d5ea41843.png",
+    "width": 82,
+    "height": 83,
+    "description": "右上角头像"
+  },
+  {
+    "configKey": "figma_pinyin_learn_title_deco_right",
+    "type": "icon",
+    "src_file": "49ec886212395a3318b58f7f805b0170.png",
+    "src_path": "/Users/pengchao/assets/1-2/49ec886212395a3318b58f7f805b0170.png",
+    "width": 42,
+    "height": 39,
+    "description": "标题右侧装饰"
+  },
+  {
+    "configKey": "figma_pinyin_learn_title_deco_left",
+    "type": "icon",
+    "src_file": "8038364964c58493a057823b2b6fbe07.png",
+    "src_path": "/Users/pengchao/assets/1-2/8038364964c58493a057823b2b6fbe07.png",
+    "width": 41,
+    "height": 37,
+    "description": "标题左侧装饰"
+  },
+  {
+    "configKey": "figma_pinyin_learn_back_btn",
+    "type": "icon",
+    "src_file": "371e6997efc3988793cf4ec0b4e772e1.png",
+    "src_path": "/Users/pengchao/assets/1-2/371e6997efc3988793cf4ec0b4e772e1.png",
+    "width": 84,
+    "height": 85,
+    "description": "返回按钮"
+  }
+]

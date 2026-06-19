@@ -1,0 +1,23 @@
+{
+  "skill_name": "camp-datong-tracking",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我给 Flutter 里的多游专区首页做埋点。页面 pageId 是 multi_game_page，需要上报：1）页面进入曝光，2）切换游戏按钮点击（elementId: battle_game_switcher，带参数 game_id 和 module_from），3）下拉刷新自定义事件（game_zone_pull_to_refresh，带 game_id）。参考现有代码风格。",
+      "expected_output": "生成包含 DTPageBox 包裹页面、DTElementBox 或 DTReportFlutter.reportClickEvent 处理点击、TencentDtreport.reportEventIOS/Android 处理自定义事件的 Flutter 代码。应包含 DTMultiGamePageId / DTMultiGameElementId / DTMultiGameCustomEvent / MultiGameDtReport 四类结构，并处理 iOS/Android 双平台分支。",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "我们营地 iOS 端要做一个新功能「战绩分享」，已经在大同平台定义好了埋点，埋点信息码是 Datong_battle_share，appId 是 camp_ios_battle。帮我生成对应的 iOS 上报代码。",
+      "expected_output": "1) 调用 get_dt_tracking_info('Datong_battle_share') 获取埋点方案；2) 生成符合营地 iOS VideoReport 风格的代码（vr_pageId / vr_elementId 属性设置 + BeaconReport 自定义事件）；3) 引导开启可视化联调。",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Flutter 里的 DTPageBox 和 DTElementBox 怎么用？我要给一个 feed 卡片列表做元素曝光，列表里有多个相同 elementId 的卡片。",
+      "expected_output": "给出 DTElementBox 加 reuseId 区分列表行的示例代码，说明需要外层 DTPageBox，解释 reuseId 的用途。代码风格符合营地 camp-style.md 规范。",
+      "files": []
+    }
+  ]
+}

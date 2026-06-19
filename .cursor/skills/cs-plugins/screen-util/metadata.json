@@ -1,0 +1,15 @@
+{
+  "id": "screen-util",
+  "name": "屏幕适配",
+  "version": "1.0.0",
+  "description": "flutter_screenutil 按比例缩放尺寸，仅接入初始化，业务代码按需使用 .w / .h / .sp",
+  "category": "utility",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "flutter_screenutil": "^5.9.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["SU1"],
+  "presets": ["full"]
+}

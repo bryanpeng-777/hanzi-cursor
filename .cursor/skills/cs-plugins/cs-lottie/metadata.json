@@ -1,0 +1,21 @@
+{
+  "id": "cs-lottie",
+  "name": "CS Lottie 动画管理",
+  "version": "1.0.0",
+  "description": "CsLottie 控件 + lottie_manifest.json，统一管理动画生命周期（本地/远程/占位），禁止直接使用 Lottie.asset/network",
+  "category": "media",
+  "source": "cs_repo",
+  "cs_package": "cs_ui",
+  "pubspec_local": {
+    "dependencies": { "cs_ui": { "path": "../cs/cs_ui" } }
+  },
+  "pubspec_git": {
+    "dependencies": {
+      "cs_ui": { "git": { "url": "https://github.com/bryanpeng-777/cs_ui.git", "ref": "main" } }
+    }
+  },
+  "dependencies": ["cs-ui"],
+  "conflicts": [],
+  "verify_points": ["LA1"],
+  "presets": ["full"]
+}

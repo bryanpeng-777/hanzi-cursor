@@ -1,0 +1,10 @@
+{
+  "name": "tdesign-d2c-workspace",
+  "version": "1.0.0",
+  "type": "module",
+  "devDependencies": {
+    "@tdesign/d2c-utils": "^0.0.11",
+    "tsx": "latest",
+    "typescript": "latest"
+  }
+}

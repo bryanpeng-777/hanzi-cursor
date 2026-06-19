@@ -1,0 +1,15 @@
+{
+  "id": "go-router",
+  "name": "go_router 路由",
+  "version": "1.0.0",
+  "description": "声明式路由，替代 Navigator.push/pop/pushNamed",
+  "category": "navigation",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "go_router": "^14.0.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["C1", "C2", "C3"],
+  "presets": ["minimal", "standard", "full"]
+}

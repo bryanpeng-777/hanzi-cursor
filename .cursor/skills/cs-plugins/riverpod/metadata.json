@@ -1,0 +1,16 @@
+{
+  "id": "riverpod",
+  "name": "Riverpod 状态管理",
+  "version": "1.0.0",
+  "description": "flutter_riverpod + riverpod_annotation + 代码生成，替代 setState 业务逻辑",
+  "category": "state",
+  "source": "pubdev",
+  "pubspec_local": {
+    "dependencies": { "flutter_riverpod": "^2.5.0", "riverpod_annotation": "^2.4.0" },
+    "dev_dependencies": { "riverpod_generator": "^2.4.0", "build_runner": "^2.4.0" }
+  },
+  "dependencies": [],
+  "conflicts": [],
+  "verify_points": ["B1", "B2", "B3", "B4"],
+  "presets": ["minimal", "standard", "full"]
+}

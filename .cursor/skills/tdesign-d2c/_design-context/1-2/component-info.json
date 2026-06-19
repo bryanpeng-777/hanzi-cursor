@@ -1,0 +1,263 @@
+{
+  "layerName": "1-2",
+  "components": [
+    {
+      "componentName": "Figma design - hanzi_ui_preview.png",
+      "tagName": "div",
+      "props": {
+        "style": "position:absolute;left:0px;top:0px;width:1536px;height:1024px;overflow:hidden",
+        "data-name": "Figma design - hanzi_ui_preview.png"
+      },
+      "children": [
+        {
+          "componentName": "Root",
+          "tagName": "div",
+          "props": {
+            "style": "position:absolute;left:0px;top:0px;width:1536px;height:1024px",
+            "data-name": "Root"
+          },
+          "children": [
+            {
+              "componentName": "Groups",
+              "tagName": "div",
+              "props": {
+                "style": "position:absolute;left:0px;top:200px;width:1536px;height:824px",
+                "data-name": "Groups"
+              },
+              "children": [
+                {
+                  "componentName": "Button",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:1142px;top:673px;width:283px;height:122px",
+                    "data-name": "Button"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:5px;top:4px;width:275px;height:115px;background:url(",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Button",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:464px;top:673px;width:537px;height:91px",
+                    "data-name": "Button"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:0px;top:5px;width:532px;height:80px;background:rgba(242,246,251,1);border-radius:46px 33px 33px 43px;outline:2px solid rgba(177,211,231,1);outline-offset:-2px",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Groups",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:1074px;top:318px;width:306px;height:324px",
+                    "data-name": "Groups"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:8px;top:0px;width:291px;height:318px;background:url(",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Groups",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:766px;top:316px;width:305px;height:328px",
+                    "data-name": "Groups"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Groups",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:7px;top:0px;width:293px;height:322px",
+                        "data-name": "Groups"
+                      },
+                      "children": [
+                        {
+                          "componentName": "Background",
+                          "tagName": "div",
+                          "props": {
+                            "style": "position:absolute;left:-1px;top:0px;width:291px;height:320px;background:url(",
+                            "data-name": "Background"
+                          }
+                        },
+                        {
+                          "componentName": "Button",
+                          "tagName": "div",
+                          "props": {
+                            "style": "position:absolute;left:14px;top:53px;width:51px;height:52px",
+                            "data-name": "Button"
+                          },
+                          "children": [
+                            {
+                              "componentName": "Background",
+                              "tagName": "div",
+                              "props": {
+                                "style": "position:absolute;left:5px;top:6px;width:43px;height:43px;background:rgba(253,253,253,1);border-radius:21.5px;outline:1px solid rgba(140,189,244,1);outline-offset:-1px",
+                                "data-name": "Background"
+                              }
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Groups",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:0px;top:-2px;width:1536px;height:303px",
+                    "data-name": "Groups"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Groups",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:68px;top:-2px;width:1264px;height:314px",
+                        "data-name": "Groups"
+                      },
+                      "children": [
+                        {
+                          "componentName": "Background",
+                          "tagName": "div",
+                          "props": {
+                            "style": "position:absolute;left:0px;top:0px;width:1264px;height:314px;background:url(",
+                            "data-name": "Background"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Groups",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:467px;top:315px;width:296px;height:322px",
+                    "data-name": "Groups"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:-7px;top:0px;width:297px;height:321px;background:url(",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "componentName": "Groups",
+              "tagName": "div",
+              "props": {
+                "style": "position:absolute;left:0px;top:0px;width:1536px;height:128px",
+                "data-name": "Groups"
+              },
+              "children": [
+                {
+                  "componentName": "Button",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:1318px;top:20px;width:202px;height:99px",
+                    "data-name": "Button"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:6px;top:4px;width:194px;height:93px;background:url(",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Button",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:1089px;top:25px;width:201px;height:88px",
+                    "data-name": "Button"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:7px;top:6px;width:191px;height:79px;background:rgba(243,246,250,1);border-radius:36px;outline:7px solid rgba(199,226,243,1);outline-offset:-7px",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Groups",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:503px;top:29px;width:527px;height:86px",
+                    "data-name": "Groups"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:7px;top:6px;width:515px;height:75px;background:rgba(248,249,251,1);border-radius:35px;outline:1px solid rgba(169,212,240,1);outline-offset:-1px",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "componentName": "Button",
+                  "tagName": "div",
+                  "props": {
+                    "style": "position:absolute;left:130px;top:25px;width:217px;height:84px",
+                    "data-name": "Button"
+                  },
+                  "children": [
+                    {
+                      "componentName": "Background",
+                      "tagName": "div",
+                      "props": {
+                        "style": "position:absolute;left:5px;top:5px;width:207px;height:75px;background:rgba(244,247,251,1);border-radius:36px;outline:1px solid rgba(197,225,244,1);outline-offset:-1px",
+                        "data-name": "Background"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
