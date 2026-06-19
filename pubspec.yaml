@@ -48,6 +48,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/figma_pinyin_1_2/
+    - assets/images/pinyin_icons/
     - assets/figma_d2c/
     - assets/audio/
     - assets/default_configs.json
