@@ -27,11 +27,6 @@ const _optionColors = [
   Color(0xFFFB8082),
 ];
 
-// ─── Quick lookup: initial symbol → PinyinItem ─────────────────────────────
-final _initialBySymbol = <String, PinyinItem>{
-  for (final p in allInitials) p.symbol: p,
-};
-
 class PinyinExerciseScreen extends ConsumerStatefulWidget {
   final bool mistakeMode;
 
@@ -519,6 +514,13 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
       ],
     );
 
+    final hanziImage = CsImage(
+      configKey: 'hanzi_icon_${_currentHanzi!.character}',
+      description: _currentHanzi!.iconHint,
+      width: compact ? 72 : 96,
+      height: compact ? 72 : 96,
+    );
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 24),
       child: Container(
@@ -559,6 +561,8 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
             ),
             SizedBox(height: compact ? 6 : 8),
             timerRing,
+            SizedBox(height: compact ? 6 : 10),
+            hanziImage,
             if (_timedOut)
               Padding(
                 padding: const EdgeInsets.only(top: 6),
@@ -626,11 +630,6 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
       }
     }
 
-    // Use the example character for this initial (if found)
-    final pinyinItem = _initialBySymbol[initial];
-    final exampleChar = pinyinItem?.example ?? '';
-    final iconHint = pinyinItem?.iconHint ?? '声母$initial示意图';
-
     return GestureDetector(
       onTap: () => _selectAnswer(initial),
       child: AnimatedContainer(
@@ -662,33 +661,15 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
                 ),
               ),
             ),
-            SizedBox(height: compact ? 4 : 6),
-            // Example character image
-            CsImage(
-              configKey: 'hanzi_icon_$exampleChar',
-              description: iconHint,
-              width: compact ? 40 : 52,
-              height: compact ? 40 : 52,
-            ),
-            SizedBox(height: compact ? 2 : 4),
-            // Initial text
+            SizedBox(height: compact ? 8 : 12),
             Text(
               initial,
               style: TextStyle(
-                fontSize: compact ? 22 : 28,
+                fontSize: compact ? 28 : 36,
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),
             ),
-            // Example character name
-            if (exampleChar.isNotEmpty)
-              Text(
-                exampleChar,
-                style: TextStyle(
-                  fontSize: compact ? 10 : 12,
-                  color: textColor.withOpacity(0.6),
-                ),
-              ),
           ],
         ),
       ).animate(delay: (idx * 80).ms).fadeIn().scale(
