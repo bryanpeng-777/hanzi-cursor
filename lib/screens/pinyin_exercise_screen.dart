@@ -401,6 +401,8 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
 
   Widget _buildGameBody() {
     if (_currentHanzi == null) return const SizedBox.shrink();
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -413,128 +415,159 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
           ],
         ),
       ),
-      child: Column(
-        children: [
-          const SizedBox(height: 10),
-          Expanded(flex: 4, child: _buildQuestionCard()),
-          const SizedBox(height: 10),
-          Expanded(flex: 6, child: _buildOptionsRow()),
-          const SizedBox(height: 10),
-        ],
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isLandscape ? 8 : 0,
+          vertical: isLandscape ? 6 : 0,
+        ),
+        child: isLandscape
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(flex: 4, child: _buildQuestionCard(compact: true)),
+                  const SizedBox(width: 8),
+                  Expanded(flex: 6, child: _buildOptionsRow()),
+                ],
+              )
+            : Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Expanded(flex: 3, child: _buildQuestionCard()),
+                  const SizedBox(height: 10),
+                  Expanded(flex: 7, child: _buildOptionsRow()),
+                  const SizedBox(height: 10),
+                ],
+              ),
       ),
     );
   }
 
   // ─── Question card ─────────────────────────────────────────────────────
 
-  Widget _buildQuestionCard() {
+  Widget _buildQuestionCard({bool compact = false}) {
     final pinyin = _currentHanzi!.pinyin;
     // Derive the vowel/final part by stripping the initial
     final vowelPart = _correctInitial.isNotEmpty
         ? pinyin.replaceFirst(_correctInitial, '')
         : pinyin;
 
+    final pinyinFontSize = compact ? 32.0 : 46.0;
+    final questionMarkSize = compact ? 28.0 : 38.0;
+    final timerSize = compact ? 52.0 : 64.0;
+    final charFontSize = compact ? 22.0 : 26.0;
+
+    final pinyinRow = Row(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.baseline,
+      textBaseline: TextBaseline.alphabetic,
+      children: [
+        Text(
+          '?-',
+          style: TextStyle(
+            fontSize: questionMarkSize,
+            fontWeight: FontWeight.w700,
+            color: const Color(0xFF4D4D4E),
+            letterSpacing: -1,
+          ),
+        ),
+        if (vowelPart.isNotEmpty) ...[
+          SizedBox(width: compact ? 4 : 6),
+          Text(
+            vowelPart,
+            style: TextStyle(
+              fontSize: pinyinFontSize,
+              fontWeight: FontWeight.w700,
+              color: _orangeAccent,
+            ),
+          ),
+        ],
+      ],
+    );
+
+    final timerRing = Stack(
+      alignment: Alignment.center,
+      children: [
+        SizedBox(
+          width: timerSize,
+          height: timerSize,
+          child: AnimatedBuilder(
+            animation: _timerController,
+            builder: (context, _) {
+              final remaining = 1.0 - _timerController.value;
+              final timerColor = remaining > 0.5
+                  ? AppTheme.primaryGreen
+                  : remaining > 0.2
+                      ? AppTheme.primaryYellow
+                      : Colors.red;
+              return CircularProgressIndicator(
+                value: remaining,
+                strokeWidth: compact ? 3 : 4,
+                backgroundColor: Colors.grey.shade200,
+                valueColor: AlwaysStoppedAnimation<Color>(timerColor),
+              );
+            },
+          ),
+        ),
+        Text(
+          _currentHanzi!.character,
+          style: TextStyle(
+            fontSize: charFontSize,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF333334),
+          ),
+        ),
+      ],
+    );
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: EdgeInsets.symmetric(horizontal: compact ? 8 : 24),
       child: Container(
         width: double.infinity,
-        padding:
-            const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        padding: EdgeInsets.symmetric(
+          horizontal: compact ? 14 : 24,
+          vertical: compact ? 10 : 12,
+        ),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.95),
-          borderRadius: BorderRadius.circular(28),
+          borderRadius: BorderRadius.circular(compact ? 20 : 28),
           border: Border.all(color: _cardBorder.withOpacity(0.5)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              '读一读，选出正确的声母',
-              style: TextStyle(
-                fontSize: 14,
-                color: Color(0xFF666667),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const SizedBox(height: 8),
-            // Pinyin display: "?- ā" style
+            // 说明文字与拼音同一行，节省纵向空间
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text(
-                  '?-',
-                  style: TextStyle(
-                    fontSize: 38,
-                    fontWeight: FontWeight.w700,
-                    color: Color(0xFF4D4D4E),
-                    letterSpacing: -1,
+                Flexible(
+                  child: Text(
+                    '读一读，选出正确的声母',
+                    style: TextStyle(
+                      fontSize: compact ? 12 : 14,
+                      color: const Color(0xFF666667),
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
-                if (vowelPart.isNotEmpty) ...[
-                  const SizedBox(width: 6),
-                  Text(
-                    vowelPart,
-                    style: const TextStyle(
-                      fontSize: 46,
-                      fontWeight: FontWeight.w700,
-                      color: _orangeAccent,
-                    ),
-                  ),
-                ],
+                SizedBox(width: compact ? 8 : 12),
+                pinyinRow,
               ],
             ),
-            const SizedBox(height: 4),
-            // Character with circular timer progress ring
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 64,
-                  height: 64,
-                  child: AnimatedBuilder(
-                    animation: _timerController,
-                    builder: (context, _) {
-                      final remaining = 1.0 - _timerController.value;
-                      final timerColor = remaining > 0.5
-                          ? AppTheme.primaryGreen
-                          : remaining > 0.2
-                              ? AppTheme.primaryYellow
-                              : Colors.red;
-                      return CircularProgressIndicator(
-                        value: remaining,
-                        strokeWidth: 4,
-                        backgroundColor:
-                            Colors.grey.shade200,
-                        valueColor: AlwaysStoppedAnimation<Color>(
-                            timerColor),
-                      );
-                    },
-                  ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      _currentHanzi!.character,
-                      style: const TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF333334),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            SizedBox(height: compact ? 6 : 8),
+            timerRing,
             if (_timedOut)
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Text(
                   '时间到！正确声母是 $_correctInitial',
-                  style: const TextStyle(
-                      color: Colors.redAccent, fontSize: 13),
+                  style: TextStyle(
+                    color: Colors.redAccent,
+                    fontSize: compact ? 11 : 13,
+                  ),
                 ).animate().fadeIn().shake(),
               ),
           ],
@@ -548,16 +581,18 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   // ─── Answer option cards ────────────────────────────────────────────────
 
   Widget _buildOptionsRow() {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      padding: EdgeInsets.symmetric(horizontal: isLandscape ? 4 : 14),
       child: Row(
         children: _options.asMap().entries.map((entry) {
           final idx = entry.key;
           final initial = entry.value;
           return Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: _buildOptionCard(idx, initial),
+              padding: EdgeInsets.symmetric(horizontal: isLandscape ? 3 : 5),
+              child: _buildOptionCard(idx, initial, compact: isLandscape),
             ),
           );
         }).toList(),
@@ -565,7 +600,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
     );
   }
 
-  Widget _buildOptionCard(int idx, String initial) {
+  Widget _buildOptionCard(int idx, String initial, {bool compact = false}) {
     final isCorrect = initial == _correctInitial;
     final isSelected = _selectedAnswer == initial;
     final accentColor = _optionColors[idx];
@@ -610,8 +645,8 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
           children: [
             // Numbered badge
             Container(
-              width: 28,
-              height: 28,
+              width: compact ? 24 : 28,
+              height: compact ? 24 : 28,
               decoration: BoxDecoration(
                 color: numBgColor,
                 shape: BoxShape.circle,
@@ -619,28 +654,28 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
               child: Center(
                 child: Text(
                   '${idx + 1}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
+                    fontSize: compact ? 12 : 14,
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 6),
+            SizedBox(height: compact ? 4 : 6),
             // Example character image
             CsImage(
               configKey: 'hanzi_icon_$exampleChar',
               description: iconHint,
-              width: 52,
-              height: 52,
+              width: compact ? 40 : 52,
+              height: compact ? 40 : 52,
             ),
-            const SizedBox(height: 4),
+            SizedBox(height: compact ? 2 : 4),
             // Initial text
             Text(
               initial,
               style: TextStyle(
-                fontSize: 28,
+                fontSize: compact ? 22 : 28,
                 fontWeight: FontWeight.w700,
                 color: textColor,
               ),
@@ -650,7 +685,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
               Text(
                 exampleChar,
                 style: TextStyle(
-                  fontSize: 12,
+                  fontSize: compact ? 10 : 12,
                   color: textColor.withOpacity(0.6),
                 ),
               ),
