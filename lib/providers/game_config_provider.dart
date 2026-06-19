@@ -12,7 +12,7 @@ class GameConfig extends _$GameConfig {
       matchGameWordCount: await ConfigManager.getInt('match_game_word_count') ?? 5,
       listenGameQuestionsCount:
           await ConfigManager.getInt('listen_game_questions_count') ?? 8,
-      quizTimeLimitSeconds: await ConfigManager.getInt('quiz_time_limit_seconds') ?? 6,
+      quizTimeLimitSeconds: await ConfigManager.getInt('quiz_time_limit_seconds') ?? 10,
       quizQuestionsCount: await ConfigManager.getInt('quiz_questions_count') ?? 10,
       quizPassThreshold: await ConfigManager.getInt('quiz_pass_threshold') ?? 70,
     );

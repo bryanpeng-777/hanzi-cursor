@@ -60,7 +60,7 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
   double _questionStartTime = 0;
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
-  double _timeLimit = 6.0;
+  double _timeLimit = 10.0;
 
   @override
   void initState() {
