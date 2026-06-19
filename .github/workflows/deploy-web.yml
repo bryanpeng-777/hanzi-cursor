@@ -39,3 +39,28 @@ jobs:
           publish_dir: ./build/web
           publish_branch: gh-pages
           force_orphan: true
+
+      # 部署成功后发邮件（需在仓库 Settings → Secrets 配置 MAIL_*，见仓库文档说明）
+      - name: Send deploy success email
+        if: success()
+        continue-on-error: true
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.MAIL_SERVER }}
+          server_port: ${{ secrets.MAIL_PORT }}
+          secure: true
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: '✅ 宝宝识字 Web 部署成功'
+          to: ${{ secrets.MAIL_TO }}
+          from: ${{ secrets.MAIL_FROM }}
+          body: |
+            宝宝识字（hanzi-cursor）GitHub Pages 部署已完成。
+
+            📱 手机预览：https://bryanpeng-777.github.io/hanzi-cursor/
+            🔗 仓库：https://github.com/bryanpeng-777/hanzi-cursor
+            📝 提交：${{ github.event.head_commit.message }}
+            👤 推送者：${{ github.actor }}
+            🆔 SHA：${{ github.sha }}
+
+            — GitHub Actions 自动通知
