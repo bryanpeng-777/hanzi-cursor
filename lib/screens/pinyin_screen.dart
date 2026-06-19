@@ -2,15 +2,16 @@ import 'package:cs_ui/cs_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../constants/pinyin_figma_assets.dart';
 import '../constants/pinyin_hub_figma_layout.dart';
-import '../design/hanzi_design_spec.dart';
 import '../providers/learning_provider.dart';
 
-/// 拼音 Hub — Figma node `9-55`「拼音乐园」
+/// 拼音 Hub — Codia / Figma node `9-55`「拼音乐园」
 ///
-/// 812×375 固定画布 + 单层 Stack 绝对定位（对齐 d2c `intermediate.tsx`）。
+/// 1536×1024 设计稿经 [PinyinHubFigmaLayout] 映射到 812×375 横屏画布，
+/// 外层 [FittedBox] 按屏宽等比缩放，保留 Codia 绝对定位层级关系。
 class PinyinScreen extends ConsumerWidget {
   const PinyinScreen({super.key});
 
@@ -25,6 +26,21 @@ class PinyinScreen extends ConsumerWidget {
   static const Color _tipBorder = Color(0xFFEAEBF0);
   static const Color _sloganColor = Color(0xFF478EDD);
   static const Color _headerBlue = Color(0xFF2C91F1);
+  static const Color _headerWatermark = Color(0xFFE7F2FC);
+
+  static TextStyle _textStyle({
+    required double fontSize,
+    required Color color,
+    FontWeight fontWeight = FontWeight.w600,
+    double? height,
+  }) {
+    return GoogleFonts.notoSansSc(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+      height: height,
+    );
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -52,125 +68,123 @@ class PinyinScreen extends ConsumerWidget {
                 key: const Key('hanzi-pinyin-hub-landscape'),
                 clipBehavior: Clip.hardEdge,
                 children: [
-            Positioned.fill(
-              child: Image.asset(
-                PinyinFigmaAssetPaths.canvasBackdrop,
-                fit: BoxFit.fill,
-                filterQuality: FilterQuality.high,
-              ),
-            ),
-            _watermark(
-              PinyinFigmaAssetPaths.watermarkA,
-              left: PinyinHubFigmaLayout.watermarkALeft,
-              top: PinyinHubFigmaLayout.watermarkATop,
-              width: PinyinHubFigmaLayout.watermarkAWidth,
-              height: PinyinHubFigmaLayout.watermarkAHeight,
-            ),
-            _watermark(
-              PinyinFigmaAssetPaths.watermarkE,
-              left: PinyinHubFigmaLayout.watermarkELeft,
-              top: PinyinHubFigmaLayout.watermarkETop,
-              width: PinyinHubFigmaLayout.watermarkEWidth,
-              height: PinyinHubFigmaLayout.watermarkEHeight,
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.decorDotLeft,
-              top: PinyinHubFigmaLayout.decorDotTop,
-              child: IgnorePointer(
-                child: _asset(
-                  PinyinFigmaAssetPaths.decorDot,
-                  PinyinHubFigmaLayout.decorDotSize,
-                  PinyinHubFigmaLayout.decorDotSize,
-                ),
-              ),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.headerPinyinLeft,
-              top: PinyinHubFigmaLayout.headerPinyinTop,
-              width: PinyinHubFigmaLayout.headerPinyinWidth,
-              height: PinyinHubFigmaLayout.headerPinyinHeight,
-              child: _headerPinyinChip(),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.headerBabyLeft,
-              top: PinyinHubFigmaLayout.headerBabyTop,
-              width: PinyinHubFigmaLayout.headerBabyWidth,
-              height: PinyinHubFigmaLayout.headerBabyHeight,
-              child: _headerBabyChip(points),
-            ),
-            Positioned(
-              left: 0,
-              right: 0,
-              top: PinyinHubFigmaLayout.titleTop,
-              child: Text(
-                '拼音乐园',
-                key: const Key('hanzi-pinyin-hub-header-chip'),
-                textAlign: TextAlign.center,
-                style: HanziDesignSpec.hubTitleStyle.copyWith(
-                  color: _titleInk,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w600,
-                  height: 34 / 28,
-                ),
-              ),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.subtitleLearnLeft,
-              top: PinyinHubFigmaLayout.subtitleTop,
-              child: const Text(
-                '快乐拼读',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: _subtitleMuted,
-                ),
-              ),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.subtitleOpenLeft,
-              top: PinyinHubFigmaLayout.subtitleTop,
-              child: const Text(
-                '自信开',
-                style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: _subtitleMuted,
-                ),
-              ),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.learnCardLeft,
-              top: PinyinHubFigmaLayout.learnCardTop,
-              width: PinyinHubFigmaLayout.learnCardWidth,
-              height: PinyinHubFigmaLayout.learnCardHeight,
-              child: _learnCard(context),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.quizCardLeft,
-              top: PinyinHubFigmaLayout.quizCardTop,
-              width: PinyinHubFigmaLayout.quizCardWidth,
-              height: PinyinHubFigmaLayout.quizCardHeight,
-              child: _quizCard(context),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.mistakeCardLeft,
-              top: PinyinHubFigmaLayout.mistakeCardTop,
-              width: PinyinHubFigmaLayout.mistakeCardWidth,
-              height: PinyinHubFigmaLayout.mistakeCardHeight,
-              child: _mistakeCard(context, mistakeCount),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.tipBarLeft,
-              top: PinyinHubFigmaLayout.tipBarTop,
-              width: PinyinHubFigmaLayout.tipBarWidth,
-              height: PinyinHubFigmaLayout.tipBarHeight,
-              child: _tipBar(),
-            ),
-            Positioned(
-              left: PinyinHubFigmaLayout.sloganLeft,
-              top: PinyinHubFigmaLayout.sloganTop,
-              child: _slogan(),
-            ),
+                  Positioned.fill(
+                    child: Image.asset(
+                      PinyinFigmaAssetPaths.canvasBackdrop,
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.high,
+                    ),
+                  ),
+                  _watermark(
+                    PinyinFigmaAssetPaths.watermarkA,
+                    left: PinyinHubFigmaLayout.watermarkALeft,
+                    top: PinyinHubFigmaLayout.watermarkATop,
+                    width: PinyinHubFigmaLayout.watermarkAWidth,
+                    height: PinyinHubFigmaLayout.watermarkAHeight,
+                  ),
+                  _watermark(
+                    PinyinFigmaAssetPaths.watermarkE,
+                    left: PinyinHubFigmaLayout.watermarkELeft,
+                    top: PinyinHubFigmaLayout.watermarkETop,
+                    width: PinyinHubFigmaLayout.watermarkEWidth,
+                    height: PinyinHubFigmaLayout.watermarkEHeight,
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.decorDotLeft,
+                    top: PinyinHubFigmaLayout.decorDotTop,
+                    child: IgnorePointer(
+                      child: _asset(
+                        PinyinFigmaAssetPaths.decorDot,
+                        PinyinHubFigmaLayout.decorDotSize,
+                        PinyinHubFigmaLayout.decorDotSize,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.headerPinyinLeft,
+                    top: PinyinHubFigmaLayout.headerPinyinTop,
+                    width: PinyinHubFigmaLayout.headerPinyinWidth,
+                    height: PinyinHubFigmaLayout.headerPinyinHeight,
+                    child: _headerPinyinChip(),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.headerBabyLeft,
+                    top: PinyinHubFigmaLayout.headerBabyTop,
+                    width: PinyinHubFigmaLayout.headerBabyWidth,
+                    height: PinyinHubFigmaLayout.headerBabyHeight,
+                    child: _headerBabyChip(points),
+                  ),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    top: PinyinHubFigmaLayout.titleTop,
+                    child: Text(
+                      '拼音乐园',
+                      key: const Key('hanzi-pinyin-hub-header-chip'),
+                      textAlign: TextAlign.center,
+                      style: _textStyle(
+                        fontSize: PinyinHubFigmaLayout.titleFontSize,
+                        color: _titleInk,
+                        fontWeight: FontWeight.w600,
+                        height: 1.05,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.subtitleLearnLeft,
+                    top: PinyinHubFigmaLayout.subtitleTop,
+                    child: Text(
+                      '快乐拼读',
+                      style: _textStyle(
+                        fontSize: PinyinHubFigmaLayout.subtitleFontSize,
+                        color: _subtitleMuted,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.subtitleOpenLeft,
+                    top: PinyinHubFigmaLayout.subtitleTop,
+                    child: Text(
+                      '自信开',
+                      style: _textStyle(
+                        fontSize: PinyinHubFigmaLayout.subtitleFontSize,
+                        color: _subtitleMuted,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.learnCardLeft,
+                    top: PinyinHubFigmaLayout.learnCardTop,
+                    width: PinyinHubFigmaLayout.learnCardWidth,
+                    height: PinyinHubFigmaLayout.learnCardHeight,
+                    child: _learnCard(context),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.quizCardLeft,
+                    top: PinyinHubFigmaLayout.quizCardTop,
+                    width: PinyinHubFigmaLayout.quizCardWidth,
+                    height: PinyinHubFigmaLayout.quizCardHeight,
+                    child: _quizCard(context),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.mistakeCardLeft,
+                    top: PinyinHubFigmaLayout.mistakeCardTop,
+                    width: PinyinHubFigmaLayout.mistakeCardWidth,
+                    height: PinyinHubFigmaLayout.mistakeCardHeight,
+                    child: _mistakeCard(context, mistakeCount),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.tipBarLeft,
+                    top: PinyinHubFigmaLayout.tipBarTop,
+                    width: PinyinHubFigmaLayout.tipBarWidth,
+                    height: PinyinHubFigmaLayout.tipBarHeight,
+                    child: _tipBar(),
+                  ),
+                  Positioned(
+                    left: PinyinHubFigmaLayout.sloganLeft,
+                    top: PinyinHubFigmaLayout.sloganTop,
+                    child: _slogan(),
+                  ),
                 ],
               ),
             ),
@@ -242,6 +256,19 @@ class PinyinScreen extends ConsumerWidget {
           ),
         ),
         Positioned(
+          left: PinyinHubFigmaLayout.headerPinyinWatermarkLeft,
+          top: PinyinHubFigmaLayout.headerPinyinWatermarkTop,
+          child: Text(
+            'a',
+            style: _textStyle(
+              fontSize: PinyinHubFigmaLayout.headerPinyinWatermarkFontSize,
+              color: _headerWatermark,
+              fontWeight: FontWeight.w400,
+              height: 1.0,
+            ),
+          ),
+        ),
+        Positioned(
           left: PinyinHubFigmaLayout.headerPinyinIconLeft,
           top: PinyinHubFigmaLayout.headerPinyinIconTop,
           child: _asset(
@@ -253,12 +280,11 @@ class PinyinScreen extends ConsumerWidget {
         Positioned(
           left: PinyinHubFigmaLayout.headerPinyinLabelLeft,
           top: PinyinHubFigmaLayout.headerPinyinLabelTop,
-          child: const Text(
+          child: Text(
             '拼音',
-            style: TextStyle(
+            style: _textStyle(
+              fontSize: PinyinHubFigmaLayout.headerPinyinLabelFontSize,
               color: _headerBlue,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -292,9 +318,13 @@ class PinyinScreen extends ConsumerWidget {
         Positioned(
           left: PinyinHubFigmaLayout.headerBabyLabelLeft,
           top: PinyinHubFigmaLayout.headerBabyLabelTop,
-          child: const Text(
+          child: Text(
             '宝宝',
-            style: TextStyle(fontSize: 12, color: Color(0xFF7B7C7E)),
+            style: _textStyle(
+              fontSize: PinyinHubFigmaLayout.headerBabyLabelFontSize,
+              color: const Color(0xFF7B7C7E),
+              fontWeight: FontWeight.w400,
+            ),
           ),
         ),
         Positioned(
@@ -302,10 +332,10 @@ class PinyinScreen extends ConsumerWidget {
           top: PinyinHubFigmaLayout.headerBabyPointsTop,
           child: Text(
             '$points',
-            style: const TextStyle(
-              fontSize: 10,
+            style: _textStyle(
+              fontSize: PinyinHubFigmaLayout.headerBabyPointsFontSize,
+              color: const Color(0xFF898A8D),
               fontWeight: FontWeight.w700,
-              color: Color(0xFF898A8D),
             ),
           ),
         ),
@@ -342,23 +372,22 @@ class PinyinScreen extends ConsumerWidget {
           Positioned(
             left: PinyinHubFigmaLayout.learnTitleLeft,
             top: PinyinHubFigmaLayout.learnTitleTop,
-            child: const Text(
+            child: Text(
               '开始学习',
-              style: TextStyle(
+              style: _textStyle(
+                fontSize: PinyinHubFigmaLayout.learnTitleFontSize,
                 color: _accentLearn,
-                fontSize: 20,
-                fontWeight: FontWeight.w600,
               ),
             ),
           ),
           Positioned(
             left: PinyinHubFigmaLayout.learnSubtitleLeft,
             top: PinyinHubFigmaLayout.learnSubtitleTop,
-            child: const Text(
+            child: Text(
               '系统学拼音，打好基础',
-              style: TextStyle(
+              style: _textStyle(
+                fontSize: PinyinHubFigmaLayout.learnSubtitleFontSize,
                 color: _cardSubtitle,
-                fontSize: 12,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -376,7 +405,7 @@ class PinyinScreen extends ConsumerWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: const Color(0xFFFDFCFC),
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(PinyinHubFigmaLayout.sy(36)),
           border: Border.all(color: const Color(0xFFBDDDEE)),
         ),
         child: Stack(
@@ -384,21 +413,24 @@ class PinyinScreen extends ConsumerWidget {
             Positioned(
               left: PinyinHubFigmaLayout.quizTitleLeft,
               top: PinyinHubFigmaLayout.quizTitleTop,
-              child: const Text(
+              child: Text(
                 '拼音测验',
-                style: TextStyle(
+                style: _textStyle(
+                  fontSize: PinyinHubFigmaLayout.quizTitleFontSize,
                   color: _accentQuiz,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
             Positioned(
               left: PinyinHubFigmaLayout.quizSubtitleLeft,
               top: PinyinHubFigmaLayout.quizSubtitleTop,
-              child: const Text(
+              child: Text(
                 '巩固拼音，检验掌握',
-                style: TextStyle(color: Color(0xFF969799), fontSize: 10),
+                style: _textStyle(
+                  fontSize: PinyinHubFigmaLayout.quizSubtitleFontSize,
+                  color: const Color(0xFF969799),
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             Positioned(
@@ -462,19 +494,22 @@ class PinyinScreen extends ConsumerWidget {
               top: PinyinHubFigmaLayout.mistakeTitleTop,
               child: Text(
                 '错题本',
-                style: TextStyle(
+                style: _textStyle(
+                  fontSize: PinyinHubFigmaLayout.mistakeTitleFontSize,
                   color: hasMistakes ? _accentMistake : Colors.grey.shade500,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
             Positioned(
               left: PinyinHubFigmaLayout.mistakeSubtitleLeft,
               top: PinyinHubFigmaLayout.mistakeSubtitleTop,
-              child: const Text(
+              child: Text(
                 '错题回顾，查漏补缺',
-                style: TextStyle(color: Color(0xFF969698), fontSize: 10),
+                style: _textStyle(
+                  fontSize: PinyinHubFigmaLayout.mistakeSubtitleFontSize,
+                  color: const Color(0xFF969698),
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
             if (hasMistakes) ...[
@@ -525,11 +560,12 @@ class PinyinScreen extends ConsumerWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: _tipBg,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius:
+            BorderRadius.circular(PinyinHubFigmaLayout.sy(32)),
         border: Border.all(color: _tipBorder),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: PinyinHubFigmaLayout.sx(16)),
         child: Row(
           children: [
             _asset(
@@ -537,13 +573,18 @@ class PinyinScreen extends ConsumerWidget {
               PinyinHubFigmaLayout.tipIconWidth,
               PinyinHubFigmaLayout.tipIconHeight,
             ),
-            const SizedBox(width: 12),
-            const Expanded(
+            SizedBox(width: PinyinHubFigmaLayout.sx(12)),
+            Expanded(
               child: Text(
                 '每天坚持学习，拼音进步看得见!',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(color: _tipText, fontSize: 12, height: 15 / 12),
+                style: _textStyle(
+                  fontSize: PinyinHubFigmaLayout.tipFontSize,
+                  color: _tipText,
+                  fontWeight: FontWeight.w500,
+                  height: 1.1,
+                ),
               ),
             ),
           ],
@@ -561,13 +602,12 @@ class PinyinScreen extends ConsumerWidget {
           PinyinHubFigmaLayout.sloganDecorWidth,
           PinyinHubFigmaLayout.sloganDecorHeight,
         ),
-        const SizedBox(width: 8),
-        const Text(
+        SizedBox(width: PinyinHubFigmaLayout.sx(8)),
+        Text(
           '拼得快乐，读得自信！',
-          style: TextStyle(
+          style: _textStyle(
+            fontSize: PinyinHubFigmaLayout.sloganFontSize,
             color: _sloganColor,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
           ),
         ),
       ],
@@ -592,8 +632,8 @@ class _MistakeBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          color: Color(0xFFFFF3F1),
+        style: GoogleFonts.notoSansSc(
+          color: const Color(0xFFFFF3F1),
           fontWeight: FontWeight.w800,
           fontSize: 11,
         ),

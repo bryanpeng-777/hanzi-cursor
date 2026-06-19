@@ -10,6 +10,10 @@ abstract final class PinyinHubFigmaLayout {
   static double sy(double figmaY) =>
       (figmaY * designH / 1024).roundToDouble();
 
+  /// Codia / Figma 字号 → 812×375 逻辑画布字号（按高度等比缩放）。
+  static double sf(double figmaFontSize) =>
+      (figmaFontSize * designH / 1024).roundToDouble();
+
   // 水印 / 装饰
   static double get watermarkALeft => sx(496);
   static double get watermarkATop => sy(121);
@@ -40,6 +44,10 @@ abstract final class PinyinHubFigmaLayout {
   static double get headerPinyinIconHeight => sy(92);
   static double get headerPinyinLabelLeft => sx(110);
   static double get headerPinyinLabelTop => sy(27);
+  static double get headerPinyinWatermarkLeft => sx(37);
+  static double get headerPinyinWatermarkTop => sy(31);
+  static double get headerPinyinWatermarkFontSize => sf(57);
+  static double get headerPinyinLabelFontSize => sf(34);
 
   // 顶栏宝宝胶囊（根坐标 1288,18）
   static double get headerBabyLeft => sx(1288);
@@ -62,12 +70,16 @@ abstract final class PinyinHubFigmaLayout {
   static double get headerBabyArrowTop => sy(60);
   static double get headerBabyArrowWidth => sx(23);
   static double get headerBabyArrowHeight => sy(22);
+  static double get headerBabyLabelFontSize => sf(24);
+  static double get headerBabyPointsFontSize => sf(19);
 
   // 标题区
   static double get titleTop => sy(99);
+  static double get titleFontSize => sf(107);
   static double get subtitleTop => sy(225);
   static double get subtitleLearnLeft => sx(601);
   static double get subtitleOpenLeft => sx(781);
+  static double get subtitleFontSize => sf(36);
 
   // 学习卡（根 128,300）
   static double get learnCardLeft => sx(128);
@@ -78,6 +90,8 @@ abstract final class PinyinHubFigmaLayout {
   static double get learnTitleTop => sy(44);
   static double get learnSubtitleLeft => sx(66);
   static double get learnSubtitleTop => sy(120);
+  static double get learnTitleFontSize => sf(55);
+  static double get learnSubtitleFontSize => sf(27);
 
   // 测验卡（根 749,313）
   static double get quizCardLeft => sx(749);
@@ -96,6 +110,8 @@ abstract final class PinyinHubFigmaLayout {
   static double get quizArrowTop => sy(398);
   static double get quizArrowWidth => sx(77);
   static double get quizArrowHeight => sy(78);
+  static double get quizTitleFontSize => sf(41);
+  static double get quizSubtitleFontSize => sf(23);
 
   // 错题卡（根 1059,307）
   static double get mistakeCardLeft => sx(1059);
@@ -114,6 +130,8 @@ abstract final class PinyinHubFigmaLayout {
   static double get mistakeArrowTop => sy(404);
   static double get mistakeArrowWidth => sx(76);
   static double get mistakeArrowHeight => sy(81);
+  static double get mistakeTitleFontSize => sf(40);
+  static double get mistakeSubtitleFontSize => sf(23);
 
   // 提示条 / Slogan
   static double get tipBarLeft => sx(421);
@@ -122,11 +140,13 @@ abstract final class PinyinHubFigmaLayout {
   static double get tipBarHeight => sy(73);
   static double get tipIconWidth => sx(47);
   static double get tipIconHeight => sy(46);
+  static double get tipFontSize => sf(27);
 
   static double get sloganLeft => sx(542);
   static double get sloganTop => sy(932);
   static double get sloganDecorWidth => sx(36);
   static double get sloganDecorHeight => sy(50);
+  static double get sloganFontSize => sf(40);
 
   static double get mistakesEmptyIconSize => sx(120);
 }
