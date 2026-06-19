@@ -83,7 +83,7 @@ GoRouter appRouter(AppRouterRef ref) {
         path: '/login',
         builder: (context, state) => CsLoginPage(
           title: '宝宝识字',
-          subtitle: '登录或跳过，开始学习汉字',
+          subtitle: '登录或跳过，开始学汉字吧',
           showSkipButton: true,
           continueOnSkipFailure: true,
           onLoginSuccess: () => context.go('/'),
