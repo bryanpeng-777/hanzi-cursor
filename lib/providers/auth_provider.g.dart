@@ -6,14 +6,15 @@ part of 'auth_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$authNotifierHash() => r'fc7da88d21493855ccbe3ae99a394c95a66b26e1';
+String _$authNotifierHash() => r'440b06a7f2eb46e7eadb1d6d0369ab77d0c49f48';
 
 /// 监听认证状态，驱动 GoRouter redirect 重新计算。
 /// keepAlive=true 保持全生命周期存活。
 ///
 /// Copied from [AuthNotifier].
 @ProviderFor(AuthNotifier)
-final authNotifierProvider = NotifierProvider<AuthNotifier, bool>.internal(
+final authNotifierProvider =
+    NotifierProvider<AuthNotifier, AuthGateState>.internal(
   AuthNotifier.new,
   name: r'authNotifierProvider',
   debugGetCreateSourceHash:
@@ -22,6 +23,6 @@ final authNotifierProvider = NotifierProvider<AuthNotifier, bool>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef _$AuthNotifier = Notifier<bool>;
+typedef _$AuthNotifier = Notifier<AuthGateState>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

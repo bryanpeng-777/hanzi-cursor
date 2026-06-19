@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cs_auth/cs_auth.dart';
@@ -28,12 +29,14 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   VoidCallback? _routerListener;
 
   @override
-  bool build() {
-    // 监听 authNotifierProvider，auth 状态变化时通知 GoRouter 重新计算 redirect
+  AuthGateState build() {
     ref.listen(authNotifierProvider, (_, __) {
       state = ref.read(authNotifierProvider);
       _routerListener?.call();
     });
+    Future.microtask(
+      () => ref.read(authNotifierProvider.notifier).hydrateGuestFlag(),
+    );
     return ref.read(authNotifierProvider);
   }
 
@@ -42,10 +45,10 @@ class RouterNotifier extends _$RouterNotifier implements Listenable {
   }
 
   /// 纯函数，便于单元测试（不依赖 BuildContext / GoRouterState）
-  static String? computeRedirect(bool isLoggedIn, String location) {
+  static String? computeRedirect(AuthGateState auth, String location) {
     final isPublic = _publicRoutes.contains(location);
-    if (!isLoggedIn && !isPublic) return '/login';
-    if (isLoggedIn && location == '/login') return '/';
+    if (!auth.canAccessApp && !isPublic) return '/login';
+    if (auth.canAccessApp && location == '/login') return '/';
     return null;
   }
 
@@ -82,11 +85,9 @@ GoRouter appRouter(AppRouterRef ref) {
           title: '宝宝识字',
           subtitle: '登录或跳过，开始学习汉字',
           showSkipButton: true,
+          continueOnSkipFailure: true,
           onLoginSuccess: () => context.go('/'),
-          onSkip: () async {
-            await AuthManager.signInAnonymously();
-            if (context.mounted) context.go('/');
-          },
+          onSkip: () => _handleSkipLogin(context),
         ),
       ),
       GoRoute(
@@ -153,4 +154,12 @@ GoRouter appRouter(AppRouterRef ref) {
       ),
     ],
   );
+}
+
+Future<void> _handleSkipLogin(BuildContext context) async {
+  final container = ProviderScope.containerOf(context);
+  if (!AuthManager.isLoggedIn) {
+    await container.read(authNotifierProvider.notifier).enterGuestMode();
+  }
+  if (context.mounted) context.go('/');
 }

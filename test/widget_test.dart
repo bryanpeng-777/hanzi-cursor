@@ -7,7 +7,10 @@ import 'package:hanzi_app/utils/app_orientation.dart';
 // 假 AuthNotifier：未登录状态（不触发真实 Supabase）
 class _FakeAuthNotifier extends AuthNotifier {
   @override
-  bool build() => false;
+  AuthGateState build() => const AuthGateState();
+
+  @override
+  Future<void> hydrateGuestFlag() async {}
 }
 
 void main() {
