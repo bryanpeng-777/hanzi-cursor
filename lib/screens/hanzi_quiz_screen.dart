@@ -46,7 +46,7 @@ class _HanziQuizScreenState extends ConsumerState<HanziQuizScreen>
   int _mistakesAdded = 0;
   int _mistakesCleared = 0;
 
-  double _timeLimit = 10.0;
+  double _timeLimit = 20.0;
   int _passThreshold = 70;
 
   @override

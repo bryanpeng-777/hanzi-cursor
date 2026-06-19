@@ -10,9 +10,9 @@ Future<int> _bundledQuizTimeLimitSeconds() async {
   try {
     final jsonStr = await rootBundle.loadString('assets/default_configs.json');
     final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
-    return (decoded['quiz_time_limit_seconds'] as num?)?.toInt() ?? 10;
+    return (decoded['quiz_time_limit_seconds'] as num?)?.toInt() ?? 20;
   } catch (_) {
-    return 10;
+    return 20;
   }
 }
 
