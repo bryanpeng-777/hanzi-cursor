@@ -1,6 +1,7 @@
 ---
 name: app-dev-workflow
 description: 应用开发全流程技能（开发 → 提交 → 推送 → 监控 CI → 构建成功才算结束）。当用户说「应用开发」「App 开发」「开发应用」「做 App 功能」「改 App」「实现这个功能并部署」「开发完 push 部署」「应用开发任务」时触发；用户只需提供具体开发内容，本技能自动把代码修改、git 提交、push 触发 GitHub Actions、监控构建直到成功纳入标准流程。即使用户只说「应用开发：XXX」或「帮我开发 XXX 并上线」，也应主动使用此技能。不要与纯「部署」「只 push」混淆——那些用 flutter-github-deploy；不要与纯「修 bug 不部署」混淆——那些用 dev-assistant 或 bugfix。
+disable-model-invocation: false
 ---
 
 # 应用开发全流程（App Dev Workflow）

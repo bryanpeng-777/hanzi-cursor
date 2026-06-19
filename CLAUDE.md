@@ -335,6 +335,19 @@ final todayChar = allHanzi[DateTime.now().day % allHanzi.length];
 
 ---
 
+## 应用开发（带部署）
+
+当用户说 **「应用开发：…」** 时，必须走完整闭环，**不是**改完代码就结束：
+
+1. Read `.cursor/skills/app-dev-workflow/SKILL.md`（或 `~/.claude/skills/app-dev-workflow/SKILL.md`）
+2. 开发 → `flutter analyze` / `flutter build web` → commit → push → `gh run watch` 至 CI 成功
+
+大仓级强制规则：父目录 `hanzi/.cursor/rules/app-dev-workflow.mdc`（`alwaysApply: true`）。
+
+纯修 bug、不部署 → 用 dev-assistant；纯 push 部署 → 用 flutter-github-deploy。
+
+---
+
 ## 开发命令
 
 ```bash
