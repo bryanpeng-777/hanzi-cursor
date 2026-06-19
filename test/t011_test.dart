@@ -93,5 +93,55 @@ void main() {
       expect(header.data, '拼音学习');
       expect(header.style?.color, HanziDesignSpec.titleInk);
     });
+
+    // ── T011 重设计合约（先红后绿）──────────────────────────────────────────
+
+    testWidgets('test_pinyin_learn_mode_switch', (tester) async {
+      await pumpLearnScreen(tester);
+
+      expect(
+        find.byKey(const Key('hanzi-pinyin-learn-mode-switch')),
+        findsOneWidget,
+      );
+
+      await tester.tap(find.text('自动模式'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        find.byKey(const Key('hanzi-pinyin-learn-auto-panel')),
+        findsOneWidget,
+      );
+      expect(find.text('选择学习内容'), findsOneWidget);
+    });
+
+    testWidgets('test_pinyin_learn_stats_bar', (tester) async {
+      await pumpLearnScreen(tester);
+
+      expect(
+        find.byKey(const Key('hanzi-pinyin-learn-stats-bar')),
+        findsOneWidget,
+      );
+      expect(find.text('学习进度'), findsOneWidget);
+      expect(find.text('掌握拼音'), findsOneWidget);
+    });
+
+    testWidgets('test_pinyin_learn_no_overflow', (tester) async {
+      final exceptions = <Object>[];
+      final oldHandler = FlutterError.onError;
+      FlutterError.onError = (details) {
+        if (details.exceptionAsString().contains('overflowed')) {
+          exceptions.add(details.exception);
+        }
+        oldHandler?.call(details);
+      };
+      addTearDown(() => FlutterError.onError = oldHandler);
+
+      await pumpLearnScreen(tester);
+      await tester.pumpAndSettle(const Duration(milliseconds: 100));
+
+      expect(exceptions, isEmpty);
+      expect(tester.takeException(), isNull);
+    });
   });
 }
