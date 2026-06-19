@@ -1,0 +1,23 @@
+{
+  "skill_name": "app-dev-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "应用开发：拼音测验页横屏模式下题目和计时圈被遮挡，把说明文字和拼音放同一行，改完 push 部署",
+      "expected_output": "修改布局代码、commit、push、gh run watch 至 CI 成功、汇报线上地址",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "应用开发：首页每日一字卡片点击能跳转到详情页",
+      "expected_output": "实现跳转、analyze 通过、commit push、等待 CI 成功",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "帮我 push 一下 hanzi-cursor",
+      "expected_output": "不应触发本技能，应使用 flutter-github-deploy",
+      "files": []
+    }
+  ]
+}
