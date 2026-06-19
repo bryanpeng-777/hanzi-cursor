@@ -536,27 +536,20 @@ class _PinyinExerciseScreenState extends ConsumerState<PinyinExerciseScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // 说明文字与拼音同一行，节省纵向空间
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Text(
-                    '读一读，选出正确的声母',
-                    style: TextStyle(
-                      fontSize: compact ? 12 : 14,
-                      color: const Color(0xFF666667),
-                      fontWeight: FontWeight.w500,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                  ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                '读一读，选出正确的声母',
+                style: TextStyle(
+                  fontSize: compact ? 10 : 11,
+                  color: const Color(0xFF9AA0A6).withOpacity(0.75),
+                  fontWeight: FontWeight.w400,
+                  height: 1.2,
                 ),
-                SizedBox(width: compact ? 8 : 12),
-                pinyinRow,
-              ],
+              ),
             ),
+            SizedBox(height: compact ? 4 : 6),
+            Center(child: pinyinRow),
             SizedBox(height: compact ? 6 : 8),
             timerRing,
             SizedBox(height: compact ? 6 : 10),
