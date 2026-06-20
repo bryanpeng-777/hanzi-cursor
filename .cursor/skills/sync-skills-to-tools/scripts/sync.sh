@@ -5,6 +5,7 @@
 # 用法:
 #   ./scripts/sync.sh [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only]
 #   ./scripts/sync.sh --symlinks-only   只检查/建立 ~/.claude-internal 下三处软链，不同步 WB/CB/Cursor
+#   ./scripts/sync.sh --fetch-agents-from-git   从 CLAUDE_AGENTS_GIT_URL 拉取 agents 到本地 ~/.claude/agents/ 再同步
 #   --pull-first  先从远程 git 拉取 ~/.claude 到最新，再执行同步
 
 set -euo pipefail
@@ -23,6 +24,10 @@ CURSOR_PROJECT_ROOTS="${CURSOR_PROJECT_ROOTS:-/Users/pengchao/hanzi/hanzi-cursor
 PULL_FIRST=false
 SYNC_TARGET="all"
 SYMLINKS_ONLY=false
+FETCH_AGENTS_FROM_GIT=false
+CLAUDE_AGENTS_GIT_URL="${CLAUDE_AGENTS_GIT_URL:-https://github.com/bryanpeng-777/claude-agents.git}"
+CLAUDE_AGENTS_GIT_REF="${CLAUDE_AGENTS_GIT_REF:-main}"
+CLAUDE_AGENTS_GIT_SPARSE="${CLAUDE_AGENTS_GIT_SPARSE:-}"
 
 for arg in "$@"; do
     case "$arg" in
@@ -31,16 +36,17 @@ for arg in "$@"; do
         --codebuddy-only) SYNC_TARGET="codebuddy" ;;
         --cursor-only) SYNC_TARGET="cursor" ;;
         --symlinks-only) SYMLINKS_ONLY=true ;;
+        --fetch-agents-from-git) FETCH_AGENTS_FROM_GIT=true ;;
         *)
             echo "未知参数: $arg" >&2
-            echo "用法: $0 [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only | --symlinks-only]" >&2
+            echo "用法: $0 [--pull-first] [--fetch-agents-from-git] [--workbuddy-only | --codebuddy-only | --cursor-only | --symlinks-only]" >&2
             exit 1
             ;;
     esac
 done
 
-if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$SYNC_TARGET" != "all" ]]; then
-    echo "错误：--symlinks-only 不能与 --pull-first / --workbuddy-only / --codebuddy-only / --cursor-only 同时使用" >&2
+if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$FETCH_AGENTS_FROM_GIT" == true || "$SYNC_TARGET" != "all" ]]; then
+    echo "错误：--symlinks-only 不能与 --pull-first / --fetch-agents-from-git / --workbuddy-only / --codebuddy-only / --cursor-only 同时使用" >&2
     exit 1
 fi
 
@@ -63,6 +69,52 @@ git_pull_claude_repo() {
         cd "$repo_root"
         git pull --ff-only
     )
+    echo ""
+}
+
+# 从 Git 拉取 agents 到 ~/.claude/agents/（Cloud Agent 无本地 ~/.claude 时可用 --fetch-agents-from-git）
+fetch_agents_from_git() {
+    local tmpdir src
+    tmpdir="$(mktemp -d)"
+    echo "从 Git 拉取 agents：$CLAUDE_AGENTS_GIT_URL (ref=$CLAUDE_AGENTS_GIT_REF sparse=${CLAUDE_AGENTS_GIT_SPARSE:-<root>})"
+
+    if [[ -n "$CLAUDE_AGENTS_GIT_SPARSE" ]]; then
+        git clone --depth 1 --filter=blob:none --sparse --branch "$CLAUDE_AGENTS_GIT_REF" \
+            "$CLAUDE_AGENTS_GIT_URL" "$tmpdir/repo"
+        (
+            cd "$tmpdir/repo"
+            git sparse-checkout set "$CLAUDE_AGENTS_GIT_SPARSE"
+        )
+        src="$tmpdir/repo/$CLAUDE_AGENTS_GIT_SPARSE"
+    else
+        git clone --depth 1 --branch "$CLAUDE_AGENTS_GIT_REF" \
+            "$CLAUDE_AGENTS_GIT_URL" "$tmpdir/repo"
+        src="$tmpdir/repo"
+    fi
+
+    if [[ ! -d "$src" ]]; then
+        rm -rf "$tmpdir"
+        echo "错误：Git 检出后未找到 agents 目录：$src" >&2
+        exit 1
+    fi
+
+    local count
+    count=$(find "$src" -type f \( -name '*.md' -o -name '*.mdc' \) | wc -l | tr -d ' ')
+    if [[ "$count" -eq 0 ]]; then
+        rm -rf "$tmpdir"
+        echo "错误：Git 仓库中未找到 agent/workflow 文件" >&2
+        exit 1
+    fi
+
+    mkdir -p "$CLAUDE_AGENTS"
+    rsync -a \
+        --include='*/' \
+        --include='*.md' \
+        --include='*.mdc' \
+        --exclude='*' \
+        "$src/" "$CLAUDE_AGENTS/"
+    rm -rf "$tmpdir"
+    echo "已拉取 $count 个 agent 文件到 $CLAUDE_AGENTS"
     echo ""
 }
 
@@ -261,6 +313,7 @@ if [[ "$SYMLINKS_ONLY" == true ]]; then
 fi
 
 [[ "$PULL_FIRST" == true ]] && git_pull_claude_repo
+[[ "$FETCH_AGENTS_FROM_GIT" == true ]] && fetch_agents_from_git
 
 echo "同步开始..."
 echo ""
