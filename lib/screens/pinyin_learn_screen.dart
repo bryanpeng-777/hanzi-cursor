@@ -4,6 +4,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/pinyin_learn_d2c_9_2_layout.dart';
 import '../constants/pinyin_learn_grid_9_2_cards.dart';
 import '../constants/pinyin_learn_ui_assets.dart';
 import '../data/pinyin_data.dart';
@@ -14,7 +15,7 @@ import '../widgets/pinyin_learn/pinyin_learn_detail_modal.dart';
 import '../widgets/pinyin_learn/pinyin_learn_grid_card.dart';
 import '../widgets/pinyin_learn/pinyin_learn_stats_bar.dart';
 
-/// 拼音学习 — Figma node 9-2（粘土 3D 海滩风网格 + 4-2 详情模态）
+/// 拼音学习 — Figma node 9-2（tdesign-d2c 布局 + 4-2 详情模态）
 class PinyinLearnScreen extends ConsumerStatefulWidget {
   const PinyinLearnScreen({super.key});
 
@@ -53,15 +54,14 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
   Widget build(BuildContext context) {
     final learning = ref.watch(learningNotifierProvider);
     final starCount = learning.totalStars;
-    final learnedCount =
-        (starCount ~/ 3).clamp(0, _currentItems.length);
+    final learnedCount = (starCount ~/ 3).clamp(0, _currentItems.length);
     final progressTotal = _currentItems.length;
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final scaledH = PinyinLearnCanvasSize.gridH *
+        final scaledH = PinyinLearnD2c92Layout.canvasH *
             constraints.maxWidth /
-            PinyinLearnCanvasSize.gridW;
+            PinyinLearnD2c92Layout.canvasW;
 
         final canvas = SizedBox(
           width: constraints.maxWidth,
@@ -70,13 +70,12 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
             fit: BoxFit.fitWidth,
             alignment: Alignment.topCenter,
             child: SizedBox(
-              width: PinyinLearnCanvasSize.gridW,
-              height: PinyinLearnCanvasSize.gridH,
+              width: PinyinLearnD2c92Layout.canvasW,
+              height: PinyinLearnD2c92Layout.canvasH,
               child: Stack(
                 key: const Key('hanzi-pinyin-learn-landscape'),
                 clipBehavior: Clip.none,
                 children: [
-                  // 全屏海滩背景
                   Positioned.fill(
                     child: FigmaUiImage(
                       configKey: PinyinLearnUiAssets.gridCanvasBg,
@@ -84,12 +83,11 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  // 主面板衬底
                   Positioned(
-                    left: 115,
-                    top: 157,
-                    width: 1290,
-                    height: 826,
+                    left: PinyinLearnD2c92Layout.panelLeft,
+                    top: PinyinLearnD2c92Layout.panelTop,
+                    width: PinyinLearnD2c92Layout.panelW,
+                    height: PinyinLearnD2c92Layout.panelH,
                     child: FigmaUiImage(
                       configKey: PinyinLearnUiAssets.gridPanelBg,
                       description: '主面板衬底',
@@ -100,20 +98,19 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
                   _buildTabBar(),
                   _buildCardGrid(_currentItems),
                   Positioned(
-                    left: 95,
-                    bottom: 43,
-                    width: 1302,
-                    height: 152,
+                    left: PinyinLearnD2c92Layout.statsLeft,
+                    top: PinyinLearnD2c92Layout.statsTop,
+                    width: PinyinLearnD2c92Layout.statsW,
+                    height: PinyinLearnD2c92Layout.statsH,
                     child: PinyinLearnStatsBar(
                       starCount: starCount,
-                      learnedCount: learnedCount.clamp(0, progressTotal),
+                      learnedCount: learnedCount,
                       totalCount: progressTotal,
                     ),
                   ),
-                  // 左下熊猫
                   Positioned(
-                    left: 99,
-                    bottom: 214,
+                    left: PinyinLearnD2c92Layout.mascotLeft,
+                    top: PinyinLearnD2c92Layout.mascotTop,
                     width: 166,
                     height: 155,
                     child: FigmaUiImage(
@@ -122,10 +119,9 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
                       fit: BoxFit.contain,
                     ),
                   ),
-                  // 右侧探出熊猫
                   Positioned(
-                    right: 12,
-                    bottom: 328,
+                    left: PinyinLearnD2c92Layout.sideDecoLeft,
+                    top: PinyinLearnD2c92Layout.sideDecoTop,
                     width: 120,
                     height: 145,
                     child: FigmaUiImage(
@@ -153,15 +149,15 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
     return Positioned(
       left: 0,
       top: 0,
-      width: PinyinLearnCanvasSize.gridW,
-      height: 158,
+      width: PinyinLearnD2c92Layout.canvasW,
+      height: PinyinLearnD2c92Layout.headerH,
       child: Stack(
         children: [
           Positioned(
-            left: 42,
-            top: 33,
-            width: 87,
-            height: 90,
+            left: PinyinLearnD2c92Layout.backLeft,
+            top: PinyinLearnD2c92Layout.backTop,
+            width: PinyinLearnD2c92Layout.backW,
+            height: PinyinLearnD2c92Layout.backH,
             child: GestureDetector(
               onTap: () => context.pop(),
               child: FigmaUiImage(
@@ -172,10 +168,10 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
             ),
           ),
           Positioned(
-            left: 552,
-            top: 54,
-            width: 62,
-            height: 44,
+            left: PinyinLearnD2c92Layout.titleDecoLeft,
+            top: PinyinLearnD2c92Layout.titleDecoTop,
+            width: 171,
+            height: 99,
             child: FigmaUiImage(
               configKey: PinyinLearnUiAssets.gridTitleDeco,
               description: '标题装饰',
@@ -183,8 +179,8 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
             ),
           ),
           Positioned(
-            left: 692,
-            top: 50,
+            left: PinyinLearnD2c92Layout.headerDecoLeft,
+            top: PinyinLearnD2c92Layout.headerDecoTop,
             width: 147,
             height: 74,
             child: FigmaUiImage(
@@ -194,10 +190,10 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
             ),
           ),
           Positioned(
-            right: 27,
-            top: 16,
-            width: 123,
-            height: 123,
+            left: PinyinLearnD2c92Layout.avatarLeft,
+            top: PinyinLearnD2c92Layout.avatarTop,
+            width: PinyinLearnD2c92Layout.avatarSize,
+            height: PinyinLearnD2c92Layout.avatarSize,
             child: FigmaUiImage(
               configKey: PinyinLearnUiAssets.gridHeaderAvatar,
               description: '头像',
@@ -210,34 +206,40 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
   }
 
   Widget _buildTabBar() {
-    return Positioned(
-      left: 543,
-      top: 220,
-      width: 450,
-      height: 88,
-      child: Stack(
-        key: const Key('hanzi-pinyin-learn-tab-bar'),
-        children: [
-          Positioned(
-            left: 228,
-            child: _tabChip('韵母', 1),
+    return Stack(
+      key: const Key('hanzi-pinyin-learn-tab-bar'),
+      children: [
+        Positioned(
+          left: PinyinLearnD2c92Layout.tabInitialsLeft,
+          top: PinyinLearnD2c92Layout.tabInitialsTop,
+          child: _tabChip(
+            '声母',
+            0,
+            PinyinLearnD2c92Layout.tabInitialsW,
+            PinyinLearnD2c92Layout.tabInitialsH,
           ),
-          Positioned(
-            left: 0,
-            child: _tabChip('声母', 0),
+        ),
+        Positioned(
+          left: PinyinLearnD2c92Layout.tabFinalsLeft,
+          top: PinyinLearnD2c92Layout.tabFinalsTop,
+          child: _tabChip(
+            '韵母',
+            1,
+            PinyinLearnD2c92Layout.tabFinalsW,
+            PinyinLearnD2c92Layout.tabFinalsH,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget _tabChip(String label, int index) {
+  Widget _tabChip(String label, int index, double width, double height) {
     final selected = _tabIndex == index;
     return GestureDetector(
       onTap: () => setState(() => _tabIndex = index),
       child: Container(
-        width: 214,
-        height: 78,
+        width: width,
+        height: height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? _tabActiveBg : _tabIdleBg,
@@ -250,7 +252,7 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
         child: Text(
           label,
           style: GoogleFonts.notoSansSc(
-            fontSize: 34,
+            fontSize: index == 0 ? 34 : 33,
             fontWeight: FontWeight.w600,
             color: selected
                 ? const Color(0xFFD4EEEE)
@@ -263,18 +265,19 @@ class _PinyinLearnScreenState extends ConsumerState<PinyinLearnScreen> {
 
   Widget _buildCardGrid(List<PinyinItem> items) {
     return Positioned(
-      left: 163,
-      top: 338,
-      width: 1210,
-      height: 520,
+      left: PinyinLearnD2c92Layout.gridLeft,
+      top: PinyinLearnD2c92Layout.gridTop,
+      width: PinyinLearnD2c92Layout.gridW,
+      height: PinyinLearnD2c92Layout.gridH,
       child: GridView.builder(
         key: ValueKey('hanzi-pinyin-learn-grid-$_tabIndex'),
         padding: const EdgeInsets.only(right: 8, bottom: 8),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 4,
-          mainAxisSpacing: 16,
-          crossAxisSpacing: 16,
-          childAspectRatio: 279 / 305,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: PinyinLearnD2c92Layout.gridCrossAxisCount,
+          mainAxisSpacing: PinyinLearnD2c92Layout.gridMainSpacing,
+          crossAxisSpacing: PinyinLearnD2c92Layout.gridCrossSpacing,
+          childAspectRatio:
+              PinyinLearnD2c92Layout.cardW / PinyinLearnD2c92Layout.cardH,
         ),
         itemCount: items.length,
         itemBuilder: (context, index) {
