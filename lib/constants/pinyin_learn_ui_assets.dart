@@ -6,8 +6,27 @@ abstract final class PinyinLearnUiAssets {
   static const gridStatsBar = 'figma_pinyin_grid_stats_bar';
   static const gridBackBtn = 'figma_pinyin_grid_back_btn';
   static const gridAvatar = 'figma_pinyin_grid_avatar';
+  static const gridHeaderAvatar = 'figma_pinyin_grid_47';
+  static const gridTitleDeco = 'figma_pinyin_grid_title_deco';
+  static const gridHeaderDeco = 'figma_pinyin_grid_48';
   static const gridMascotPanda = 'figma_pinyin_grid_mascot_panda';
-  static const gridCardSpeaker = 'figma_pinyin_grid_31';
+  static const gridSideDeco = 'figma_pinyin_grid_side_deco';
+
+  // 底部进度条元素
+  static const gridGiftBox = 'figma_pinyin_grid_03';
+  static const gridMilestone50 = 'figma_pinyin_grid_04';
+  static const gridMilestoneDot4 = 'figma_pinyin_grid_05';
+  static const gridMilestone40 = 'figma_pinyin_grid_06';
+  static const gridMilestoneDot3 = 'figma_pinyin_grid_07';
+  static const gridMilestone30 = 'figma_pinyin_grid_08';
+  static const gridMilestoneDot2 = 'figma_pinyin_grid_09';
+  static const gridMilestone20 = 'figma_pinyin_grid_10';
+  static const gridMilestoneDot1 = 'figma_pinyin_grid_11';
+  static const gridStarBadge = 'figma_pinyin_grid_12';
+  static const gridEncourageBubble = 'figma_pinyin_grid_13';
+  static const gridEncourageIcon = 'figma_pinyin_grid_14';
+
+  static const gridCardSpeaker = 'figma_pinyin_grid_45';
 
   // ── 详情模态（4-2）────────────────────────────────────────────
   static const detailModalBg = 'figma_pinyin_detail_modal_bg';
