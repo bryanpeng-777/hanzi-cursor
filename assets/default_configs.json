@@ -762,5 +762,301 @@
   "hanzi_icon:icon_月": {
     "url": null,
     "asset": "assets/images/pinyin_icons/hanzi_icon_yue.png"
+  },
+  "figma_pinyin_grid_canvas_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_canvas_bg.png"
+  },
+  "figma_pinyin_grid_panel_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_panel_bg.png"
+  },
+  "figma_pinyin_grid_stats_bar": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_stats_bar.png"
+  },
+  "figma_pinyin_grid_03": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_03.png"
+  },
+  "figma_pinyin_grid_04": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_04.png"
+  },
+  "figma_pinyin_grid_05": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_05.png"
+  },
+  "figma_pinyin_grid_06": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_06.png"
+  },
+  "figma_pinyin_grid_07": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_07.png"
+  },
+  "figma_pinyin_grid_08": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_08.png"
+  },
+  "figma_pinyin_grid_09": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_09.png"
+  },
+  "figma_pinyin_grid_10": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_10.png"
+  },
+  "figma_pinyin_grid_11": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_11.png"
+  },
+  "figma_pinyin_grid_12": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_12.png"
+  },
+  "figma_pinyin_grid_13": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_13.png"
+  },
+  "figma_pinyin_grid_14": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_14.png"
+  },
+  "figma_pinyin_grid_mascot_panda": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_mascot_panda.png"
+  },
+  "figma_pinyin_grid_side_deco": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_side_deco.png"
+  },
+  "figma_pinyin_grid_17": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_17.png"
+  },
+  "figma_pinyin_grid_18": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_18.png"
+  },
+  "figma_pinyin_grid_19": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_19.png"
+  },
+  "figma_pinyin_grid_20": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_20.png"
+  },
+  "figma_pinyin_grid_21": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_21.png"
+  },
+  "figma_pinyin_grid_22": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_22.png"
+  },
+  "figma_pinyin_grid_23": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_23.png"
+  },
+  "figma_pinyin_grid_24": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_24.png"
+  },
+  "figma_pinyin_grid_25": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_25.png"
+  },
+  "figma_pinyin_grid_26": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_26.png"
+  },
+  "figma_pinyin_grid_27": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_27.png"
+  },
+  "figma_pinyin_grid_28": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_28.png"
+  },
+  "figma_pinyin_grid_29": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_29.png"
+  },
+  "figma_pinyin_grid_30": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_30.png"
+  },
+  "figma_pinyin_grid_31": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_31.png"
+  },
+  "figma_pinyin_grid_32": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_32.png"
+  },
+  "figma_pinyin_grid_33": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_33.png"
+  },
+  "figma_pinyin_grid_34": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_34.png"
+  },
+  "figma_pinyin_grid_35": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_35.png"
+  },
+  "figma_pinyin_grid_36": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_36.png"
+  },
+  "figma_pinyin_grid_37": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_37.png"
+  },
+  "figma_pinyin_grid_38": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_38.png"
+  },
+  "figma_pinyin_grid_39": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_39.png"
+  },
+  "figma_pinyin_grid_40": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_40.png"
+  },
+  "figma_pinyin_grid_41": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_41.png"
+  },
+  "figma_pinyin_grid_42": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_42.png"
+  },
+  "figma_pinyin_grid_43": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_43.png"
+  },
+  "figma_pinyin_grid_44": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_44.png"
+  },
+  "figma_pinyin_grid_45": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_45.png"
+  },
+  "figma_pinyin_grid_46": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_46.png"
+  },
+  "figma_pinyin_grid_47": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_47.png"
+  },
+  "figma_pinyin_grid_48": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_48.png"
+  },
+  "figma_pinyin_grid_back_btn": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_back_btn.png"
+  },
+  "figma_pinyin_grid_title_deco": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_title_deco.png"
+  },
+  "figma_pinyin_grid_avatar": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_avatar.png"
+  },
+  "figma_pinyin_detail_modal_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_modal_bg.png"
+  },
+  "figma_pinyin_detail_01": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_01.png"
+  },
+  "figma_pinyin_detail_02": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_02.png"
+  },
+  "figma_pinyin_detail_right_illustration": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_right_illustration.png"
+  },
+  "figma_pinyin_detail_04": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_04.png"
+  },
+  "figma_pinyin_detail_05": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_05.png"
+  },
+  "figma_pinyin_detail_06": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_06.png"
+  },
+  "figma_pinyin_detail_07": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_07.png"
+  },
+  "figma_pinyin_detail_08": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_08.png"
+  },
+  "figma_pinyin_detail_09": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_09.png"
+  },
+  "figma_pinyin_detail_10": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_10.png"
+  },
+  "figma_pinyin_detail_11": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_11.png"
+  },
+  "figma_pinyin_detail_12": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_12.png"
+  },
+  "figma_pinyin_detail_13": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_13.png"
+  },
+  "figma_pinyin_detail_14": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_14.png"
+  },
+  "figma_pinyin_detail_15": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_15.png"
+  },
+  "figma_pinyin_detail_letter_panel": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_letter_panel.png"
+  },
+  "figma_pinyin_detail_letter_stroke": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_letter_stroke.png"
+  },
+  "figma_pinyin_detail_learned_badge": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_learned_badge.png"
+  },
+  "figma_pinyin_detail_close_btn": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_close_btn.png"
+  },
+  "figma_pinyin_detail_drag_handle": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_drag_handle.png"
+  },
+  "figma_pinyin_detail_21": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_21.png"
   }
 }

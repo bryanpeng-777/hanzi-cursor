@@ -1,11 +1,10 @@
-// TDD 合约：T011 - 拼音学习横屏重设计
+// TDD 合约：T011 - 拼音学习横屏重设计（网格 + 详情模态）
 
 import 'package:cs_ui/cs_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hanzi_app/design/hanzi_design_spec.dart';
 import 'package:hanzi_app/screens/pinyin_learn_screen.dart';
 import 'package:hanzi_app/utils/app_orientation.dart';
 
@@ -49,7 +48,7 @@ void main() {
 
       expect(find.text('声母'), findsOneWidget);
       expect(find.text('韵母'), findsOneWidget);
-      expect(find.text('四声'), findsOneWidget);
+      expect(find.text('四声'), findsNothing);
 
       final tabBar = find.byKey(const Key('hanzi-pinyin-learn-tab-bar'));
       expect(tabBar, findsOneWidget);
@@ -59,14 +58,6 @@ void main() {
       await tester.pump(const Duration(milliseconds: 300));
       expect(
         find.byKey(const Key('hanzi-pinyin-learn-finals-panel')),
-        findsOneWidget,
-      );
-
-      await tester.tap(find.text('四声'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-      expect(
-        find.byKey(const Key('hanzi-pinyin-learn-tones-panel')),
         findsOneWidget,
       );
     });
@@ -84,35 +75,25 @@ void main() {
       expect(tester.takeException(), isNull);
     });
 
-    testWidgets('test_pinyin_learn_uses_design_spec_header', (tester) async {
+    testWidgets('test_pinyin_learn_no_page_title', (tester) async {
       await pumpLearnScreen(tester);
 
-      final header = tester.widget<Text>(
+      expect(
         find.byKey(const Key('hanzi-pinyin-learn-header-title')),
+        findsNothing,
       );
-      expect(header.data, '拼音学习');
-      expect(header.style?.color, HanziDesignSpec.titleInk);
+      expect(find.text('拼音学习'), findsNothing);
     });
 
-    // ── T011 重设计合约（先红后绿）──────────────────────────────────────────
-
-    testWidgets('test_pinyin_learn_mode_switch', (tester) async {
+    testWidgets('test_pinyin_learn_card_grid', (tester) async {
       await pumpLearnScreen(tester);
 
       expect(
-        find.byKey(const Key('hanzi-pinyin-learn-mode-switch')),
+        find.byKey(const Key('hanzi-pinyin-learn-card-grid')),
         findsOneWidget,
       );
-
-      await tester.tap(find.text('自动模式'));
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 300));
-
-      expect(
-        find.byKey(const Key('hanzi-pinyin-learn-auto-panel')),
-        findsOneWidget,
-      );
-      expect(find.text('选择学习内容'), findsOneWidget);
+      expect(find.text('手动模式'), findsNothing);
+      expect(find.text('自动模式'), findsNothing);
     });
 
     testWidgets('test_pinyin_learn_stats_bar', (tester) async {
@@ -122,8 +103,23 @@ void main() {
         find.byKey(const Key('hanzi-pinyin-learn-stats-bar')),
         findsOneWidget,
       );
-      expect(find.text('学习进度'), findsOneWidget);
-      expect(find.text('掌握拼音'), findsOneWidget);
+      expect(find.textContaining('学习进度'), findsOneWidget);
+      expect(find.textContaining('掌握拼音'), findsOneWidget);
+    });
+
+    testWidgets('test_pinyin_learn_detail_modal', (tester) async {
+      await pumpLearnScreen(tester);
+
+      final card = find.byKey(const Key('hanzi-pinyin-learn-card-grid'));
+      await tester.ensureVisible(card);
+      await tester.tap(card);
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 350));
+
+      expect(
+        find.byKey(const Key('hanzi-pinyin-learn-detail-modal')),
+        findsOneWidget,
+      );
     });
 
     testWidgets('test_pinyin_learn_no_overflow', (tester) async {

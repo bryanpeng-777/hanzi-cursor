@@ -1,5 +1,3 @@
-import 'pinyin_learn_figma_layout.dart';
-
 /// Figma node `1-2` 每个拼音卡片的绝对坐标（相对 grid 区，与 gridBg top=5 对齐）。
 class PinyinLearnFigmaCardSpec {
   const PinyinLearnFigmaCardSpec({
