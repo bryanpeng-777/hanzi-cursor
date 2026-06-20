@@ -39,53 +39,139 @@ class _HomeScreenState extends State<HomeScreen> {
             Positioned(
               top: MediaQuery.paddingOf(context).top + 6,
               right: 8,
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Material(
-                    color: Colors.white.withValues(alpha: 0.94),
-                    elevation: 2,
-                    borderRadius: BorderRadius.circular(20),
-                    child: TextButton.icon(
-                      key: const Key('hanzi-screenshot-preview-entry'),
-                      onPressed: () => context.push('/pinyin-screenshot-preview'),
-                      icon: const Icon(Icons.image_outlined, size: 18),
-                      label: const Text('截图预览'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFF42BAC4),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Material(
+                        color: Colors.white.withValues(alpha: 0.94),
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextButton.icon(
+                          key: const Key('hanzi-screenshot-preview-entry'),
+                          onPressed: () =>
+                              context.push('/pinyin-screenshot-preview'),
+                          icon: const Icon(Icons.image_outlined, size: 18),
+                          label: const Text('截图预览'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF42BAC4),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 6),
+                      Material(
+                        color: Colors.white.withValues(alpha: 0.94),
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextButton.icon(
+                          key: const Key('hanzi-pinyin-codia-test-entry'),
+                          onPressed: () =>
+                              context.push('/pinyin-hub-codia-test'),
+                          icon: const Icon(Icons.compare_arrows_rounded,
+                              size: 18),
+                          label: const Text('Hub Codia'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF2C91F1),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 6),
-                  Material(
-                    color: Colors.white.withValues(alpha: 0.94),
-                    elevation: 2,
-                    borderRadius: BorderRadius.circular(20),
-                    child: TextButton.icon(
-                      key: const Key('hanzi-pinyin-codia-test-entry'),
-                      onPressed: () => context.push('/pinyin-hub-codia-test'),
-                      icon: const Icon(Icons.compare_arrows_rounded, size: 18),
-                      label: const Text('Codia 对比'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFF2C91F1),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
+                  const SizedBox(height: 6),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Material(
+                        color: Colors.white.withValues(alpha: 0.94),
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextButton.icon(
+                          key: const Key('hanzi-pinyin-learn-grid-codia-entry'),
+                          onPressed: () =>
+                              context.push('/pinyin-learn-grid-codia-test'),
+                          icon: const Icon(Icons.grid_view_rounded, size: 18),
+                          label: const Text('Codia 网格'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF0BAEB9),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 6),
+                      Material(
+                        color: Colors.white.withValues(alpha: 0.94),
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextButton.icon(
+                          key: const Key(
+                              'hanzi-pinyin-learn-detail-codia-entry'),
+                          onPressed: () =>
+                              context.push('/pinyin-learn-detail-codia-test'),
+                          icon: const Icon(Icons.layers_outlined, size: 18),
+                          label: const Text('Codia 详情'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF214B8C),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      Material(
+                        color: Colors.white.withValues(alpha: 0.94),
+                        elevation: 2,
+                        borderRadius: BorderRadius.circular(20),
+                        child: TextButton.icon(
+                          onPressed: () => context.push('/pinyin-learn'),
+                          icon: const Icon(Icons.phone_iphone_rounded,
+                              size: 18),
+                          label: const Text('正式版'),
+                          style: TextButton.styleFrom(
+                            foregroundColor: const Color(0xFF2EB28A),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 10,
+                              vertical: 6,
+                            ),
+                            textStyle: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

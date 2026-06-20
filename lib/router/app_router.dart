@@ -17,6 +17,8 @@ import '../screens/match_game_screen.dart';
 import '../screens/listen_game_screen.dart';
 import '../screens/dev/pinyin_hub_codia_test_screen.dart';
 import '../screens/dev/pinyin_screenshot_preview_screen.dart';
+import '../screens/dev/pinyin_learn_grid_codia_test_screen.dart';
+import '../screens/dev/pinyin_learn_detail_codia_test_screen.dart';
 import '../models/hanzi_model.dart';
 
 part 'app_router.g.dart';
@@ -159,6 +161,16 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: 'pinyin-screenshot-preview',
             builder: (context, state) => const PinyinScreenshotPreviewScreen(),
+          ),
+          GoRoute(
+            path: 'pinyin-learn-grid-codia-test',
+            builder: (context, state) =>
+                const PinyinLearnGridCodiaTestScreen(),
+          ),
+          GoRoute(
+            path: 'pinyin-learn-detail-codia-test',
+            builder: (context, state) =>
+                const PinyinLearnDetailCodiaTestScreen(),
           ),
         ],
       ),
