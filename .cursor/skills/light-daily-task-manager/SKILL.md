@@ -117,7 +117,7 @@ filename = monday.strftime("%m%d") + "-" + project  # 例如 "0421-camp"
 
 ### Step 2-0：【最高优先级】检查匹配 Agent
 
-在做任何关键词提取或知识库检索之前，**先扫描任务描述，匹配 `~/.claude/agents/` 中最合适的 agent**：
+在做任何关键词提取或知识库检索之前，**先扫描任务描述，匹配 agents 中最合适的 agent**（本地 `~/.claude/agents/`；Cloud Agent `.cursor/agents/`）：
 
 | 任务关键词 | 匹配 Agent |
 |-----------|-----------|
@@ -271,7 +271,7 @@ execution-planner 内部负责：
 ⛔ **禁止自行想象执行（用户进化 2026-06-05）**：
 - Step 4 **只许按 Step3令牌逐项执行**；不得替换清单中的 `[workflow]` / `[subagent]` / `[技能]` 为「我觉得更快」的捷径。
 - 不得合并多步（例：ui-design-workflow Step 2+3+4 一条回复做完）、不得跳过 workflow 子文件规定的 Pre-check / GATE PASS / 用户确认点。
-- `[workflow]` 类项：必须先 `Read` 该 workflow **全文**（含逐步强制执行段），**禁止用摘要代替全文**。
+- `[workflow]` 类项：必须先 `Read` 该 workflow **全文**（含逐步强制执行段），**禁止用摘要代替全文**。路径：本地 `~/.claude/agents/<name>.md`；Cloud Agent `.cursor/agents/<name>.md`。
 - 不得在未更新 `plan.md` / 未获用户确认的情况下，擅自改布局策略、资源口径或验收标准（T010 反例：Column↔Stack 来回、主会话直接改 Figma 实现）。
 - 若执行中发现清单不适用 → **硬停**，回到 Step 3 修订编排并等用户「开始」，禁止边做边改规则。
 

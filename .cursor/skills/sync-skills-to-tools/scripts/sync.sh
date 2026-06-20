@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # sync.sh - 将 ~/.claude/skills/ 同步到 WorkBuddy、CodeBuddy、Cursor 项目 .cursor/skills/；
+#           将 ~/.claude/agents/ 同步到 Cursor 项目 .cursor/agents/（供 Cloud Agent 使用）；
 #           将 ~/.claude-internal/{skills,agents,knowledge} 软链到 ~/.claude 下对应目录（不 rsync）
 # 用法:
 #   ./scripts/sync.sh [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only]
 #   ./scripts/sync.sh --symlinks-only   只检查/建立 ~/.claude-internal 下三处软链，不同步 WB/CB/Cursor
-#   --pull-first  先从远程 git 拉取 ~/.claude/skills 到最新，再执行同步
+#   --pull-first  先从远程 git 拉取 ~/.claude 到最新，再执行同步
 
 set -euo pipefail
 
@@ -43,15 +44,23 @@ if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$SYNC_TARGET" 
     exit 1
 fi
 
-git_pull_skills() {
-    echo "Git 更新 $CLAUDE_SKILLS ..."
-    if [[ ! -d "$CLAUDE_SKILLS/.git" ]]; then
-        echo "警告：$CLAUDE_SKILLS 不是 git 仓库，跳过 git pull" >&2
+git_pull_claude_repo() {
+    local repo_root=""
+    if [[ -d "$HOME/.claude/.git" ]]; then
+        repo_root="$HOME/.claude"
+    elif [[ -d "$CLAUDE_SKILLS/.git" ]]; then
+        repo_root="$CLAUDE_SKILLS"
+    fi
+
+    if [[ -z "$repo_root" ]]; then
+        echo "警告：~/.claude 与 ~/.claude/skills 均不是 git 仓库，跳过 git pull" >&2
         echo ""
         return 0
     fi
+
+    echo "Git 更新 $repo_root ..."
     (
-        cd "$CLAUDE_SKILLS"
+        cd "$repo_root"
         git pull --ff-only
     )
     echo ""
@@ -168,6 +177,65 @@ ensure_internal_claude_symlinks() {
     _ensure_link "knowledge" "$CLAUDE_KNOWLEDGE" "$INTERNAL_KNOWLEDGE"
 }
 
+# agents：~/.claude/agents/*.md（可含子目录）镜像到项目 .cursor/agents/
+sync_agents_to() {
+    local dest="$1"
+    local dest_name="$2"
+
+    if [[ ! -d "$CLAUDE_AGENTS" ]]; then
+        echo "$dest_name ($dest)："
+        echo "  跳过（源不存在：$CLAUDE_AGENTS）"
+        return 0
+    fi
+
+    mkdir -p "$dest"
+
+    local before_list
+    before_list=$(mktemp)
+    find "$dest" -type f \( -name '*.md' -o -name '*.mdc' \) 2>/dev/null | sort > "$before_list" || true
+
+    rsync -a --delete \
+        --include='*/' \
+        --include='*.md' \
+        --include='*.mdc' \
+        --exclude='*' \
+        "$CLAUDE_AGENTS/" "$dest/"
+
+    local after_list added=() updated=() deleted=()
+    after_list=$(mktemp)
+    find "$dest" -type f \( -name '*.md' -o -name '*.mdc' \) 2>/dev/null | sort > "$after_list" || true
+
+    while IFS= read -r file; do
+        [[ -z "$file" ]] && continue
+        if ! grep -qxF "$file" "$before_list" 2>/dev/null; then
+            added+=("${file#"$dest"/}")
+        fi
+    done < "$after_list"
+
+    while IFS= read -r file; do
+        [[ -z "$file" ]] && continue
+        if ! grep -qxF "$file" "$after_list" 2>/dev/null; then
+            deleted+=("${file#"$dest"/}")
+        elif grep -qxF "$file" "$before_list" 2>/dev/null; then
+            if ! cmp -s "$file" "$CLAUDE_AGENTS/${file#"$dest"/}" 2>/dev/null; then
+                updated+=("${file#"$dest"/}")
+            fi
+        fi
+    done < "$before_list"
+
+    rm -f "$before_list" "$after_list"
+
+    local total
+    total=$(find "$dest" -type f \( -name '*.md' -o -name '*.mdc' \) 2>/dev/null | wc -l | tr -d ' ')
+
+    echo "$dest_name ($dest)："
+    [[ ${#added[@]} -gt 0 ]] && echo "  新增（${#added[@]}）：${added[*]}"
+    [[ ${#updated[@]} -gt 0 ]] && echo "  更新（${#updated[@]}）：${updated[*]}"
+    [[ ${#deleted[@]} -gt 0 ]] && echo "  删除（${#deleted[@]}）：${deleted[*]}"
+    [[ ${#added[@]} -eq 0 && ${#updated[@]} -eq 0 && ${#deleted[@]} -eq 0 ]] && echo "  已是最新"
+    echo "  目标共 $total 个 agent/workflow 文件"
+}
+
 sync_cursor_projects() {
     local roots_csv="$1"
     local root
@@ -180,7 +248,8 @@ sync_cursor_projects() {
             echo "Cursor 项目（跳过，目录不存在）：$root" >&2
             continue
         fi
-        sync_to "$root/.cursor/skills" "Cursor ($root/.cursor/skills)"
+        sync_to "$root/.cursor/skills" "Cursor skills ($root/.cursor/skills)"
+        sync_agents_to "$root/.cursor/agents" "Cursor agents ($root/.cursor/agents)"
     done
 }
 
@@ -191,7 +260,7 @@ if [[ "$SYMLINKS_ONLY" == true ]]; then
     exit 0
 fi
 
-[[ "$PULL_FIRST" == true ]] && git_pull_skills
+[[ "$PULL_FIRST" == true ]] && git_pull_claude_repo
 
 echo "同步开始..."
 echo ""
@@ -205,4 +274,6 @@ ensure_internal_claude_symlinks
 
 echo ""
 total_src=$(find "$CLAUDE_SKILLS" -type f -name 'SKILL.md' 2>/dev/null | wc -l | tr -d ' ')
-echo "同步完成 ✓（源共 ${total_src} 个 SKILL.md；internal 三目录已保证为 ~/.claude 的软链）"
+total_agents=0
+[[ -d "$CLAUDE_AGENTS" ]] && total_agents=$(find "$CLAUDE_AGENTS" -type f \( -name '*.md' -o -name '*.mdc' \) 2>/dev/null | wc -l | tr -d ' ')
+echo "同步完成 ✓（源共 ${total_src} 个 SKILL.md、${total_agents} 个 agent 文件；internal 三目录已保证为 ~/.claude 的软链）"
