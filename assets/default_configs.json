@@ -1058,5 +1058,9 @@
   "figma_pinyin_detail_21": {
     "url": null,
     "asset": "assets/figma_ui/figma_pinyin_detail_21.png"
+  },
+  "figma_pinyin_detail_corner_tl": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_corner_tl.png"
   }
 }

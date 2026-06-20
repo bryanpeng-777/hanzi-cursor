@@ -30,14 +30,24 @@ abstract final class PinyinLearnUiAssets {
 
   // ── 详情模态（4-2）────────────────────────────────────────────
   static const detailModalBg = 'figma_pinyin_detail_modal_bg';
+  static const detailBorderLeft = 'figma_pinyin_detail_01';
+  static const detailBorderRight = 'figma_pinyin_detail_02';
+  static const detailCornerTopLeft = 'figma_pinyin_detail_corner_tl';
+  static const detailCornerTopRight = 'figma_pinyin_detail_21';
+  static const detailBottomDeco = 'figma_pinyin_detail_08';
   static const detailCloseBtn = 'figma_pinyin_detail_close_btn';
   static const detailDragHandle = 'figma_pinyin_detail_drag_handle';
   static const detailLetterStroke = 'figma_pinyin_detail_letter_stroke';
   static const detailLetterPanel = 'figma_pinyin_detail_letter_panel';
   static const detailLearnedBadge = 'figma_pinyin_detail_learned_badge';
   static const detailRightIllustration = 'figma_pinyin_detail_right_illustration';
-  static const detailExampleCardBg = 'figma_pinyin_detail_05';
-  static const detailToneGridLine = 'figma_pinyin_detail_11';
+  static const detailExampleDecoA = 'figma_pinyin_detail_09';
+  static const detailExampleDecoB = 'figma_pinyin_detail_04';
+  static const detailToneLine1 = 'figma_pinyin_detail_12';
+  static const detailToneLine2 = 'figma_pinyin_detail_14';
+  static const detailToneLine3 = 'figma_pinyin_detail_13';
+  static const detailToneLine4 = 'figma_pinyin_detail_11';
+  static const detailToneDivider = 'figma_pinyin_detail_15';
 }
 
 /// Codia 导出画布尺寸（FittedBox 缩放用）
