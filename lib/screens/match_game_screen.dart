@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:cs_ui/cs_ui.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../constants/match_game_d2c_layout.dart';
 import '../data/hanzi_data.dart';
 import '../design/hanzi_design_spec.dart';
 import '../design/hanzi_shared_widgets.dart';
@@ -114,6 +115,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
   @override
   Widget build(BuildContext context) {
     return HanziLandscapeScaffold(
+      key: const Key('hanzi-match-game-landscape'),
       backgroundColor: HanziDesignSpec.surfaceWarm,
       appBar: CsAppBar(
         title: '图字配对',
@@ -136,6 +138,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
 
   Widget _buildGameBody() {
     return Column(
+      key: const Key('hanzi-match-game-body'),
       children: [
         _buildHeaderPanel(),
         SizedBox(height: 10.h),
@@ -143,29 +146,35 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Expanded(child: _buildColumnPanel(
-                title: '情境图',
-                subtitle: '点一张图',
-                iconKey: 'img_card_game_match',
-                accent: _matchGradient.first,
-                items: _leftItems,
-                isImageColumn: true,
-                selectedId: _selectedLeft,
-                onSelect: _onSelectLeft,
-              )),
+              Expanded(
+                child: _buildColumnPanel(
+                  key: const Key('hanzi-match-game-image-panel'),
+                  title: '情境图',
+                  subtitle: '点一张图',
+                  iconKey: 'img_card_game_match',
+                  accent: _matchGradient.first,
+                  items: _leftItems,
+                  isImageColumn: true,
+                  selectedId: _selectedLeft,
+                  onSelect: _onSelectLeft,
+                ),
+              ),
               SizedBox(width: 8.w),
               _buildConnector(),
               SizedBox(width: 8.w),
-              Expanded(child: _buildColumnPanel(
-                title: '汉字',
-                subtitle: '再点一个字',
-                iconKey: 'img_card_hanzi_learn',
-                accent: HanziDesignSpec.accentLearn,
-                items: _rightItems,
-                isImageColumn: false,
-                selectedId: _selectedRight,
-                onSelect: _onSelectRight,
-              )),
+              Expanded(
+                child: _buildColumnPanel(
+                  key: const Key('hanzi-match-game-hanzi-panel'),
+                  title: '汉字',
+                  subtitle: '再点一个字',
+                  iconKey: 'img_card_hanzi_learn',
+                  accent: HanziDesignSpec.accentLearn,
+                  items: _rightItems,
+                  isImageColumn: false,
+                  selectedId: _selectedRight,
+                  onSelect: _onSelectRight,
+                ),
+              ),
             ],
           ),
         ),
@@ -175,6 +184,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
 
   Widget _buildHeaderPanel() {
     return Container(
+      key: const Key('hanzi-match-game-guide-header'),
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -237,7 +247,8 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
     final bothSelected = _selectedLeft != null && _selectedRight != null;
 
     return SizedBox(
-      width: 36.w,
+      key: const Key('hanzi-match-game-connector'),
+      width: MatchGameD2cLayout.connectorSize.w,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -279,6 +290,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
   }
 
   Widget _buildColumnPanel({
+    Key? key,
     required String title,
     required String subtitle,
     required String iconKey,
@@ -289,6 +301,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
     required ValueChanged<String> onSelect,
   }) {
     return HanziSurfaceCard(
+      key: key,
       shadowColor: accent,
       padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 8.h),
       child: Column(
@@ -383,6 +396,7 @@ class _MatchGameScreenState extends ConsumerState<MatchGameScreen> {
 
     return Center(
       child: HanziSurfaceCard(
+        key: const Key('hanzi-match-game-completion'),
         shadowColor: _matchGradient.first,
         padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 20.h),
         child: Column(
@@ -590,10 +604,10 @@ class _MatchTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(14.r),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            height: 46.h,
+            height: MatchGameD2cLayout.tileH.h,
             decoration: BoxDecoration(
               color: bgColor,
-              borderRadius: BorderRadius.circular(14.r),
+              borderRadius: BorderRadius.circular(MatchGameD2cLayout.tileRadius.r),
               border: Border.all(color: borderColor, width: isSelected ? 2.5 : 1.5),
               boxShadow: isSelected && !isMatched
                   ? [

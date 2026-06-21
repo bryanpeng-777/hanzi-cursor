@@ -46,6 +46,8 @@
 | # | 测试项 | 方式 | 说明 | 状态 |
 |---|--------|------|------|------|
 | G1 | 图字配对全部配对完成 → 显示结算页 | 手动 | MatchGameScreen 真机操作 | 计划中 |
+| IT-G1-001 | 图字配对横屏布局 — 引导条与双栏面板 | 自动 | integration_test/scenarios/match_game_test.dart | 已实现 |
+| IT-G1-002 | 图字配对 — 进度与得分展示 | 自动 | integration_test/scenarios/match_game_test.dart | 已实现 |
 | G2 | 听音选字答对 → addStars 被调用 | 自动 | ListenGameScreen 答对时 stars 增加 | 计划中 |
 
 ## 路由 & 登录模块
