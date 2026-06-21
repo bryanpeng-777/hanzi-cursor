@@ -1062,5 +1062,113 @@
   "figma_pinyin_detail_corner_tl": {
     "url": null,
     "asset": "assets/figma_ui/figma_pinyin_detail_corner_tl.png"
+  },
+  "doodle_canvas_backdrop": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_canvas_backdrop.png"
+  },
+  "doodle_header_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_header_bg.png"
+  },
+  "doodle_back_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_back_icon.png"
+  },
+  "doodle_title_deco_left_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_title_deco_left_icon.png"
+  },
+  "doodle_title_deco_right_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_title_deco_right_icon.png"
+  },
+  "doodle_btn_refresh_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_btn_refresh_icon.png"
+  },
+  "doodle_panel_lineart_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_panel_lineart_bg.png"
+  },
+  "doodle_bird_lineart": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_bird_lineart.png"
+  },
+  "doodle_panel_coloring_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_panel_coloring_bg.png"
+  },
+  "doodle_label_mycoloring_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_label_mycoloring_bg.png"
+  },
+  "doodle_toolbar_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_toolbar_bg.png"
+  },
+  "doodle_color_red_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_red_icon.png"
+  },
+  "doodle_color_orange_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_orange_icon.png"
+  },
+  "doodle_color_yellow_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_yellow_icon.png"
+  },
+  "doodle_color_green_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_green_icon.png"
+  },
+  "doodle_color_blue_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_blue_icon.png"
+  },
+  "doodle_color_purple_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_purple_icon.png"
+  },
+  "doodle_color_pink_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_pink_icon.png"
+  },
+  "doodle_color_brown_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_brown_icon.png"
+  },
+  "doodle_brush_small_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_small_icon.png"
+  },
+  "doodle_brush_medium_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_medium_icon.png"
+  },
+  "doodle_brush_large_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_large_icon.png"
+  },
+  "doodle_eraser_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_eraser_icon.png"
+  },
+  "doodle_clear_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_clear_icon.png"
+  },
+  "doodle_done_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_done_icon.png"
+  },
+  "doodle_save_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_blue_icon.png"
+  },
+  "img_card_game_doodle": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_orange_icon.png"
   }
 }

@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # sync.sh - 将 ~/.claude/skills/ 同步到 WorkBuddy、CodeBuddy、Cursor 项目 .cursor/skills/；
+#           将 ~/.claude/agents/ 同步到 Cursor 项目 .cursor/agents/（供 Cloud Agent 使用）；
 #           将 ~/.claude-internal/{skills,agents,knowledge} 软链到 ~/.claude 下对应目录（不 rsync）
 # 用法:
 #   ./scripts/sync.sh [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only]
 #   ./scripts/sync.sh --symlinks-only   只检查/建立 ~/.claude-internal 下三处软链，不同步 WB/CB/Cursor
-#   --pull-first  先从远程 git 拉取 ~/.claude/skills 到最新，再执行同步
+#   --pull-first  先从远程 git 拉取 claude-config（~/.claude）到最新，再执行同步
 
 set -euo pipefail
 
@@ -16,7 +17,7 @@ INTERNAL_AGENTS="$HOME/.claude-internal/agents"
 INTERNAL_KNOWLEDGE="$HOME/.claude-internal/knowledge"
 WORKBUDDY_SKILLS="$HOME/.workbuddy/skills"
 CODEBUDDY_SKILLS="$HOME/.codebuddy/skills"
-# 逗号分隔的 Git 项目根目录，skills 同步到各仓库 .cursor/skills/（供 Cloud Agent 使用）
+# 逗号分隔的 Git 项目根目录；skills/agents 同步到各仓库 .cursor/ 下（供 Cloud Agent 使用）
 CURSOR_PROJECT_ROOTS="${CURSOR_PROJECT_ROOTS:-/Users/pengchao/hanzi/hanzi-cursor}"
 
 PULL_FIRST=false
@@ -43,15 +44,17 @@ if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$SYNC_TARGET" 
     exit 1
 fi
 
-git_pull_skills() {
-    echo "Git 更新 $CLAUDE_SKILLS ..."
-    if [[ ! -d "$CLAUDE_SKILLS/.git" ]]; then
-        echo "警告：$CLAUDE_SKILLS 不是 git 仓库，跳过 git pull" >&2
+git_pull_claude_config() {
+    local claude_root
+    claude_root="$(cd "$HOME/.claude" && pwd -P)"
+    echo "Git 更新 claude-config ($claude_root) ..."
+    if [[ ! -d "$claude_root/.git" ]]; then
+        echo "警告：$claude_root 不是 git 仓库，跳过 git pull" >&2
         echo ""
         return 0
     fi
     (
-        cd "$CLAUDE_SKILLS"
+        cd "$claude_root"
         git pull --ff-only
     )
     echo ""
@@ -130,6 +133,38 @@ sync_to() {
     echo "  目标共 $total 个技能"
 }
 
+# 镜像 ~/.claude/agents/ 到 Cursor 项目 .cursor/agents/（含子目录如 ui-design-workflow/）
+sync_agents_to() {
+    local dest="$1"
+    local dest_name="$2"
+
+    if [[ ! -d "$CLAUDE_AGENTS" ]]; then
+        echo "$dest_name：跳过（源不存在：$CLAUDE_AGENTS）"
+        return 0
+    fi
+
+    mkdir -p "$dest"
+
+    local changes_count
+    changes_count=$(
+        rsync -a --delete --itemize-changes \
+            --exclude='.DS_Store' \
+            "$CLAUDE_AGENTS/" "$dest/" \
+            | grep -c '^[<>c*.*]' || true
+    )
+
+    local total_md
+    total_md=$(find "$dest" -type f -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+
+    echo "$dest_name ($dest)："
+    if [[ "$changes_count" -gt 0 ]]; then
+        echo "  变更条目：$changes_count"
+    else
+        echo "  跳过（已最新）"
+    fi
+    echo "  目标共 $total_md 个 agent .md 文件"
+}
+
 # ~/.claude-internal 下 skills / agents / knowledge 与 ~/.claude 同源：用绝对路径软链，不做 rsync
 ensure_internal_claude_symlinks() {
     echo "claude-internal（软链 -> ~/.claude，无复制）："
@@ -180,7 +215,8 @@ sync_cursor_projects() {
             echo "Cursor 项目（跳过，目录不存在）：$root" >&2
             continue
         fi
-        sync_to "$root/.cursor/skills" "Cursor ($root/.cursor/skills)"
+        sync_to "$root/.cursor/skills" "Cursor skills"
+        sync_agents_to "$root/.cursor/agents" "Cursor agents"
     done
 }
 
@@ -191,7 +227,7 @@ if [[ "$SYMLINKS_ONLY" == true ]]; then
     exit 0
 fi
 
-[[ "$PULL_FIRST" == true ]] && git_pull_skills
+[[ "$PULL_FIRST" == true ]] && git_pull_claude_config
 
 echo "同步开始..."
 echo ""
@@ -205,4 +241,5 @@ ensure_internal_claude_symlinks
 
 echo ""
 total_src=$(find "$CLAUDE_SKILLS" -type f -name 'SKILL.md' 2>/dev/null | wc -l | tr -d ' ')
-echo "同步完成 ✓（源共 ${total_src} 个 SKILL.md；internal 三目录已保证为 ~/.claude 的软链）"
+total_agents=$(find "$CLAUDE_AGENTS" -type f -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
+echo "同步完成 ✓（源共 ${total_src} 个 SKILL.md、${total_agents} 个 agent .md；internal 三目录已保证为 ~/.claude 的软链）"

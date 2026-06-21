@@ -1,0 +1,99 @@
+{
+  "predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "user_id": "428930738",
+        "camp_uid": "a1b2c3d4-xxxx",
+        "user_logs_text": "[用户日志聚合报告]\nuserId=428930738  campUid=a1b2c3d4-xxxx\n合并条数=18\n────────────────────────────────────────────────────\n2026-04-01T10:12:03+08:00 moduleName=QuickLogin campType=start status=0 step=init\n2026-04-01T10:12:04+08:00 moduleName=QuickLogin campType=step status=0 step=camp_token_verify result=success\n2026-04-01T10:12:04+08:00 moduleName=QuickLogin campType=end status=0 desc=快速登录成功 skipQQTokenRefresh=true\n2026-04-01T10:12:05+08:00 moduleName=AccountSwitch campType=start status=0 fromAccount=A toAccount=B\n2026-04-01T10:12:05+08:00 moduleName=AccountSwitch campType=end status=0 result=success\n2026-04-01T10:15:30+08:00 moduleName=AutoLogin campType=start status=0\n2026-04-01T10:15:30+08:00 moduleName=AutoLogin campType=step status=-1 step=qq_token_check errorCode=-10001 desc=QQ_accessToken_expired\n2026-04-01T10:15:31+08:00 moduleName=AutoLogin campType=end status=-1 errorMsg=auto_login_failed reason=qq_accesstoken_expired\n2026-04-01T10:15:32+08:00 moduleName=AppStart campType=end status=-2 desc=kicked_to_login_page",
+        "problem_description": "用户设备上有两个营地账号A和B，账号B的QQ accessToken已过期。切换到B使用快速登录成功，但杀掉App后自动登录失败，重新用A登录也无法修复B，再次切换B仍然失败，形成死循环。",
+        "reasoning": "分析日志：用户从账号A切换到账号B，使用快速登录成功（skipQQTokenRefresh=true），表明营地token有效但跳过了QQ token刷新。随后AutoLogin失败，原因为QQ_accessToken_expired。用户反馈切换回A也无法修复B，再次切换B仍然失败。这表明账号B的QQ accessToken在快速登录时未被刷新，一直处于过期状态。由于快速登录成功，用户没有机会触发QQ授权流程来刷新token，导致每次尝试登录B都会因QQ token过期而失败，形成死循环。问题核心在于账号切换和快速登录逻辑未处理目标账号的QQ token过期情况。",
+        "root_cause": "[AccountSwitch+QuickLogin] 因快速登录逻辑（skipQQTokenRefresh=true）在账号切换场景下未检测并刷新目标账号已过期的QQ accessToken，导致该账号的QQ token持续过期，后续所有自动登录均因此失败，形成无法自愈的死循环。",
+        "issue_category": "auth_deadloop",
+        "auth_pattern": "账号切换后使用快速登录成功，但目标账号的QQ accessToken未刷新（skipQQTokenRefresh=true），导致后续自动登录因QQ token过期而失败，用户无法通过正常操作（如切换回原账号）修复此问题。",
+        "severity": "P1",
+        "recommendation": "1. 在账号切换完成并触发快速登录时，若检测到目标账号的QQ accessToken已过期或即将过期，应强制拉起QQ授权或静默刷新，而非跳过。\n2. 优化AutoLogin失败处理逻辑：当失败原因为QQ token过期时，应引导用户重新授权，而不是直接踢回登录页。\n3. 增加账号管理模块对多账号QQ token状态的监控，在切换时主动同步或刷新过期token。",
+        "needs_engineer_fix": true,
+        "affected_accounts": "账号B（campUid=a1b2c3d4-xxxx）的QQ accessToken已过期，且因快速登录跳过刷新而无法自动恢复。"
+      },
+      {
+        "augmented": true,
+        "user_id": "987654321",
+        "camp_uid": "z9y8x7w6-yyyy",
+        "user_logs_text": "[用户日志聚合报告]\nuserId=987654321  campUid=z9y8x7w6-yyyy\n合并条数=10\n────────────────────────────────────────────────────\n2026-04-01T09:00:01+08:00 moduleName=AutoLogin campType=start status=0\n2026-04-01T09:00:02+08:00 moduleName=AutoLogin campType=step status=-1 step=camp_token_verify errorCode=-10003 desc=camp_token_expired\n2026-04-01T09:00:02+08:00 moduleName=AutoLogin campType=end status=-1 errorMsg=auto_login_failed reason=camp_token_expired\n2026-04-01T09:05:10+08:00 moduleName=Login campType=start status=0 method=qq_auth\n2026-04-01T09:05:12+08:00 moduleName=Login campType=end status=0 result=success tokenRefreshed=true\n2026-04-01T09:05:13+08:00 moduleName=AutoLogin campType=start status=0\n2026-04-01T09:05:13+08:00 moduleName=AutoLogin campType=end status=0 desc=auto_login_success",
+        "problem_description": "用户反馈启动App后自动登录失败，但手动重新授权QQ后恢复正常，未出现死循环。",
+        "reasoning": "日志显示用户启动App后，AutoLogin流程在第一步`camp_token_verify`就失败了，原因是`camp_token_expired`（错误码-10003）。这表明本地存储的营地token已过期。随后用户手动进行了QQ授权登录（`method=qq_auth`），登录成功并刷新了token（`tokenRefreshed=true`）。手动登录成功后，紧接着的AutoLogin也成功了。整个过程是线性的：token过期 -> 自动登录失败 -> 用户手动登录刷新token -> 后续自动登录成功。没有出现多账号切换或快速登录的复杂场景，也没有出现反复失败的死循环。问题是一次性的认证过期问题。",
+        "root_cause": "[认证模块] 因本地缓存的营地登录凭证（camp_token）自然过期，导致自动登录流程校验失败。",
+        "issue_category": "token_expired",
+        "auth_pattern": "营地 token 过期导致自动登录失败，用户手动授权 QQ 后成功刷新 token，流程恢复正常。",
+        "severity": "P2",
+        "recommendation": "1. 优化 token 过期前的静默刷新机制，在 App 启动或后台运行时尝试提前刷新。\n2. 自动登录失败时，给予更明确的错误提示（如“登录信息已过期，请重新登录”），引导用户操作。\n3. 考虑延长 camp_token 的有效期，或实现更平滑的无感刷新逻辑。",
+        "needs_engineer_fix": false,
+        "affected_accounts": "账号 userId=987654321 (campUid=z9y8x7w6-yyyy) 的 camp_token 过期。"
+      }
+    ],
+    "signature": {
+      "instructions": "分析伽利略中特定用户的日志和 trace，诊断用户遇到的问题根因。\n输入日志来自 userId + campUid 两个维度查询的并集，覆盖更完整的用户行为链路。\n营地 App 常见问题：登录失败（QQ accessToken 过期）、账号切换异常、快速登录死循环等。\n快速登录仅校验营地 token，不校验 QQ accessToken，可能导致 token 未刷新的死循环。",
+      "fields": [
+        {
+          "prefix": "User Id:",
+          "description": "App userId，用于报告标识"
+        },
+        {
+          "prefix": "Camp Uid:",
+          "description": "设备 campUid，与 userId 并集查询日志用的标识符"
+        },
+        {
+          "prefix": "User Logs Text:",
+          "description": "从伽利略拉取的用户全量日志和 trace 文本（userId + campUid 查询结果并集，按时间排序）"
+        },
+        {
+          "prefix": "Problem Description:",
+          "description": "用户反馈的问题描述，如「切换账号后重启 App 自动登录失败」"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Root Cause:",
+          "description": "根因，格式：'[模块] 因 [原因] 导致 [现象]'"
+        },
+        {
+          "prefix": "Issue Category:",
+          "description": "问题分类：auth_deadloop（认证死循环）/ token_expired（token过期）/ account_switch（账号切换异常）/ network（网络异常）/ unknown（未知）"
+        },
+        {
+          "prefix": "Auth Pattern:",
+          "description": "检测到的认证异常模式，如 '快速登录成功但 QQ accessToken 未刷新，导致下次自动登录失败'；无认证问题则返回 '无'"
+        },
+        {
+          "prefix": "Severity:",
+          "description": "严重等级：P0（核心功能不可用）/ P1（功能受损）/ P2（体验下降）"
+        },
+        {
+          "prefix": "Recommendation:",
+          "description": "修复建议，2-3 条，按优先级排列"
+        },
+        {
+          "prefix": "Needs Engineer Fix:",
+          "description": "True=需要代码修复；False=用户操作或配置可解决"
+        },
+        {
+          "prefix": "Affected Accounts:",
+          "description": "受影响账号描述，如 '账号B campUid=xxx 的 QQ accessToken 过期'；不明确则返回 '待确认'"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.14",
+      "dspy": "3.1.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}

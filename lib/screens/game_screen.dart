@@ -58,6 +58,19 @@ class GameScreen extends ConsumerWidget {
             ).animate(delay: 200.ms).fadeIn().slideX(begin: -0.2),
             const SizedBox(height: 16),
             _GameCard(
+              key: const Key('hanzi-game-card-doodle'),
+              iconKey: 'img_card_game_doodle',
+              iconDesc: '涂鸦填色',
+              title: '涂鸦填色',
+              description: '选颜色给线稿涂色，发挥创意！',
+              color: const Color(0xFFFFB347),
+              gradient: const [Color(0xFFFFB347), Color(0xFFFF8C42)],
+              difficulty: '轻松',
+              stars: 3,
+              onTap: () => context.push('/doodle-game'),
+            ).animate(delay: 300.ms).fadeIn().slideX(begin: -0.2),
+            const SizedBox(height: 16),
+            _GameCard(
               iconKey: 'img_card_game_spell',
               iconDesc: '拼字游戏',
               title: '拼字游戏',
@@ -68,7 +81,7 @@ class GameScreen extends ConsumerWidget {
               stars: 1,
               isComingSoon: !spellGameEnabled,
               onTap: spellGameEnabled ? () {} : () {},
-            ).animate(delay: 300.ms).fadeIn().slideX(begin: -0.2),
+            ).animate(delay: 400.ms).fadeIn().slideX(begin: -0.2),
           ],
         ),
       ),
@@ -89,6 +102,7 @@ class _GameCard extends StatelessWidget {
   final VoidCallback onTap;
 
   const _GameCard({
+    super.key,
     required this.iconKey,
     required this.iconDesc,
     required this.title,

@@ -15,6 +15,7 @@ import '../screens/pinyin_learn_screen.dart';
 import '../screens/pinyin_exercise_screen.dart';
 import '../screens/match_game_screen.dart';
 import '../screens/listen_game_screen.dart';
+import '../screens/doodle_game_screen.dart';
 import '../screens/dev/pinyin_hub_codia_test_screen.dart';
 import '../screens/dev/pinyin_screenshot_preview_screen.dart';
 import '../screens/dev/pinyin_learn_grid_codia_test_screen.dart';
@@ -153,6 +154,10 @@ GoRouter appRouter(AppRouterRef ref) {
           GoRoute(
             path: 'listen-game',
             builder: (context, state) => const ListenGameScreen(),
+          ),
+          GoRoute(
+            path: 'doodle-game',
+            builder: (context, state) => const DoodleGameScreen(),
           ),
           GoRoute(
             path: 'pinyin-hub-codia-test',

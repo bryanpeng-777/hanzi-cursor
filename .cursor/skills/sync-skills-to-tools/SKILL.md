@@ -1,27 +1,28 @@
 ---
 name: sync-skills-to-tools
-description: 将 ~/.claude/skills 中的技能同步到 WorkBuddy（.workbuddy/skills/）、CodeBuddy（.codebuddy/skills/）与 Cursor 项目仓库（.cursor/skills/，供 Cloud Agent 使用）；并在每次同步时保证 ~/.claude-internal 下的 skills、agents、knowledge 为指向 ~/.claude 对应目录的符号软链（单一数据源，不 rsync 复制）。当用户提到「更新技能」「更新技能库」「同步技能」「sync skills」「把技能同步到 WorkBuddy/CodeBuddy/Cursor」「同步到其他工具」「skills 同步」「skill 同步」时触发。若用户表述为「更新」或明确要求拉取最新技能，必须先在本机 ~/.claude/skills 仓库执行 git pull，再 rsync；仅说「同步」且未要求更新远端时，可直接 rsync。WorkBuddy/CodeBuddy/Cursor 侧 skills 按技能目录增量镜像；internal 侧仅维护软链。
+description: 将 ~/.claude/skills 中的技能同步到 WorkBuddy（.workbuddy/skills/）、CodeBuddy（.codebuddy/skills/）与 Cursor 项目仓库（.cursor/skills/ 与 .cursor/agents/，供 Cloud Agent 使用）；并在每次同步时保证 ~/.claude-internal 下的 skills、agents、knowledge 为指向 ~/.claude 对应目录的符号软链（单一数据源，不 rsync 复制）。当用户提到「更新技能」「更新技能库」「同步技能」「sync skills」「把技能同步到 WorkBuddy/CodeBuddy/Cursor」「同步到其他工具」「skills 同步」「skill 同步」「同步 agent」「同步 agents」时触发。若用户表述为「更新」或明确要求拉取最新技能，必须先在本机 claude-config（~/.claude）仓库执行 git pull，再 rsync；仅说「同步」且未要求更新远端时，可直接 rsync。WorkBuddy/CodeBuddy/Cursor 侧 skills 按技能目录增量镜像；Cursor 侧 agents 整目录镜像；internal 侧仅维护软链。
 ---
 
 # Sync Skills to Tools
 
-将 `~/.claude/skills/` 中的技能同步到 WorkBuddy、CodeBuddy 与 Cursor 项目仓库；并在**同一次脚本执行**中，保证 `~/.claude-internal/skills`、`~/.claude-internal/agents`、`~/.claude-internal/knowledge` 三者为指向 `~/.claude/skills`、`~/.claude/agents`、`~/.claude/knowledge` 的**符号软链**（绝对路径），**不再**对 internal 做目录复制或 rsync。
+将 `~/.claude/skills/` 中的技能同步到 WorkBuddy、CodeBuddy 与 Cursor 项目仓库；将 `~/.claude/agents/` 同步到 Cursor 项目 `.cursor/agents/`；并在**同一次脚本执行**中，保证 `~/.claude-internal/skills`、`~/.claude-internal/agents`、`~/.claude-internal/knowledge` 三者为指向 `~/.claude/skills`、`~/.claude/agents`、`~/.claude/knowledge` 的**符号软链**（绝对路径），**不再**对 internal 做目录复制或 rsync。
 
 ## 配置
 
 | 参数 | 值 |
 |------|-----|
-| skills 源目录 | `~/.claude/skills/`（通常为独立 git 仓库） |
-| agents 源目录 | `~/.claude/agents/` |
+| skills 源目录 | `~/.claude/skills/`（claude-config 仓库内） |
+| agents 源目录 | `~/.claude/agents/`（claude-config 仓库内） |
 | knowledge 源目录 | `~/.claude/knowledge/` |
 | WorkBuddy skills 目标 | `~/.workbuddy/skills/`（rsync 镜像） |
 | CodeBuddy skills 目标 | `~/.codebuddy/skills/`（rsync 镜像） |
 | Cursor 项目 skills 目标 | `<项目根>/.cursor/skills/`（rsync 镜像，默认 `hanzi-cursor`） |
+| Cursor 项目 agents 目标 | `<项目根>/.cursor/agents/`（rsync 整目录镜像，含子目录） |
 | Cursor 项目根列表 | 环境变量 `CURSOR_PROJECT_ROOTS`，逗号分隔，默认 `/Users/pengchao/hanzi/hanzi-cursor` |
 | claude-internal skills | `~/.claude-internal/skills` → **软链** → `~/.claude/skills` |
 | claude-internal agents | `~/.claude-internal/agents` → **软链** → `~/.claude/agents` |
 | claude-internal knowledge | `~/.claude-internal/knowledge` → **软链** → `~/.claude/knowledge` |
-| 同步模式 | WB/CB/Cursor：按顶层技能目录（含分组如 `camp/`）增量 rsync；internal：仅 `ln -s`（若原为实体目录则改名为 `*.pre-symlink.时间戳` 后建链） |
+| 同步模式 | WB/CB/Cursor skills：按顶层技能目录（含分组如 `camp/`）增量 rsync；Cursor agents：整目录镜像（`rsync --delete`）；internal：仅 `ln -s`（若原为实体目录则改名为 `*.pre-symlink.时间戳` 后建链） |
 
 ## 「更新」与「同步」
 
@@ -32,12 +33,12 @@ description: 将 ~/.claude/skills 中的技能同步到 WorkBuddy（.workbuddy/s
 | **只修 internal 软链**（不动 WorkBuddy/CodeBuddy/Cursor） | `bash scripts/sync.sh --symlinks-only` |
 | **只同步 Cursor 项目** | `bash scripts/sync.sh --cursor-only` |
 
-`--pull-first` 会在 rsync 之前进入 `~/.claude/skills`，若存在 `.git` 则执行 `git pull --ff-only`；若不是 git 仓库则打印警告并继续同步。
+`--pull-first` 会在 rsync 之前进入 `~/.claude`（claude-config 根目录），若存在 `.git` 则执行 `git pull --ff-only`（同时更新 skills 与 agents）；若不是 git 仓库则打印警告并继续同步。
 
 ## 脚本分工
 
-> **脚本全自动处理**：可选 git 拉取、扫描源目录、rsync 到 WB/CB/Cursor 项目、检查/建立 internal 软链（`scripts/sync.sh`）  
-> **AI 处理**：判断用户是「更新」还是「仅同步」；确认是否只同步某一目标工具；Cursor 同步后若项目为 git 仓库且用户要求提交，则 `git add .cursor/skills && git commit`
+> **脚本全自动处理**：可选 git 拉取、扫描源目录、rsync skills 到 WB/CB/Cursor 项目、rsync agents 到 Cursor 项目、检查/建立 internal 软链（`scripts/sync.sh`）  
+> **AI 处理**：判断用户是「更新」还是「仅同步」；确认是否只同步某一目标工具；Cursor 同步后若项目为 git 仓库且用户要求提交，则 `git add .cursor/skills .cursor/agents && git commit`
 
 ```bash
 # 更新：先 git pull ~/.claude/skills，再同步 skills 到各目标，并确保 internal 三软链
@@ -110,7 +111,13 @@ internal 下的 `skills` / `agents` / `knowledge` 由脚本建为软链，**不�
 
 由 `scripts/sync.sh` 内 `sync_to` / `sync_cursor_projects` 实现：对每个有效技能目录 rsync 到 WorkBuddy、CodeBuddy 与各 Cursor 项目的 `.cursor/skills/`，并对目标侧已删除的源技能做目录删除（镜像）。
 
-Cursor 项目路径由 `CURSOR_PROJECT_ROOTS` 控制（默认 `hanzi-cursor`）。同步完成后若用户要求提交，进入对应项目根目录执行 `git add .cursor/skills && git commit`。
+Cursor 项目路径由 `CURSOR_PROJECT_ROOTS` 控制（默认 `hanzi-cursor`）。
+
+#### 3-A2：同步 agents（仅 Cursor 项目）
+
+由 `sync_agents_to` 实现：将 `~/.claude/agents/` 整目录镜像到各 Cursor 项目的 `.cursor/agents/`（含 `ui-design-workflow/` 等子目录），目标侧多余文件会被删除。
+
+同步完成后若用户要求提交，进入对应项目根目录执行 `git add .cursor/skills .cursor/agents && git commit`。
 
 `rsync -a --update`（用于 WB/CB 单技能目录增量）：
 
@@ -155,6 +162,9 @@ CodeBuddy (~/.codebuddy/skills/)：
 Cursor (<项目>/.cursor/skills/)：
   ...
 
+Cursor (<项目>/.cursor/agents/)：
+  ...
+
 claude-internal（软链 -> ~/.claude，无复制）：
   skills：已是正确软链 -> /Users/xxx/.claude/skills
   agents：已是正确软链 -> /Users/xxx/.claude/agents
@@ -166,7 +176,7 @@ claude-internal（软链 -> ~/.claude，无复制）：
 - **误删风险**：若某脚本对 `~/.claude-internal/skills` 等执行 `rm -rf` 且**解析软链**，可能删到 `~/.claude` 下真实目录。自动化或清理脚本应先判断 `[[ -L path ]]`，或只操作 `~/.claude/...`。
 - 如果用户只想同步 skills 到其中一个工具或 Cursor 项目，询问确认后使用对应 flag；**internal 三软链仍会检查/建立**（与 `--workbuddy-only` / `--codebuddy-only` / `--cursor-only` 独立）。
 - `--symlinks-only` 不能与 `--pull-first`、`--workbuddy-only`、`--codebuddy-only`、`--cursor-only` 同时使用。
-- **Cursor Cloud Agent**：项目级 `.cursor/skills/` 须提交到 Git 后 Cloud Agent 才能读取；用户级 `~/.cursor/skills/` 在云 VM 不可用。
+- **Cursor Cloud Agent**：项目级 `.cursor/skills/` 与 `.cursor/agents/` 须提交到 Git 后 Cloud Agent 才能读取；用户级 `~/.cursor/skills/`、`~/.claude/agents/` 在云 VM 不可用。
 - **macOS 默认 Bash 3.2**：`echo` 中 **`$变量` 紧邻全角左括号 `（`** 会误解析；脚本内已避免，新增 echo 时同样注意。
 - 如果 rsync 不可用，WB/CB 段需回退方案（本技能以 rsync 为主）；internal 不依赖 rsync。
 - 同步完成后不需要重启各工具（视具体产品而定）；claude-internal 读路径即 `~/.claude` 内容。

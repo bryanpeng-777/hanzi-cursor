@@ -100,4 +100,22 @@ void main() {
       findsOneWidget,
     );
   }, timeout: const Timeout(Duration(minutes: 2)));
+
+  testWidgets('IT-DOODLE-001: 游戏 Tab 进入涂鸦填色', (tester) async {
+    await enterHomeAsGuest(tester);
+
+    await tester.tap(find.text('游戏'));
+    await tester.pumpAndSettle(const Duration(seconds: 5));
+
+    expect(find.text('涂鸦填色'), findsOneWidget);
+    await tester.tap(find.byKey(const Key('hanzi-game-card-doodle')));
+    await tester.pumpAndSettle(const Duration(seconds: 8));
+
+    expect(
+      find.byKey(const Key('hanzi-doodle-game-landscape')),
+      findsOneWidget,
+    );
+    expect(find.text('线稿参考'), findsOneWidget);
+    expect(find.text('我的涂色'), findsOneWidget);
+  }, timeout: const Timeout(Duration(minutes: 3)));
 }

@@ -1,0 +1,100 @@
+{
+  "predict": {
+    "traces": [],
+    "train": [],
+    "demos": [
+      {
+        "augmented": true,
+        "alert_text": "规则：大流量单模块start失败量对比前1分钟上涨5%\n模块：OneApi（campType: start）\n数据：失败量 100,087（阈值6,000），1分钟上涨 6.78%\n时间：2026-03-26 12:15",
+        "trace_logs": "tags.moduleName=OneApi, tags.campType=start, 错误量持续上涨",
+        "reasoning": "告警显示 OneApi 模块在 start 类型的请求上失败量在1分钟内上涨6.78%，达到10万+，远超阈值。trace_logs 确认错误量持续上涨，表明问题正在恶化。OneApi 是核心接口服务，start 类型请求通常与关键业务启动相关。失败量突增且持续，表明后端服务或网络存在普遍性问题，而非单个用户问题。",
+        "root_cause": "[OneApi] 因后端服务异常或网络问题导致 start 类型接口大量失败",
+        "module_name": "OneApi",
+        "severity": "P0",
+        "impact_scope": "影响所有依赖 OneApi start 接口的业务功能，可能导致用户无法正常启动或使用核心服务",
+        "action": "1. 立即检查 OneApi 后端服务健康状态、错误日志和依赖的中间件（如数据库、缓存）。\n2. 联系后端开发团队介入排查，确认是服务崩溃、性能瓶颈还是依赖故障。\n3. 根据排查结果，执行服务重启、扩容、回滚或修复。",
+        "need_code_fix": true,
+        "sample_user_id": "（日志中未提供具体 userId）"
+      },
+      {
+        "augmented": true,
+        "alert_text": "规则：大流量单模块start失败量对比前1分钟上涨2.5%\n模块：NetRequest（logName: NetRequest-start）\n接口：user/getkingcalendar\n数据：失败量 155,318（阈值100,000），1分钟上涨 12.46%\n时间：2026-03-26 16:49",
+        "trace_logs": "tags.moduleName=NetRequest, cmd=user/getkingcalendar, 失败量持续上涨",
+        "reasoning": "告警显示 NetRequest 模块的 `user/getkingcalendar` 接口失败量在1分钟内上涨12.46%，达到155,318次，远超阈值。失败量持续上涨表明问题正在恶化。接口失败通常与网络、服务端异常或客户端请求参数/逻辑问题有关。由于是特定接口的大规模失败，首先应怀疑服务端问题（如接口故障、超时、返回错误码）或客户端对该接口的请求逻辑存在缺陷。",
+        "root_cause": "[NetRequest] 因 `user/getkingcalendar` 接口服务端异常或客户端请求逻辑问题，导致网络请求失败量激增。",
+        "module_name": "NetRequest",
+        "severity": "P1",
+        "impact_scope": "影响所有调用 `user/getkingcalendar` 接口的用户，相关功能（如用户日历信息获取）受损。",
+        "action": "1. 立即联系后端服务负责人，确认 `user/getkingcalendar` 接口的健康状态（错误率、响应时间、日志）。\n2. 客户端侧检查该接口的请求参数、超时设置及错误处理逻辑，查看是否有异常请求模式。\n3. 如有必要，客户端对该接口进行降级或熔断，避免影响主流程。",
+        "need_code_fix": false,
+        "sample_user_id": "（日志中未提供具体 userId）"
+      },
+      {
+        "augmented": true,
+        "alert_text": "规则：小流量 start→step1 转化率波动超过 15%\n模块：Pay\n数据：start=724，step1成功=46，转化率波动 35.67%（正常阈值±15%）\n时间：2026-03-26 20:14",
+        "trace_logs": "tags.moduleName=Pay, start量级较低（724），转化率波动但绝对量小",
+        "reasoning": "告警显示 Pay 模块的 start→step1 转化率波动超过阈值（35.67% > 15%）。然而，trace_logs 指出 start 量级较低（724），转化率基于小样本计算，容易因随机性产生大幅波动。绝对失败量不大，可能并非系统性故障。",
+        "root_cause": "[Pay] 因 start 样本量小（724）导致转化率统计波动，属正常数据噪声。",
+        "module_name": "Pay",
+        "severity": "P2",
+        "impact_scope": "影响范围极小，仅涉及少量用户支付流程第一步。",
+        "action": "1. 观察后续时段转化率是否回归正常水平。\n2. 确认是否有针对性的运营活动导致小流量测试。\n3. 考虑为小流量场景调整告警策略或提高触发阈值。",
+        "need_code_fix": false,
+        "sample_user_id": "（日志中未提供具体 userId）"
+      }
+    ],
+    "signature": {
+      "instructions": "分析伽利略监控告警，定位根本原因并给出结构化处置建议。\n伽利略是一套移动端 APM 监控系统，moduleName 对应业务模块的监控指标名称。",
+      "fields": [
+        {
+          "prefix": "Alert Text:",
+          "description": "告警内容，含告警名称、错误信息、触发量级、阈值等"
+        },
+        {
+          "prefix": "Trace Logs:",
+          "description": "相关 trace 日志片段（可为空）"
+        },
+        {
+          "prefix": "Reasoning: Let's think step by step in order to",
+          "description": "${reasoning}"
+        },
+        {
+          "prefix": "Root Cause:",
+          "description": "根本原因，格式：'[模块] 因 [原因] 导致 [现象]'"
+        },
+        {
+          "prefix": "Module Name:",
+          "description": "最可能相关的伽利略 moduleName，如 'AutoLogin'、'Pay'"
+        },
+        {
+          "prefix": "Severity:",
+          "description": "严重等级：P0（核心不可用）/ P1（功能受损）/ P2（体验下降）"
+        },
+        {
+          "prefix": "Impact Scope:",
+          "description": "影响范围，如 '影响全量用户登录' 或 '影响 iOS 15 以下'"
+        },
+        {
+          "prefix": "Action:",
+          "description": "建议处置步骤，按优先级列出 2-3 条"
+        },
+        {
+          "prefix": "Need Code Fix:",
+          "description": "True=需要 hotfix，False=配置/回滚可解决"
+        },
+        {
+          "prefix": "Sample User Id:",
+          "description": "从日志中提取的一个受影响用户 userId，用于后续 trace 追查；若日志中无 userId 则返回空字符串"
+        }
+      ]
+    },
+    "lm": null
+  },
+  "metadata": {
+    "dependency_versions": {
+      "python": "3.14",
+      "dspy": "3.1.3",
+      "cloudpickle": "3.1"
+    }
+  }
+}
