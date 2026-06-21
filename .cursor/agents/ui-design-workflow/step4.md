@@ -6,7 +6,7 @@
 > ```
 > 🔍 Pre-check — 进入 Step 4
 >   • {dev_changes_summary}：✅ 已设置（{N} 个文件）/ ❌ 缺失 → 回退补做 Step 3
->   • {translation_map}（用户已确认）：✅ / ❌ → 回退补做 Step 3
+>   • {translation_map}（{translation_map_confirmed}）：✅ / ❌ → 回退补做 Step 3
 >   结论：✅ 门禁通过，开始 Step 4 / ❌ 门禁未通过，先补做 Step 3
 > ```
 
@@ -108,6 +108,6 @@ Step 4 标 ✅，输出 GATE PASS，进入 Step 5。
   • {test_report}：新增 {N} 条用例，兼容性检查 {通过/发现 K 处冲突}
   • integration test：✅ 全部通过（第 {N} 轮）/ ⚠️ 已达上限，需手动处理（flutter clean 已执行）
   • 构建缓存：已清理（flutter clean，无论测试是否通过）
-下一步：Step 5（说「继续」开始图片同步）
+下一步：Step 5（同回合连续执行）
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

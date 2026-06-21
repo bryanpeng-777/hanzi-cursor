@@ -38,28 +38,11 @@ Read `~/.claude/knowledge/ui-assistant/{project}/image_manifest.json`：
 
 ---
 
-## 5-C：向用户呈现并确认
+## 5-C：图片步骤（默认自动跳过）
 
-**`{affected_images}` 为空：**
-```
-ℹ️ 未发现与本次界面改动直接相关的待更新图片，跳过图片生成步骤。
-```
-Step 5 标 ✅，进入最终汇总。
+**`{affected_images}` 为空** 或 **全部 `status=provided`** → 自动 skipped。
 
-**`{affected_images}` 不为空：**
-```
-🖼️ 检测到 N 张图片可能受本次 UI 改动影响：
-
-  📄 {page_name}
-    • {key}：{description}（当前状态：{status}）
-
-是否现在生成/更新这些图片？
-  A) 是，立即调用 image-generator-workflow 生成上述图片
-  B) 跳过，稍后手动触发
-```
-
-- 用户选 **B** 或无回应 → Step 5 标 ✅ 跳过，进入最终汇总
-- 用户选 **A** → 继续 5-D
+**含 `placeholder`**：默认 skipped（汇总标注待后续生图）；**仅当用户显式说「生成图片/换图」** 时走 5-D。
 
 ---
 
