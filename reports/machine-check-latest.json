@@ -1,9 +1,9 @@
 {
-  "timestamp_utc": "2026-06-21T17:30:36Z",
+  "timestamp_utc": "2026-06-22T02:17:16Z",
   "hostname": "cursor",
-  "public_ip": "100.48.155.83",
+  "public_ip": "18.210.138.74",
   "machine_id": "44cb5599dcc24b78a2ed9dac18a9b2a5",
-  "cursor_conversation_id": "bc-01a1a38d-a62e-5777-9390-d95df134984f-3622",
+  "cursor_conversation_id": "bc-6e2ee79c-342c-5d01-8df6-e6f337008c49",
   "cursor_agent": "1",
   "cpu_cores": "4",
   "memory_total": "15Gi",
@@ -11,7 +11,7 @@
   "cloud_org": "AS14618 Amazon.com, Inc.",
   "region": "Virginia",
   "city": "Ashburn",
-  "ipinfo_hostname": "ec2-100-48-155-83.compute-1.amazonaws.com",
+  "ipinfo_hostname": "ec2-18-210-138-74.compute-1.amazonaws.com",
   "workspace": "/workspace",
   "kernel": "6.12.58+",
   "os": "Ubuntu 24.04.4 LTS"
