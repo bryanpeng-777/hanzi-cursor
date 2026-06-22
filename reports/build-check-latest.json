@@ -1,0 +1,88 @@
+{
+  "timestamp_utc": "2026-06-22T03:05:00Z",
+  "project": "hanzi-cursor",
+  "branch": "cursor/bc-0b6849da-53c1-501f-a850-0e5aac0f30db-3c51",
+  "commit": "f152b36",
+  "trigger": "slack",
+  "environment": {
+    "flutter_version": "3.41.6",
+    "dart_version": "3.11.4",
+    "os": "Ubuntu 24.04.4 LTS",
+    "workspace": "/workspace"
+  },
+  "analyze": {
+    "status": "pass_with_info",
+    "errors": 0,
+    "warnings": 0,
+    "info": 329,
+    "duration_seconds": 25
+  },
+  "unit_tests": {
+    "status": "fail",
+    "passed": 34,
+    "failed": 9,
+    "total": 43,
+    "duration_seconds": 28,
+    "failures": [
+      {
+        "file": "test/pinyin_screen_test.dart",
+        "name": "拼音 Hub 展示标题与入口",
+        "reason": "未找到文本「拼音学习」，UI 文案或布局与测试断言不一致"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_landscape_marker",
+        "reason": "PinyinLearnScreen 渲染时出现未捕获异常（横屏 marker 相关）"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_tabs",
+        "reason": "Tab 切换/渲染异常"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_tts_trigger",
+        "reason": "TTS 触发相关断言失败"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_no_page_title",
+        "reason": "页面标题断言与当前 UI 不一致"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_card_grid",
+        "reason": "卡片网格渲染/查找失败"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_stats_bar",
+        "reason": "统计栏组件断言失败"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_detail_modal",
+        "reason": "详情弹窗交互/渲染失败"
+      },
+      {
+        "file": "test/t011_test.dart",
+        "name": "test_pinyin_learn_no_overflow",
+        "reason": "RenderFlex 底部溢出 8~45px（12 处 overflow 错误）"
+      }
+    ]
+  },
+  "web_build": {
+    "status": "pass",
+    "command": "flutter build web --release --base-href /hanzi-cursor/",
+    "output": "build/web",
+    "duration_seconds": 62,
+    "notes": "Wasm dry-run 提示 flutter_secure_storage / flutter_tts 与 dart:html 不兼容，不影响当前 JS 构建"
+  },
+  "overall": {
+    "compile": "pass",
+    "tests": "partial_fail",
+    "deployable": true,
+    "summary": "Web Release 编译成功；静态分析无 error/warning；9 个拼音模块 widget 测试失败，集中在 UI 文案与横屏布局 overflow，不影响 Web 构建产物"
+  },
+  "online_url": "https://bryanpeng-777.github.io/hanzi-cursor/"
+}
