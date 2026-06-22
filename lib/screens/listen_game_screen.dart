@@ -10,7 +10,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constants/listen_game_d2c_layout.dart';
 import '../data/hanzi_data.dart';
 import '../design/hanzi_design_spec.dart';
-import '../design/hanzi_shared_widgets.dart';
 import '../models/hanzi_model.dart';
 import '../providers/game_config_provider.dart';
 import '../providers/learning_provider.dart';
@@ -23,8 +22,6 @@ class ListenGameScreen extends ConsumerStatefulWidget {
 }
 
 class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
-  static const _listenGradient = [Color(0xFF4ECDC4), Color(0xFF44A08D)];
-
   final _random = Random();
   late HanziCharacter _currentHanzi;
   late List<HanziCharacter> _options;
@@ -85,274 +82,251 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
     });
   }
 
-  double get _progress =>
-      _totalQuestions == 0 ? 0 : _questionNum / _totalQuestions;
-
   @override
   Widget build(BuildContext context) {
-    return HanziLandscapeScaffold(
+    return Scaffold(
       key: const Key('hanzi-listen-game-landscape'),
       backgroundColor: HanziDesignSpec.surfaceWarm,
-      appBar: CsAppBar(
-        title: '听音选字',
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16.w),
-            child: _ScoreBadge(score: _score, total: _totalQuestions),
-          ),
-        ],
+      body: SafeArea(
+        child: _gameComplete ? _buildCompletionScreen() : _buildGameBody(),
       ),
-      padding: EdgeInsets.fromLTRB(
-        HanziDesignSpec.pagePaddingH.w,
-        4.h,
-        HanziDesignSpec.pagePaddingH.w,
-        HanziDesignSpec.pagePaddingV.h,
-      ),
-      body: _gameComplete ? _buildCompletionScreen() : _buildGameBody(),
     );
   }
 
   Widget _buildGameBody() {
-    return Column(
+    return Stack(
       key: const Key('hanzi-listen-game-body'),
+      fit: StackFit.expand,
       children: [
-        _buildHeaderPanel(),
-        SizedBox(height: 10.h),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                flex: 5,
-                child: _buildAudioPanel(),
-              ),
-              SizedBox(width: 10.w),
-              Expanded(
-                flex: 7,
-                child: _buildOptionsPanel(),
-              ),
-            ],
+        Positioned.fill(
+          child: CsImage(
+            configKey: 'figma_listen_canvas_backdrop',
+            description: '听音选字页面背景',
+            fit: BoxFit.cover,
           ),
+        ),
+        Positioned(
+          left: ListenGameD2cLayout.sx(101),
+          right: ListenGameD2cLayout.sx(116),
+          bottom: 0,
+          height: ListenGameD2cLayout.sy(36),
+          child: CsImage(
+            configKey: 'figma_listen_bottom_deco',
+            description: '听音选字底部装饰',
+            fit: BoxFit.fitWidth,
+          ),
+        ),
+        Column(
+          children: [
+            _buildFigmaHeader(),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(
+                  ListenGameD2cLayout.sx(20),
+                  ListenGameD2cLayout.sy(8),
+                  ListenGameD2cLayout.sx(20),
+                  ListenGameD2cLayout.sy(6),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      flex: 45,
+                      child: _buildAudioPanel(),
+                    ),
+                    SizedBox(width: ListenGameD2cLayout.sx(12)),
+                    Expanded(
+                      flex: 55,
+                      child: _buildOptionsPanel(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
   }
 
-  Widget _buildHeaderPanel() {
-    return Container(
+  Widget _buildFigmaHeader() {
+    final headerH = ListenGameD2cLayout.sy(ListenGameD2cLayout.headerH);
+
+    return SizedBox(
       key: const Key('hanzi-listen-game-guide-header'),
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: _listenGradient,
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-        ),
-        borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
-        boxShadow: [
-          BoxShadow(
-            color: _listenGradient.first.withValues(alpha: 0.35),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
+      height: headerH.clamp(48, 56),
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  '听拼音，选出正确的汉字！',
-                  style: GoogleFonts.notoSansSc(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
+          CsImage(
+            configKey: 'figma_listen_header_bg',
+            description: '听音选字顶栏背景',
+            fit: BoxFit.fill,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+              horizontal: ListenGameD2cLayout.sx(16),
+              vertical: ListenGameD2cLayout.sy(8),
+            ),
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => context.pop(),
+                  child: CsImage(
+                    configKey: 'figma_listen_back_btn',
+                    description: '返回',
+                    width: ListenGameD2cLayout.sx(ListenGameD2cLayout.backBtnSize)
+                        .clamp(36, 44),
+                    height: ListenGameD2cLayout.sx(ListenGameD2cLayout.backBtnSize)
+                        .clamp(36, 44),
                   ),
                 ),
-              ),
-              _StatChip(
-                label: '题号',
-                value: '${_questionNum + 1}/$_totalQuestions',
-              ),
-              SizedBox(width: 8.w),
-              _StatChip(
-                label: '得分',
-                value: '$_score',
-                highlight: _score > 0,
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8.r),
-            child: LinearProgressIndicator(
-              value: _progress,
-              minHeight: 8.h,
-              backgroundColor: Colors.white.withValues(alpha: 0.25),
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-          ),
-        ],
-      ),
-    ).animate().fadeIn(duration: 350.ms).slideY(begin: -0.08);
-  }
-
-  Widget _buildAudioPanel() {
-    return HanziSurfaceCard(
-      key: const Key('hanzi-listen-game-audio-panel'),
-      shadowColor: _listenGradient.first,
-      padding: EdgeInsets.zero,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: _listenGradient,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: _playSound,
-            borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: ListenGameD2cLayout.playButtonSize.w,
-                    height: ListenGameD2cLayout.playButtonSize.w,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(
-                        alpha: _isPlaying ? 0.55 : 0.25,
-                      ),
-                      shape: BoxShape.circle,
-                      boxShadow: _isPlaying
-                          ? [
-                              BoxShadow(
-                                color: Colors.white.withValues(alpha: 0.45),
-                                blurRadius: 16,
-                                spreadRadius: 2,
-                              ),
-                            ]
-                          : null,
-                    ),
-                    child: Center(
-                      child: CsImage(
-                        configKey: _isPlaying
-                            ? 'img_icon_playing'
-                            : 'img_icon_listen',
-                        description: _isPlaying ? '播放中' : '点击播放',
-                        width: 36.w,
-                        height: 36.w,
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 12.h),
-                  Text(
-                    _currentHanzi.pinyin,
-                    key: const Key('hanzi-listen-game-pinyin'),
+                Expanded(
+                  child: Text(
+                    '听音选字',
+                    textAlign: TextAlign.center,
                     style: GoogleFonts.notoSansSc(
-                      fontSize: 36.sp,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                      letterSpacing: 2,
+                      fontSize: ListenGameD2cLayout.sx(54).clamp(20, 26).sp,
+                      fontWeight: FontWeight.w600,
+                      color: const Color(ListenGameD2cLayout.colorTitle),
                       height: 1.1,
                     ),
                   ),
-                  SizedBox(height: 6.h),
-                  Text(
-                    '点击喇叭听读音',
-                    style: GoogleFonts.notoSansSc(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white70,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    ).animate().fadeIn(duration: 400.ms).slideX(begin: -0.1);
-  }
-
-  Widget _buildOptionsPanel() {
-    return HanziSurfaceCard(
-      key: const Key('hanzi-listen-game-options-panel'),
-      shadowColor: HanziDesignSpec.accentLearn,
-      padding: EdgeInsets.fromLTRB(10.w, 10.h, 10.w, 8.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Container(
-                width: 28.w,
-                height: 28.w,
-                decoration: BoxDecoration(
-                  color: HanziDesignSpec.accentLearn.withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8.r),
                 ),
-                child: Center(
-                  child: CsImage(
-                    configKey: 'img_card_game_listen',
-                    description: '听音选字',
-                    width: 16.w,
-                    height: 16.w,
-                  ),
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '选汉字',
-                    style: HanziDesignSpec.cardTitleStyle.copyWith(
-                      fontSize: 15.sp,
-                    ),
-                  ),
-                  Text(
-                    '选出你听到的字',
-                    style: HanziDesignSpec.cardBodyStyle.copyWith(
-                      fontSize: 11.sp,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          Expanded(
-            child: GridView.count(
-              crossAxisCount: 2,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisSpacing: 8.w,
-              mainAxisSpacing: 8.h,
-              childAspectRatio: 1.35,
-              children: _options.asMap().entries.map((entry) {
-                final hanzi = entry.value;
-                return _ListenOptionTile(
-                  key: ValueKey('listen_option_${hanzi.character}'),
-                  hanzi: hanzi,
-                  index: entry.key,
-                  isSelected: _selectedAnswer == hanzi.character,
-                  isAnswered: _answered,
-                  isCorrect: hanzi.character == _currentHanzi.character,
-                  onTap: () => _selectAnswer(hanzi.character),
-                );
-              }).toList(),
+                _buildProgressPill(),
+              ],
             ),
           ),
         ],
       ),
-    ).animate().fadeIn(duration: 400.ms, delay: 80.ms).slideX(begin: 0.1);
+    );
+  }
+
+  Widget _buildProgressPill() {
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: ListenGameD2cLayout.sx(18),
+        vertical: ListenGameD2cLayout.sy(8),
+      ),
+      decoration: BoxDecoration(
+        color: const Color(ListenGameD2cLayout.colorProgressPill),
+        borderRadius: BorderRadius.circular(
+          ListenGameD2cLayout.sx(33).r,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CsImage(
+            configKey: 'figma_listen_progress_star',
+            description: '进度星星',
+            width: ListenGameD2cLayout.sx(28).clamp(18, 24),
+            height: ListenGameD2cLayout.sx(28).clamp(18, 24),
+          ),
+          SizedBox(width: 6.w),
+          Text(
+            '${_questionNum + 1}/$_totalQuestions',
+            style: GoogleFonts.notoSansSc(
+              fontSize: ListenGameD2cLayout.sx(39).clamp(16, 20).sp,
+              fontWeight: FontWeight.w600,
+              color: const Color(ListenGameD2cLayout.colorProgressText),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAudioPanel() {
+    return GestureDetector(
+      key: const Key('hanzi-listen-game-audio-panel'),
+      onTap: _playSound,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(
+          ListenGameD2cLayout.sx(ListenGameD2cLayout.optionCardRadius).r,
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            CsImage(
+              configKey: 'figma_listen_audio_panel_bg',
+              description: '听音选字左侧听音面板',
+              fit: BoxFit.cover,
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                AnimatedScale(
+                  scale: _isPlaying ? 1.06 : 1.0,
+                  duration: const Duration(milliseconds: 250),
+                  child: CsImage(
+                    configKey: 'figma_listen_play_btn',
+                    description: _isPlaying ? '播放中' : '点击播放',
+                    width: ListenGameD2cLayout.sx(ListenGameD2cLayout.playBtnSize)
+                        .clamp(88, 120),
+                    height: ListenGameD2cLayout.sx(ListenGameD2cLayout.playBtnSize)
+                        .clamp(88, 120),
+                  ),
+                ),
+                SizedBox(height: ListenGameD2cLayout.sy(20)),
+                Text(
+                  _currentHanzi.pinyin,
+                  key: const Key('hanzi-listen-game-pinyin'),
+                  style: GoogleFonts.notoSansSc(
+                    fontSize: ListenGameD2cLayout.sx(138).clamp(44, 58).sp,
+                    fontWeight: FontWeight.w700,
+                    color: const Color(ListenGameD2cLayout.colorPinyin),
+                    height: 1.05,
+                  ),
+                ),
+                SizedBox(height: ListenGameD2cLayout.sy(12)),
+                Text(
+                  '点击听读音，选出正确汉字',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.notoSansSc(
+                    fontSize: ListenGameD2cLayout.sx(33).clamp(12, 14).sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(ListenGameD2cLayout.colorHint),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOptionsPanel() {
+    return Container(
+      key: const Key('hanzi-listen-game-options-panel'),
+      padding: EdgeInsets.all(ListenGameD2cLayout.sx(6)),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.35),
+        borderRadius: BorderRadius.circular(
+          ListenGameD2cLayout.sx(ListenGameD2cLayout.optionCardRadius).r,
+        ),
+      ),
+      child: GridView.count(
+        crossAxisCount: 2,
+        physics: const NeverScrollableScrollPhysics(),
+        crossAxisSpacing: ListenGameD2cLayout.sx(10),
+        mainAxisSpacing: ListenGameD2cLayout.sy(10),
+        childAspectRatio: 0.95,
+        children: _options.asMap().entries.map((entry) {
+          final hanzi = entry.value;
+          return _ListenOptionTile(
+            key: ValueKey('listen_option_${hanzi.character}'),
+            hanzi: hanzi,
+            index: entry.key,
+            isSelected: _selectedAnswer == hanzi.character,
+            isAnswered: _answered,
+            isCorrect: hanzi.character == _currentHanzi.character,
+            onTap: () => _selectAnswer(hanzi.character),
+          );
+        }).toList(),
+      ),
+    );
   }
 
   Widget _buildCompletionScreen() {
@@ -371,10 +345,17 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
     }
 
     return Center(
-      child: HanziSurfaceCard(
+      child: Container(
         key: const Key('hanzi-listen-game-completion'),
-        shadowColor: _listenGradient.first,
+        margin: EdgeInsets.symmetric(horizontal: 40.w),
         padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 20.h),
+        decoration: BoxDecoration(
+          color: HanziDesignSpec.surfaceCard,
+          borderRadius: BorderRadius.circular(HanziDesignSpec.cardRadius.r),
+          boxShadow: HanziDesignSpec.cardShadow(
+            color: const Color(ListenGameD2cLayout.colorProgressPill),
+          ),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -383,38 +364,17 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
               description: message,
               width: 64.w,
               height: 64.w,
-            )
-                .animate()
-                .scale(curve: Curves.elasticOut, duration: 600.ms),
+            ),
             SizedBox(height: 10.h),
             Text(
               message,
               style: HanziDesignSpec.hubTitleStyle.copyWith(fontSize: 22.sp),
-            ).animate(delay: 250.ms).fadeIn(),
+            ),
             SizedBox(height: 6.h),
             Text(
               '正确率 $percent% · $_score / $_totalQuestions 题正确',
               style: HanziDesignSpec.cardBodyStyle.copyWith(fontSize: 13.sp),
-            ).animate(delay: 400.ms).fadeIn(),
-            SizedBox(height: 6.h),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: List.generate(
-                3,
-                (i) => Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 2.w),
-                  child: Opacity(
-                    opacity: i < (percent ~/ 34).clamp(0, 3) ? 1.0 : 0.25,
-                    child: CsImage(
-                      configKey: 'img_icon_star',
-                      description: '星星',
-                      width: 20.w,
-                      height: 20.w,
-                    ),
-                  ),
-                ),
-              ),
-            ).animate(delay: 500.ms).fadeIn(),
+            ),
             SizedBox(height: 16.h),
             Row(
               mainAxisSize: MainAxisSize.min,
@@ -443,91 +403,9 @@ class _ListenGameScreenState extends ConsumerState<ListenGameScreen> {
                   child: const Text('返回'),
                 ),
               ],
-            ).animate(delay: 650.ms).fadeIn(),
+            ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class _ScoreBadge extends StatelessWidget {
-  const _ScoreBadge({required this.score, required this.total});
-
-  final int score;
-  final int total;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: HanziDesignSpec.surfaceWarm,
-        borderRadius: BorderRadius.circular(20.r),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          CsImage(
-            configKey: 'img_icon_star',
-            description: '星星',
-            width: 16.w,
-            height: 16.w,
-          ),
-          SizedBox(width: 4.w),
-          Text(
-            '$score/$total',
-            style: GoogleFonts.notoSansSc(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w800,
-              color: HanziDesignSpec.titleInk,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatChip extends StatelessWidget {
-  const _StatChip({
-    required this.label,
-    required this.value,
-    this.highlight = false,
-  });
-
-  final String label;
-  final String value;
-  final bool highlight;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
-      decoration: BoxDecoration(
-        color: highlight
-            ? Colors.white.withValues(alpha: 0.35)
-            : Colors.white.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(10.r),
-      ),
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.notoSansSc(
-              fontSize: 9.sp,
-              color: Colors.white70,
-            ),
-          ),
-          Text(
-            value,
-            style: GoogleFonts.notoSansSc(
-              fontSize: 13.sp,
-              fontWeight: FontWeight.w800,
-              color: Colors.white,
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -553,67 +431,71 @@ class _ListenOptionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color bgColor = HanziDesignSpec.surfaceCard;
-    Color borderColor = HanziDesignSpec.subtitleMuted.withValues(alpha: 0.2);
+    final showSelected = isSelected && !isAnswered;
+    final showCorrect = isAnswered && isCorrect;
+    final showWrong = isAnswered && isSelected && !isCorrect;
 
-    if (isAnswered && isSelected) {
-      if (isCorrect) {
-        bgColor = HanziDesignSpec.accentLearn.withValues(alpha: 0.15);
-        borderColor = HanziDesignSpec.accentLearn;
-      } else {
-        bgColor = HanziDesignSpec.accentMistake.withValues(alpha: 0.12);
-        borderColor = HanziDesignSpec.accentMistake;
-      }
+    Color borderColor = const Color(ListenGameD2cLayout.colorCardBorder);
+    double borderWidth = ListenGameD2cLayout.optionBorderDefault;
+
+    if (showSelected || showCorrect) {
+      borderColor = const Color(ListenGameD2cLayout.colorSelectedBorder);
+      borderWidth = ListenGameD2cLayout.optionBorderSelected;
+    } else if (showWrong) {
+      borderColor = HanziDesignSpec.accentMistake;
+      borderWidth = ListenGameD2cLayout.optionBorderSelected;
     } else if (isAnswered && isCorrect) {
-      bgColor = HanziDesignSpec.accentLearn.withValues(alpha: 0.15);
-      borderColor = HanziDesignSpec.accentLearn;
-    } else if (isSelected) {
-      borderColor = const Color(0xFF4ECDC4);
-      bgColor = const Color(0xFF4ECDC4).withValues(alpha: 0.08);
+      borderColor = const Color(ListenGameD2cLayout.colorSelectedBorder);
+      borderWidth = ListenGameD2cLayout.optionBorderSelected;
     }
 
     return GestureDetector(
       onTap: isAnswered ? null : onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 220),
+      child: Container(
         decoration: BoxDecoration(
-          color: bgColor,
+          color: const Color(ListenGameD2cLayout.colorCardBg),
           borderRadius: BorderRadius.circular(
-            ListenGameD2cLayout.optionTileRadius.r,
+            ListenGameD2cLayout.sx(ListenGameD2cLayout.optionCardRadius).r,
           ),
-          border: Border.all(color: borderColor, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 6,
-              offset: const Offset(0, 3),
-            ),
-          ],
+          border: Border.all(color: borderColor, width: borderWidth),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            CsImage(
-              configKey: 'hanzi_icon_${hanzi.character}',
-              description: hanzi.iconHint,
-              width: 24.w,
-              height: 24.w,
-            ),
-            SizedBox(height: 4.h),
-            Text(
-              hanzi.character,
-              style: GoogleFonts.notoSansSc(
-                fontSize: 28.sp,
-                fontWeight: FontWeight.w800,
-                color: HanziDesignSpec.titleInk,
+            if (showSelected || showCorrect)
+              Positioned(
+                top: ListenGameD2cLayout.sy(8),
+                right: ListenGameD2cLayout.sx(8),
+                child: CsImage(
+                  configKey: 'figma_listen_option_check_icon',
+                  description: '已选中',
+                  width: ListenGameD2cLayout.sx(24).clamp(16, 22),
+                  height: ListenGameD2cLayout.sx(24).clamp(16, 22),
+                ),
               ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CsImage(
+                  configKey: 'hanzi_icon_${hanzi.character}',
+                  description: hanzi.iconHint,
+                  width: ListenGameD2cLayout.sx(120).clamp(48, 72),
+                  height: ListenGameD2cLayout.sx(120).clamp(48, 72),
+                ),
+                SizedBox(height: ListenGameD2cLayout.sy(6)),
+                Text(
+                  hanzi.character,
+                  style: GoogleFonts.notoSansSc(
+                    fontSize: ListenGameD2cLayout.sx(94).clamp(34, 44).sp,
+                    fontWeight: FontWeight.w600,
+                    color: const Color(ListenGameD2cLayout.colorCharText),
+                    height: 1.05,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
-    )
-        .animate(delay: (index * 80).ms)
-        .fadeIn(duration: 300.ms)
-        .scale(begin: const Offset(0.85, 0.85), curve: Curves.easeOutBack);
+    );
   }
 }

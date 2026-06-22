@@ -65,7 +65,7 @@ void main() {
       find.byKey(const Key('hanzi-listen-game-guide-header')),
       findsOneWidget,
     );
-    expect(find.text('听拼音，选出正确的汉字！'), findsOneWidget);
+    expect(find.text('听音选字'), findsWidgets);
     expect(
       find.byKey(const Key('hanzi-listen-game-audio-panel')),
       findsOneWidget,
@@ -74,16 +74,15 @@ void main() {
       find.byKey(const Key('hanzi-listen-game-options-panel')),
       findsOneWidget,
     );
-    expect(find.text('选汉字'), findsOneWidget);
+    expect(find.text('点击听读音，选出正确汉字'), findsOneWidget);
     expect(find.byKey(const Key('hanzi-listen-game-pinyin')), findsOneWidget);
   }, timeout: const Timeout(Duration(minutes: 2)));
 
-  testWidgets('IT-G2-002: 听音选字 — 题号与得分展示', (tester) async {
+  testWidgets('IT-G2-002: 听音选字 — 题号进度展示', (tester) async {
     await enterHomeAsGuest(tester);
     await openListenGame(tester);
 
-    expect(find.textContaining('题号'), findsOneWidget);
-    expect(find.textContaining('得分'), findsOneWidget);
     expect(find.textContaining('/'), findsWidgets);
+    expect(find.textContaining('8'), findsWidgets);
   }, timeout: const Timeout(Duration(minutes: 2)));
 }

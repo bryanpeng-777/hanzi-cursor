@@ -1170,5 +1170,37 @@
   "img_card_game_doodle": {
     "url": null,
     "asset": "assets/figma_d2c/doodle_color_orange_icon.png"
+  },
+  "figma_listen_canvas_backdrop": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_canvas_backdrop.png"
+  },
+  "figma_listen_header_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_header_bg.png"
+  },
+  "figma_listen_back_btn": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_back_btn.png"
+  },
+  "figma_listen_progress_star": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_progress_star.png"
+  },
+  "figma_listen_audio_panel_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_audio_panel_bg.png"
+  },
+  "figma_listen_play_btn": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_play_btn.png"
+  },
+  "figma_listen_bottom_deco": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_bottom_deco.png"
+  },
+  "figma_listen_option_check_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_option_check_icon.png"
   }
 }
