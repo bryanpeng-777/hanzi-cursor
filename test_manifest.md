@@ -49,6 +49,8 @@
 | IT-G1-001 | 图字配对横屏布局 — 引导条与双栏面板 | 自动 | integration_test/scenarios/match_game_test.dart | 已实现 |
 | IT-G1-002 | 图字配对 — 进度与得分展示 | 自动 | integration_test/scenarios/match_game_test.dart | 已实现 |
 | G2 | 听音选字答对 → addStars 被调用 | 自动 | ListenGameScreen 答对时 stars 增加 | 计划中 |
+| IT-G2-001 | 听音选字横屏布局 — 引导条与双栏面板 | 自动 | integration_test/scenarios/listen_game_test.dart | 已实现 |
+| IT-G2-002 | 听音选字 — 题号与得分展示 | 自动 | integration_test/scenarios/listen_game_test.dart | 已实现 |
 
 ## 路由 & 登录模块
 
