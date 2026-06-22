@@ -213,6 +213,9 @@ class DoodleStroke {
   final bool isEraser;
 }
 
+/// 涂色画板内线稿引导色（深色线框）
+const doodleLineArtGuideColor = Color(0xFF1A1A1A);
+
 /// 对应调色盘索引的实际填色
 const doodlePaletteColors = [
   Color(0xFFFF6B6B),

@@ -4,10 +4,9 @@ import 'package:cs_ui/cs_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../constants/doodle_ui_assets.dart';
 import '../../data/doodle_templates.dart';
 
-/// 填色画板：淡色线稿引导 + 用户笔触
+/// 填色画板：深色线稿引导 + 用户笔触
 class DoodleDrawingCanvas extends StatefulWidget {
   const DoodleDrawingCanvas({
     super.key,
@@ -98,8 +97,8 @@ class _DoodleCanvasPainter extends CustomPainter {
     if (!template.usesFigmaAsset) {
       DoodleLineArtPainter(
         template,
-        strokeColor: const Color(0xFFE0E0E0),
-        strokeWidth: 2.5,
+        strokeColor: doodleLineArtGuideColor,
+        strokeWidth: 3.0,
       ).paint(canvas, canvasSize);
     }
 
@@ -133,28 +132,6 @@ class _DoodleCanvasPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant _DoodleCanvasPainter oldDelegate) =>
       oldDelegate.template != template || oldDelegate.strokes != strokes;
-}
-
-/// 线稿参考区
-class DoodleLineArtReference extends StatelessWidget {
-  const DoodleLineArtReference({super.key, required this.template});
-
-  final DoodleTemplate template;
-
-  @override
-  Widget build(BuildContext context) {
-    if (template.usesFigmaAsset) {
-      return const FigmaUiImage(
-        configKey: DoodleUiAssets.birdLineart,
-        description: '小鸟线稿参考',
-        fit: BoxFit.contain,
-      );
-    }
-    return CustomPaint(
-      painter: template.lineArtPainter(),
-      size: Size.infinite,
-    );
-  }
 }
 
 /// 导出画板为 PNG 字节

@@ -115,7 +115,7 @@ void main() {
       find.byKey(const Key('hanzi-doodle-game-landscape')),
       findsOneWidget,
     );
-    expect(find.text('线稿参考'), findsOneWidget);
+    expect(find.text('线稿参考'), findsNothing);
     expect(find.text('我的涂色'), findsOneWidget);
   }, timeout: const Timeout(Duration(minutes: 3)));
 }

@@ -87,8 +87,8 @@ void main() {
         find.byKey(const Key('hanzi-doodle-game-landscape')),
         findsOneWidget,
       );
-      expect(find.text('线稿参考'), findsOneWidget);
       expect(find.text('我的涂色'), findsOneWidget);
+      expect(find.text('线稿参考'), findsNothing);
       expect(find.text('换一张'), findsOneWidget);
     });
 
@@ -108,7 +108,7 @@ void main() {
       await tester.tap(find.text('换一张'));
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      expect(find.text('线稿参考'), findsOneWidget);
+      expect(find.text('线稿参考'), findsNothing);
     });
   });
 }

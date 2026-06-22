@@ -108,7 +108,6 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
                       ),
                     ),
                     _buildHeader(context),
-                    _buildLineArtPanel(),
                     _buildColoringPanel(),
                     _buildToolbar(),
                   ],
@@ -206,45 +205,6 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
     );
   }
 
-  Widget _buildLineArtPanel() {
-    return Positioned(
-      left: DoodleD2cLayout.lineArtLeft,
-      top: DoodleD2cLayout.lineArtTop,
-      width: DoodleD2cLayout.lineArtW,
-      height: DoodleD2cLayout.lineArtH,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: FigmaUiImage(
-              configKey: DoodleUiAssets.panelLineartBg,
-              description: '线稿面板背景',
-              fit: BoxFit.fill,
-            ),
-          ),
-          Positioned(
-            left: 148,
-            top: 18,
-            child: Text(
-              '线稿参考',
-              style: GoogleFonts.notoSansSc(
-                fontSize: 40,
-                fontWeight: FontWeight.w600,
-                color: const Color(0xFFDFEDFC),
-              ),
-            ),
-          ),
-          Positioned(
-            left: DoodleD2cLayout.lineArtBirdLeft,
-            top: DoodleD2cLayout.lineArtBirdTop,
-            width: DoodleD2cLayout.lineArtBirdW,
-            height: DoodleD2cLayout.lineArtBirdH,
-            child: DoodleLineArtReference(template: _template),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildColoringPanel() {
     return Positioned(
       left: DoodleD2cLayout.coloringLeft,
@@ -261,10 +221,10 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
             ),
           ),
           Positioned(
-            left: 321,
+            left: DoodleD2cLayout.labelMyColoringLeft,
             top: 1,
-            width: 257,
-            height: 80,
+            width: DoodleD2cLayout.labelMyColoringW,
+            height: DoodleD2cLayout.labelMyColoringH,
             child: Stack(
               alignment: Alignment.center,
               children: [
@@ -298,13 +258,10 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
                   children: [
                     Container(color: Colors.white),
                     if (_template.usesFigmaAsset)
-                      Opacity(
-                        opacity: 0.35,
-                        child: FigmaUiImage(
-                          configKey: DoodleUiAssets.birdLineart,
-                          description: '小鸟线稿引导',
-                          fit: BoxFit.contain,
-                        ),
+                      FigmaUiImage(
+                        configKey: DoodleUiAssets.birdLineart,
+                        description: '小鸟线稿引导',
+                        fit: BoxFit.contain,
                       ),
                     DoodleDrawingCanvas(
                       template: _template,
