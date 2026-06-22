@@ -17,23 +17,17 @@ abstract final class DoodleD2cLayout {
   static const btnNextW = 237.0;
   static const btnNextH = 93.0;
 
-  static const lineArtLeft = 86.0;
-  static const lineArtTop = 182.0;
-  static const lineArtW = 446.0;
-  static const lineArtH = 580.0;
-  static const lineArtBirdLeft = 54.0;
-  static const lineArtBirdTop = 104.0;
-  static const lineArtBirdW = 345.0;
-  static const lineArtBirdH = 393.0;
-
-  static const coloringLeft = 562.0;
+  static const coloringLeft = 86.0;
   static const coloringTop = 183.0;
-  static const coloringW = 875.0;
+  static const coloringW = 1351.0;
   static const coloringH = 580.0;
-  static const canvasInnerLeft = 203.0;
+  static const labelMyColoringLeft = 547.0;
+  static const labelMyColoringW = 257.0;
+  static const labelMyColoringH = 80.0;
+  static const canvasInnerLeft = 80.0;
   static const canvasInnerTop = 84.0;
-  static const canvasInnerW = 446.0;
-  static const canvasInnerH = 451.0;
+  static const canvasInnerW = 1191.0;
+  static const canvasInnerH = 476.0;
 
   static const toolbarH = 226.0;
   static const toolbarInnerLeft = 66.0;
