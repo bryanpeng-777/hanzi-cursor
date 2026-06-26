@@ -155,10 +155,10 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
             child: Text(
               '涂鸦填色',
               style: GoogleFonts.notoSansSc(
-                fontSize: 75,
+                fontSize: 52,
                 fontWeight: FontWeight.w600,
                 color: const Color(0xFF1D6ECF),
-                height: 91 / 75,
+                height: 1.15,
               ),
             ),
           ),
@@ -170,27 +170,27 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
             child: Material(
               color: const Color(0xFFFBFBFB),
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(35),
+                borderRadius: BorderRadius.circular(24),
                 side: const BorderSide(color: Color(0xFFE0E7EC)),
               ),
               child: InkWell(
                 onTap: _nextTemplate,
-                borderRadius: BorderRadius.circular(35),
+                borderRadius: BorderRadius.circular(24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     FigmaUiImage(
                       configKey: DoodleUiAssets.btnRefreshIcon,
                       description: '换一张',
-                      width: 45,
-                      height: 47,
+                      width: 32,
+                      height: 32,
                       fit: BoxFit.contain,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text(
                       '换一张',
                       style: GoogleFonts.notoSansSc(
-                        fontSize: 37,
+                        fontSize: 26,
                         fontWeight: FontWeight.w600,
                         color: const Color(0xFF368FF6),
                       ),
@@ -236,7 +236,7 @@ class _DoodleGameScreenState extends ConsumerState<DoodleGameScreen> {
                 Text(
                   '我的涂色',
                   style: GoogleFonts.notoSansSc(
-                    fontSize: 40,
+                    fontSize: 28,
                     fontWeight: FontWeight.w600,
                     color: const Color(0xFFE4EFFC),
                   ),
