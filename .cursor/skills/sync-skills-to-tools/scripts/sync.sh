@@ -5,9 +5,15 @@
 # 用法:
 #   ./scripts/sync.sh [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only]
 #   ./scripts/sync.sh --symlinks-only   只检查/建立 ~/.claude-internal 下三处软链，不同步 WB/CB/Cursor
+#   ./scripts/sync.sh --cursor-only --project /path/to/project
+#   ./scripts/sync.sh --list-profiles
+#   ./scripts/sync.sh --init-profile quant-ai --project /path/to/project
 #   --pull-first  先从远程 git 拉取 claude-config（~/.claude）到最新，再执行同步
 
 set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SYNC_PROFILE_PY="$SCRIPT_DIR/sync_cursor_profile.py"
 
 CLAUDE_SKILLS="$HOME/.claude/skills"
 CLAUDE_AGENTS="$HOME/.claude/agents"
@@ -23,24 +29,49 @@ CURSOR_PROJECT_ROOTS="${CURSOR_PROJECT_ROOTS:-/Users/pengchao/hanzi/hanzi-cursor
 PULL_FIRST=false
 SYNC_TARGET="all"
 SYMLINKS_ONLY=false
+LIST_PROFILES=false
+INIT_PROFILE=""
+PROJECT_PATH=""
 
-for arg in "$@"; do
-    case "$arg" in
-        --pull-first|--pull) PULL_FIRST=true ;;
-        --workbuddy-only) SYNC_TARGET="workbuddy" ;;
-        --codebuddy-only) SYNC_TARGET="codebuddy" ;;
-        --cursor-only) SYNC_TARGET="cursor" ;;
-        --symlinks-only) SYMLINKS_ONLY=true ;;
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --pull-first|--pull) PULL_FIRST=true; shift ;;
+        --workbuddy-only) SYNC_TARGET="workbuddy"; shift ;;
+        --codebuddy-only) SYNC_TARGET="codebuddy"; shift ;;
+        --cursor-only) SYNC_TARGET="cursor"; shift ;;
+        --symlinks-only) SYMLINKS_ONLY=true; shift ;;
+        --list-profiles) LIST_PROFILES=true; shift ;;
+        --init-profile)
+            INIT_PROFILE="${2:-}"
+            [[ -n "$INIT_PROFILE" ]] || { echo "错误：--init-profile 需要 profile 名" >&2; exit 1; }
+            shift 2
+            ;;
+        --project)
+            PROJECT_PATH="${2:-}"
+            [[ -n "$PROJECT_PATH" ]] || { echo "错误：--project 需要项目路径" >&2; exit 1; }
+            shift 2
+            ;;
         *)
-            echo "未知参数: $arg" >&2
-            echo "用法: $0 [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only | --symlinks-only]" >&2
+            echo "未知参数: $1" >&2
+            echo "用法: $0 [--pull-first] [--workbuddy-only | --codebuddy-only | --cursor-only | --symlinks-only | --list-profiles | --init-profile NAME [--project PATH] | --project PATH]" >&2
             exit 1
             ;;
     esac
 done
 
-if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$SYNC_TARGET" != "all" ]]; then
-    echo "错误：--symlinks-only 不能与 --pull-first / --workbuddy-only / --codebuddy-only / --cursor-only 同时使用" >&2
+if [[ "$LIST_PROFILES" == true ]]; then
+    python3 "$SYNC_PROFILE_PY" list-profiles
+    exit 0
+fi
+
+if [[ -n "$INIT_PROFILE" ]]; then
+    target="${PROJECT_PATH:-.}"
+    python3 "$SYNC_PROFILE_PY" init-profile "$INIT_PROFILE" "$target"
+    exit 0
+fi
+
+if [[ "$SYMLINKS_ONLY" == true ]] && [[ "$PULL_FIRST" == true || "$SYNC_TARGET" != "all" || -n "$PROJECT_PATH" ]]; then
+    echo "错误：--symlinks-only 不能与 --pull-first / --workbuddy-only / --codebuddy-only / --cursor-only / --project 同时使用" >&2
     exit 1
 fi
 
@@ -67,29 +98,21 @@ sync_to() {
 
     local added=() updated=() deleted=() skipped_count=0
 
-    # 收集源目录所有有效条目（用换行分隔的字符串，兼容 bash 3）
-    # 支持两种结构：
-    #   1. 普通技能：skills/foo/SKILL.md
-    #   2. 分组目录：skills/camp/bar/SKILL.md（camp 本身没有 SKILL.md）
     local src_skill_list=""
     for dir in "$CLAUDE_SKILLS"/*/; do
         local skill_name
         skill_name=$(basename "$dir")
         if [[ -f "${dir}SKILL.md" ]]; then
-            # 普通技能目录
             src_skill_list="${src_skill_list}${skill_name}"$'\n'
         elif find "$dir" -maxdepth 2 -name "SKILL.md" | grep -q .; then
-            # 分组目录（如 camp/），内部含子技能
             src_skill_list="${src_skill_list}${skill_name}"$'\n'
         fi
     done
 
-    # 同步：新增 / 更新
     while IFS= read -r skill_name; do
         [[ -z "$skill_name" ]] && continue
         local dir="$CLAUDE_SKILLS/$skill_name/"
         local target_dir="$dest/$skill_name"
-        # 目标若为软链，先删除以便 rsync 写入实体目录
         if [[ -L "$target_dir" ]]; then
             rm -f "$target_dir"
         fi
@@ -107,12 +130,10 @@ sync_to() {
         fi
     done <<< "$src_skill_list"
 
-    # 删除：目标中存在但源中已删除的技能
     for target_dir in "$dest"/*/; do
         [[ ! -d "$target_dir" ]] && continue
         local skill_name
         skill_name=$(basename "$target_dir")
-        # 目标中存在 SKILL.md（普通技能）或子目录含 SKILL.md（分组目录）才纳入删除检查
         if ! find "$target_dir" -maxdepth 2 -name "SKILL.md" | grep -q .; then
             continue
         fi
@@ -133,39 +154,6 @@ sync_to() {
     echo "  目标共 $total 个技能"
 }
 
-# 镜像 ~/.claude/agents/ 到 Cursor 项目 .cursor/agents/（含子目录如 ui-design-workflow/）
-sync_agents_to() {
-    local dest="$1"
-    local dest_name="$2"
-
-    if [[ ! -d "$CLAUDE_AGENTS" ]]; then
-        echo "$dest_name：跳过（源不存在：$CLAUDE_AGENTS）"
-        return 0
-    fi
-
-    mkdir -p "$dest"
-
-    local changes_count
-    changes_count=$(
-        rsync -a --delete --itemize-changes \
-            --exclude='.DS_Store' \
-            "$CLAUDE_AGENTS/" "$dest/" \
-            | grep -c '^[<>c*.*]' || true
-    )
-
-    local total_md
-    total_md=$(find "$dest" -type f -name '*.md' 2>/dev/null | wc -l | tr -d ' ')
-
-    echo "$dest_name ($dest)："
-    if [[ "$changes_count" -gt 0 ]]; then
-        echo "  变更条目：$changes_count"
-    else
-        echo "  跳过（已最新）"
-    fi
-    echo "  目标共 $total_md 个 agent .md 文件"
-}
-
-# ~/.claude-internal 下 skills / agents / knowledge 与 ~/.claude 同源：用绝对路径软链，不做 rsync
 ensure_internal_claude_symlinks() {
     echo "claude-internal（软链 -> ~/.claude，无复制）："
     mkdir -p "$HOME/.claude-internal"
@@ -206,6 +194,11 @@ ensure_internal_claude_symlinks() {
 sync_cursor_projects() {
     local roots_csv="$1"
     local root
+
+    if [[ -n "$PROJECT_PATH" ]]; then
+        roots_csv="$PROJECT_PATH"
+    fi
+
     IFS=',' read -ra _cursor_roots <<< "$roots_csv"
     for root in "${_cursor_roots[@]}"; do
         root="${root#"${root%%[![:space:]]*}"}"
@@ -215,8 +208,8 @@ sync_cursor_projects() {
             echo "Cursor 项目（跳过，目录不存在）：$root" >&2
             continue
         fi
-        sync_to "$root/.cursor/skills" "Cursor skills"
-        sync_agents_to "$root/.cursor/agents" "Cursor agents"
+        python3 "$SYNC_PROFILE_PY" sync "$root"
+        echo ""
     done
 }
 
@@ -234,7 +227,9 @@ echo ""
 
 [[ "$SYNC_TARGET" == "all" || "$SYNC_TARGET" == "workbuddy" ]] && sync_to "$WORKBUDDY_SKILLS" "WorkBuddy"
 [[ "$SYNC_TARGET" == "all" || "$SYNC_TARGET" == "codebuddy" ]] && sync_to "$CODEBUDDY_SKILLS" "CodeBuddy"
-[[ "$SYNC_TARGET" == "all" || "$SYNC_TARGET" == "cursor" ]] && sync_cursor_projects "$CURSOR_PROJECT_ROOTS"
+if [[ "$SYNC_TARGET" == "all" || "$SYNC_TARGET" == "cursor" ]]; then
+    sync_cursor_projects "$CURSOR_PROJECT_ROOTS"
+fi
 
 echo ""
 ensure_internal_claude_symlinks

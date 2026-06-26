@@ -1,0 +1,15 @@
+{
+  "newspaper_name": "今日科技",
+  "motto": "每日精选 · 科技前沿 · 数字生活",
+  "interests": ["科技"],
+  "output_dir": "/Users/bryanpeng/work_tree_bugfix",
+  "file_prefix": "jinri-keji-daily",
+  "language": "zh-CN",
+  "created_at": "2026-06-22",
+  "issue_count": 1,
+  "layout": {
+    "total_articles": "auto",
+    "article_length": "default",
+    "target_pages": 2
+  }
+}

@@ -13,10 +13,22 @@
 路径：`~/.claude/knowledge/ceo-assistant/{project}/background.md`
 
 - **文件存在** → 读取全文，存入上下文 `{background}`
-- **文件不存在** → **不阻断**（2026-06 优化）：
-  1. 尝试 Read `{Workspace Path}/CLAUDE.md`，摘要前 800 字存入 `{background}`，标注 `source=CLAUDE.md_fallback`
-  2. 若 CLAUDE.md 也不存在 → `{background}` = 用户消息中的项目描述；输出 ⚠️ 建议后续运行 ceo-assistant 初始化
-  3. **继续 Step 0**，不禁止进入 Step 1
+- **文件不存在** → 输出以下提示，**禁止进入 Step 1**：
+
+```
+⛔ 未找到项目背景文件：
+~/.claude/knowledge/ceo-assistant/{project}/background.md
+
+请先完成以下任一操作后重试：
+A) 运行 ceo-assistant 对当前项目执行「项目初始化」（自动生成 background.md）
+B) 手工在上述路径创建 background.md，参考格式：
+   - 项目名称 & 描述
+   - 目标平台 & 技术栈
+   - 目标用户画像
+   - 核心页面/模块
+   - UI 风格定位
+   - 设计约束
+```
 
 ### 0-C：接收待优化界面
 
@@ -47,12 +59,30 @@
 
 **情况 B：文件不存在（新项目冷启动）**
 
-| 模式 | 动作 |
-|------|------|
-| `autopilot` | 从 `{background}` / CLAUDE.md 推断色板与风格，**直接 Write** `design_style.md`（无需 3 问），创建空 `style_references/` |
-| `standard` / `fast_track` | 若 `{background}` 已含 UI 风格段落 → 同样自动推断写入；否则 **一次性** 输出 Q1–Q3（合并为一条消息），用户未答则按 background 默认值写入 |
+输出：
+```
+🎨 未检测到本项目的风格规范，将通过 3 个问题帮你初始化——
+```
 
-写入后 **不等待**确认 design_style 草稿；用户可在后续任意时刻要求调整。
+依次提问（**一次性输出全部 3 个问题，等待用户一次性或分批回答**）：
+
+```
+Q1. 整体风格偏好？
+    参考选项：极简 / 活泼 / 商务 / 自然 / 科技感 / 其他（可文字描述）
+
+Q2. 主色调偏好？
+    可直接说颜色名或色号（如「暖橙 #FB6120」），也可以发一张喜欢的 App 截图或设计参考图。
+
+Q3. 有什么风格是绝对不想要的？
+    例：不要深色背景 / 不要高饱和 / 不要大量渐变 / 不要圆角过大 …
+```
+
+收到用户回答后：
+
+1. 若用户在 Q2 或额外提供了图片 → 记录图片路径为 `{cold_ref_image}`
+2. AI 综合三个回答，生成初始 `design_style.md` 草稿并展示（格式见下方模板）
+3. 用户说「确认」或「可以」→ 写入 `~/.claude/knowledge/ui-assistant/{project}/design_style.md`
+4. 用户要求修改 → 更新草稿后重新展示，直至用户确认，再写入
 
 **design_style.md 模板：**
 
@@ -121,7 +151,7 @@ background.md 已读 + 界面描述已接收 + 风格资产已就绪 → Step 0 
   • {background}：已读取（{字数} 字）
   • {screen_input}：「{界面描述前30字}…」
   • 风格规范：{已加载 / 已初始化（新建）}
-  • 参考图库：{N 张参考图 / 空库}
-下一步：Step 1（同回合连续执行；生成方案后不等待确认）
+  • 参考图库：{N 张参考图 / 空库（等待首次确认后积累）}
+下一步：Step 1（说「继续」开始；将先提醒切换 Gemini 模型，确认后再生成设计方案）
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

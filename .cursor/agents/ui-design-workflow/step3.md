@@ -11,7 +11,7 @@
 >   结论：✅ 门禁通过，开始 Step 3 / ❌ 门禁未通过，先补做 Step 2
 > ```
 >
-> **子步骤顺序（强制）**：3-Pre-Capabilities → 3-Pre-A → 3-Pre-B → 3-Pre-C（默认 auto）→ dev-assistant → **连续 Step 4**
+> **子步骤顺序（强制）**：3-Pre-Capabilities → 3-Pre-A → 3-Pre-B → 3-Pre-C（用户确认）→ dev-assistant
 
 ---
 
@@ -95,18 +95,32 @@ configKey | dest_asset_path | description | type
 
 ---
 
-## 3-Pre-C：生成翻译映射决策表（默认 auto 确认）
+## 3-Pre-C：生成翻译映射决策表（用户确认）
 
-扫描 `{d2c_intermediate}`，对照 `{project_capabilities}`，输出四维映射表。
+扫描 `{d2c_intermediate}`，对照 `{project_capabilities}`，输出四维映射表：
+
+```
+📐 翻译映射决策表
+
+━━━ 布局容器 ━━━
+<div flex-column>          →  Column + Padding
+<div flex-row class="header">  →  Row（mainAxisAlignment: spaceBetween）
+
+━━━ UI 组件 ━━━
+<button class="primary-btn">  →  ShadButton（✅ project_capabilities）
+<img class="banner">          →  CsImage(configKey: 'xxx_image')（✅ project_capabilities）
+
+━━━ 文字样式 ━━━
+font-size:24px bold           →  TextStyle(fontSize: 24, fontWeight: FontWeight.bold)
+
+━━━ 尺寸/间距 ━━━
+padding:16px                  →  EdgeInsets.all(16)
+gap:12px                      →  SizedBox(height: 12)
+```
 
 `global_banned_patterns` 命中时标注 `❌ 已替换`。
 
-| 条件 | 动作 |
-|------|------|
-| 映射表 **无 ❌**、无非 capabilities 组件 | `{translation_map_confirmed}=auto`，**同回合**调度 dev-assistant |
-| 含 ❌ 或未知组件 | **仅此情况暂停**，等人确认或给修改意见 |
-
-存入 `{translation_map}`。
+展示后等待用户说「确认」（可提修改意见循环调整），确认后存入 `{translation_map}`。
 
 ---
 
@@ -172,8 +186,8 @@ default_configs 路径：{Workspace Path}/assets/default_configs.json
 ✅ GATE PASS — Step 3 完成
 产出：
   • {project_capabilities}：已就绪（{M} 个组件，{N} 条禁用规则）
-  • {translation_map}：{translation_map_confirmed}（{K} 条映射）
+  • {translation_map}：用户已确认（{K} 条映射）
   • {dev_changes_summary}：已修改 {N} 个文件
-下一步：Step 4（同回合连续执行）
+下一步：Step 4（说「继续」开始编译检查和测试）
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

@@ -6,6 +6,7 @@
 > ```
 > 🔍 Pre-check — 进入 Step 2
 >   • {design_spec}：✅ 已设置 / ❌ 缺失（快速通道下允许为空）
+>   • 用户确认标志：✅ 已确认 / ❌ 未确认（快速通道下允许跳过）
 >   结论：✅ 门禁通过 / ❌ 门禁未通过，先补做 Step 1
 > ```
 
@@ -31,12 +32,12 @@ cd /Users/bryanpeng/.claude/skills/tdesign-d2c && npm install 2>&1 | tail -3
 
 ## 2-C：获取 Figma 上下文
 
-> Figma Token：从环境变量 `FIGMA_ACCESS_TOKEN` 读取，勿写入仓库。
+> Figma Token：从环境变量 `FIGMA_TOKEN` 读取（勿硬编码进仓库）
 
 ```bash
 cd /Users/bryanpeng/.claude/skills/tdesign-d2c && \
   npx tsx scripts/get-figma-context.ts \
-    "$FIGMA_ACCESS_TOKEN" \
+    "$FIGMA_TOKEN" \
     "{figma_link}" \
     "claude-sonnet-4-5" 2>&1
 ```
@@ -128,6 +129,6 @@ Step 2 标 ✅，输出 GATE PASS，进入 Step 3。
   • {d2c_intermediate}：{行数} 行 React 中间代码
   • {d2c_image_map}：{K} 个图片节点（icon: X，image_slot: Y）
   • Figma 资源：/Users/bryanpeng/assets/{figma_node_id}/（共 N 个文件）
-下一步：Step 3（同回合连续执行）
+下一步：Step 3（说「继续」开始开发实现）
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```

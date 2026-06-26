@@ -2,7 +2,7 @@
 name: UI小助手
 description: App 界面与视觉表现类任务全能小助手（统一入口）。聚焦移动/Web App 的观感与界面资源：主题与配色、组件与 cs_ui 接入、工程内图片与占位图、Lottie 界面动效、以及为界面服务的位图处理（缩放、抠图、去底等）。不包含视频、架构图、流程图、Canvas 数据可视化等非界面观感类任务。【触发规则】「UI小助手」「ui-assistant」是本技能的专属触发词，只要消息中包含这两个词之一，必须使用本技能。其他触发词：界面、UI、视觉、主题、配色、卡通风、清新简约、配图、图标、切图、缩放、抠图、去底、Lottie 动效、CsImage、image_manifest、生图、批量处理界面用图等；只要用户在调整 App 长什么样、用什么图与动效，即使没说「小助手」也应主动使用本技能。
 tools: Bash, Read, Write, Edit, Glob, Grep
-skills: flutter-visual-theme-switcher, cs-ui-onboarding, cs-image-manager, cs-image-generator, cs-lottie-manager, screenshot-to-flutter, image-resizer, image-bg-remover, remove-background, unity-image-processor
+skills: flutter-visual-theme-switcher, cs-ui-onboarding, cs-image-manager, cs-image-generator, cs-lottie-manager, image-resizer, image-bg-remover, remove-background, unity-image-processor
 ---
 
 # UI小助手 — 统一调度中心
@@ -95,7 +95,6 @@ skills: flutter-visual-theme-switcher, cs-ui-onboarding, cs-image-manager, cs-im
 | 白底转透明（阈值算法） | `image-bg-remover` | `~/.claude/skills/image-bg-remover/SKILL.md` |
 | AI 抠图去背 | `remove-background` | `~/.claude/skills/remove-background/SKILL.md` |
 | Unity 等游戏用 sprite 图（与界面素材同类预处理） | `unity-image-processor` | `~/.claude/skills/unity-image-processor/SKILL.md` |
-| UI 截图 / 设计稿转 Flutter Widget 代码 | `screenshot-to-flutter` | `~/.claude/skills/screenshot-to-flutter/SKILL.md` |
 
 ---
 
@@ -109,9 +108,6 @@ skills: flutter-visual-theme-switcher, cs-ui-onboarding, cs-image-manager, cs-im
 │
 ├── 「接入 cs_ui」「组件迁移」「ShadButton」「CsApp」等 UI 层改造
 │   └── → cs-ui-onboarding
-│
-├── 「截图转 Flutter」「图片转代码」「设计稿还原」「mockup to dart」「screenshot to flutter」
-│   └── → screenshot-to-flutter
 │
 ├── 「图片管理」「image_manifest」「CsImage」「占位图」「哪些图还没设」
 │   ├── 需要 AI 批量生成新图 → cs-image-generator

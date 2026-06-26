@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{报纸名}} - {{年}}年{{月}}月{{日}}日</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+  :root {
+    --paper-bg: #f5f0e8;
+    --ink-dark: #1a1a1a;
+    --ink-medium: #333;
+    --ink-light: #666;
+    --rule-color: #222;
+    --rule-light: #999;
+    --accent: #8b0000;
+    --section-gap: 1.5rem;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #d4cfc4;
+    color: var(--ink-dark);
+    font-family: 'Noto Serif SC', 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .newspaper {
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: var(--paper-bg);
+    padding: 2.5rem 3rem;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25), 0 0 60px rgba(0,0,0,0.1);
+    position: relative;
+  }
+
+  .newspaper::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(0,0,0,0.01) 28px,
+      rgba(0,0,0,0.01) 29px
+    );
+    pointer-events: none;
+  }
+
+  /* === MASTHEAD === */
+  .masthead {
+    text-align: center;
+    padding-bottom: 1rem;
+    margin-bottom: 0;
+  }
+
+  .masthead-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .masthead h1 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 4.5rem;
+    font-weight: 900;
+    letter-spacing: 0.15em;
+    line-height: 1.1;
+    margin: 0.3rem 0;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+  }
+
+  .masthead-motto {
+    font-style: italic;
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    letter-spacing: 0.2em;
+  }
+
+  .masthead-rule {
+    display: none;
+  }
+
+  /* === DATE BAR === */
+  .date-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-top: 3px solid var(--rule-color);
+    border-bottom: 1px solid var(--rule-color);
+    font-size: 0.8rem;
+    color: var(--ink-medium);
+    margin-bottom: 1.5rem;
+  }
+
+  .date-bar .quote {
+    flex: 1;
+    text-align: center;
+    font-style: italic;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    padding: 0 1.5rem;
+    letter-spacing: 0.02em;
+  }
+
+  .weather-badge {
+    background: var(--ink-dark);
+    color: var(--paper-bg);
+    padding: 0.15rem 0.6rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* === SECTION HEADERS === */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 2rem 0 1rem;
+    page-break-after: avoid;
+  }
+
+  .section-header::before,
+  .section-header::after {
+    content: '';
+    flex: 1;
+    height: 2px;
+    background: var(--rule-color);
+  }
+
+  .section-label {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: var(--ink-dark);
+  }
+
+  .section-icon {
+    font-size: 1.2rem;
+    margin-right: 0.3rem;
+  }
+
+  /* === HEADLINE (Top Story) === */
+  .headline-story {
+    border-bottom: 1px solid var(--rule-light);
+    padding-bottom: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .headline-story h2 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 2.4rem;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.02em;
+  }
+
+  .headline-story h2 a {
+    color: var(--ink-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .headline-story h2 a:hover { color: var(--accent); }
+
+  .headline-story .lead {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: var(--ink-medium);
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--rule-light);
+  }
+
+  .headline-meta {
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* === MULTI-COLUMN GRID === */
+  .columns-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0 2rem;
+    position: relative;
+  }
+
+  .columns-3::before {
+    content: '';
+    position: absolute;
+    left: calc(33.33% + 0rem);
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--rule-light);
+  }
+
+  .columns-3::after {
+    content: '';
+    position: absolute;
+    left: calc(66.66% + 0rem);
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--rule-light);
+  }
+
+  .columns-2 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0 2rem;
+    position: relative;
+  }
+
+  .columns-2::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--rule-light);
+  }
+
+  /* === ARTICLE CARDS === */
+  .article {
+    padding: 0.8rem 0;
+    border-bottom: 1px dotted var(--rule-light);
+  }
+
+  .article:last-child { border-bottom: none; }
+
+  .article h3 {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin-bottom: 0.3rem;
+  }
+
+  .article h3 a {
+    color: var(--ink-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .article h3 a:hover { color: var(--accent); }
+
+  .article .summary {
+    font-size: 0.88rem;
+    line-height: 1.65;
+    color: var(--ink-medium);
+  }
+
+  .article .meta {
+    font-size: 0.7rem;
+    color: var(--ink-light);
+    margin-top: 0.3rem;
+    letter-spacing: 0.03em;
+  }
+
+  .article-lg h3 {
+    font-size: 1.35rem;
+  }
+
+  .article-lg .summary {
+    font-size: 0.92rem;
+  }
+
+  /* === MAIN+SIDEBAR GRID (主区域 + 侧边栏) === */
+  .grid-with-sidebar {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 0 2rem;
+    position: relative;
+  }
+
+  .sidebar {
+    border-left: 1px solid var(--rule-light);
+    padding-left: 1rem;
+    margin-left: -1rem;
+  }
+
+  .sidebar-item {
+    padding: 0.6rem 0;
+    border-bottom: 1px dotted var(--rule-light);
+  }
+
+  .sidebar-item:last-child { border-bottom: none; }
+
+  .sidebar-item h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  .sidebar-item h4 a {
+    color: var(--ink-dark);
+    text-decoration: none;
+  }
+  .sidebar-item h4 a:hover { color: var(--accent); }
+
+  .sidebar-item .summary {
+    font-size: 0.8rem;
+    color: var(--ink-medium);
+    line-height: 1.5;
+  }
+
+  /* === DATA BOX (通用数据框) === */
+  .stat-box {
+    background: rgba(0,0,0,0.04);
+    border: 1px solid var(--rule-light);
+    padding: 0.8rem 1rem;
+    margin: 0.6rem 0;
+  }
+
+  .stat-box h4 {
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    padding: 0.2rem 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.1);
+  }
+
+  .stat-row:last-child { border-bottom: none; }
+
+  .stat-name { font-weight: 600; }
+  .stat-value { color: var(--ink-medium); }
+
+  /* === LIST SECTION (标签+标题列表，适合社区/论坛类) === */
+  .list-section {
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid var(--rule-light);
+  }
+
+  .list-item {
+    break-inside: avoid;
+    display: flex;
+    align-items: baseline;
+    gap: 0.3rem;
+    padding: 0.45rem 0;
+    border-bottom: 1px dotted var(--rule-light);
+    font-size: 0.88rem;
+  }
+
+  .list-item a {
+    color: var(--ink-dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .list-item a:hover { color: var(--accent); }
+
+  .list-tag {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    background: var(--ink-dark);
+    color: var(--paper-bg);
+    font-size: 0.65rem;
+    padding: 0.1rem 0.35rem;
+    letter-spacing: 0.03em;
+    position: relative;
+    top: -0.04em;
+  }
+
+  /* === FOOTER === */
+  .footer {
+    margin-top: 2.5rem;
+    padding-top: 1rem;
+    border-top: 4px double var(--rule-color);
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-light);
+    letter-spacing: 0.1em;
+  }
+
+  .footer p { margin: 0.2rem 0; }
+
+  /* === MIN WIDTH === */
+  .newspaper {
+    min-width: 900px;
+  }
+
+  /* === DECORATIVE === */
+  .ornament {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--rule-light);
+    margin: 1rem 0;
+    letter-spacing: 0.5em;
+  }
+
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 0.6rem 1rem;
+    margin: 1rem 0;
+    font-style: italic;
+    font-size: 1rem;
+    color: var(--ink-medium);
+    background: rgba(0,0,0,0.02);
+  }
+
+  /* === SCOREBOARD (两列网格布局，适合体育比分) === */
+  .scoreboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.15rem 0.8rem;
+    font-size: 0.7rem;
+    line-height: 1.5;
+    margin-bottom: 0.4rem;
+  }
+
+  .scoreboard-match {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.15rem 0;
+    border-bottom: 1px dotted rgba(0,0,0,0.08);
+    white-space: nowrap;
+    gap: 0.15rem;
+  }
+
+  .scoreboard-match .wt {
+    text-align: right;
+    font-weight: 800;
+    min-width: 2.5em;
+  }
+
+  .scoreboard-match .ws {
+    text-align: right;
+    font-weight: 800;
+    min-width: 1.8em;
+  }
+
+  .scoreboard-match .sc {
+    text-align: center;
+    color: var(--accent);
+    font-weight: 900;
+    font-size: 0.72rem;
+  }
+
+  .scoreboard-match .ls {
+    text-align: left;
+    font-weight: 400;
+    min-width: 1.8em;
+  }
+
+  .scoreboard-match .lt {
+    text-align: left;
+    font-weight: 400;
+    min-width: 2.5em;
+  }
+
+  .scoreboard-match .ot-tag {
+    display: inline-block;
+    font-size: 0.55rem;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.05rem 0.2rem;
+    margin-left: 0.2rem;
+    vertical-align: baseline;
+    letter-spacing: 0.02em;
+    line-height: 1;
+    position: relative;
+    top: -0.05rem;
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="newspaper">
+
+  <!-- ==================== MASTHEAD ==================== -->
+  <header class="masthead">
+    <div class="masthead-top">
+      <span>EST. {{创刊年}}</span>
+      <span>第 {{期号}} 期</span>
+      <span>{{星期}}</span>
+    </div>
+    <h1>{{报纸名}}</h1>
+    <div class="masthead-motto">{{motto}}</div>
+    <hr class="masthead-rule">
+  </header>
+
+  <div class="date-bar">
+    <span>{{年}}年{{月}}月{{日}}日 · 农历{{农历日期}}</span>
+    <span class="quote">"{{每日名言英文}}" — {{名言作者}}</span>
+    <span class="weather-badge">DAILY BRIEFING</span>
+  </div>
+
+  <!-- ==========================================================
+       以下为板块区域，根据用户订阅源动态生成。
+       提供三种板块模板，按需选用：
+
+       【模板A】主板块 — 头条 + 三栏副条（内容 ≥ 7 条时使用）
+       【模板B】列表板块 — 标签+标题两栏列表（社区/论坛类）
+       【模板C】主区域+侧边栏板块 — 左侧文章 + 右侧数据/短讯
+       ========================================================== -->
+
+
+  <!-- ==================== 模板A：主板块 ==================== -->
+  <!--
+  适用：新闻/科技/财经等资讯类板块，内容 ≥ 7 条
+  结构：1 条头条 + 三栏 × 最多 3 篇 = 最多 10 篇
+  -->
+  <div class="section-header">
+    <span class="section-label"><span class="section-icon">{{板块图标}}</span> {{板 块 名 称}}</span>
+  </div>
+
+  <div class="headline-story">
+    <div class="headline-meta">{{头条来源}} · 今日焦点</div>
+    <h2><a href="{{头条链接}}" target="_blank">{{头条标题}}</a></h2>
+    <p class="lead">{{头条摘要（100-200字，双栏排版）}}</p>
+  </div>
+
+  <div class="columns-3">
+    <div>
+      <div class="article article-lg">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+    </div>
+    <div>
+      <div class="article article-lg">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+    </div>
+    <div>
+      <div class="article article-lg">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+      <div class="article">
+        <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+        <p class="summary">{{摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 当日引言（放在第一个板块和第二个板块之间） -->
+  <div class="pull-quote">
+    "{{从当日新闻中提炼的引言}}"
+  </div>
+
+  <div class="ornament">◆ ◆ ◆</div>
+
+
+  <!-- ==================== 模板B：列表板块 ==================== -->
+  <!--
+  适用：社区/论坛类（V2EX、Hacker News、Reddit 等）
+  结构：两栏列表，每条显示 [标签] + 标题链接
+  -->
+  <div class="section-header">
+    <span class="section-label"><span class="section-icon">{{板块图标}}</span> {{板 块 名 称}}</span>
+  </div>
+
+  <div class="list-section">
+    <div class="list-item">
+      <span class="list-tag">{{标签}}</span>
+      <a href="{{链接}}" target="_blank">{{标题}}</a>
+    </div>
+    <!-- 重复 8-12 条 list-item -->
+  </div>
+
+  <div class="ornament">◆ ◆ ◆</div>
+
+
+  <!-- ==================== 模板C：主区域 + 侧边栏板块 ==================== -->
+  <!--
+  适用：体育/深度资讯等需要数据面板或短讯补充的板块
+  结构：左侧头条 + 两栏副条 | 右侧数据框 + 短讯
+  -->
+  <div class="section-header">
+    <span class="section-label"><span class="section-icon">{{板块图标}}</span> {{板 块 名 称}}</span>
+  </div>
+
+  <div class="grid-with-sidebar">
+    <div>
+      <!-- 板块头条 -->
+      <div class="article article-lg">
+        <h3><a href="{{链接}}" target="_blank">{{头条标题}}</a></h3>
+        <p class="summary">{{头条摘要}}</p>
+        <p class="meta">{{来源}} · {{分类}}</p>
+      </div>
+
+      <!-- 副条两栏 -->
+      <div class="columns-2" style="margin-top: 1rem;">
+        <div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+        </div>
+        <div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+          <div class="article">
+            <h3><a href="{{链接}}" target="_blank">{{标题}}</a></h3>
+            <p class="summary">{{摘要}}</p>
+            <p class="meta">{{来源}} · {{分类}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 侧边栏 -->
+    <div class="sidebar">
+
+      <!-- 数据框（可选，如体育比分、股市行情等） -->
+      <div class="stat-box">
+        <h4>{{数据框标题}}</h4>
+        <!-- 比分类用 scoreboard-grid -->
+        <div class="scoreboard-grid">
+          <div class="scoreboard-match"><span class="wt">{{赢方}}</span><span class="ws">{{赢方数据}}</span><span class="sc">:</span><span class="ls">{{负方数据}}</span><span class="lt">{{负方}}</span></div>
+        </div>
+        <!-- 或用 stat-row 列表 -->
+        <!--
+        <div class="stat-row">
+          <span class="stat-name">{{名称}}</span>
+          <span class="stat-value">{{数据}}</span>
+        </div>
+        -->
+      </div>
+
+      <!-- 侧边栏短讯 -->
+      <div class="sidebar-item">
+        <h4><a href="{{链接}}" target="_blank">{{短讯标题}}</a></h4>
+        <p class="summary">{{短讯摘要}}</p>
+      </div>
+      <div class="sidebar-item">
+        <h4><a href="{{链接}}" target="_blank">{{短讯标题}}</a></h4>
+        <p class="summary">{{短讯摘要}}</p>
+      </div>
+      <div class="sidebar-item">
+        <h4><a href="{{链接}}" target="_blank">{{短讯标题}}</a></h4>
+        <p class="summary">{{短讯摘要}}</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="footer">
+    <p>—— {{报纸名}} · {{年}}年{{月}}月{{日}}日 {{星期}} ——</p>
+    <p>数据来源：{{来源1}} · {{来源2}} · {{来源3}} · ...</p>
+    <p>本刊内容由 RSS 订阅源自动聚合生成 · 仅供个人阅读</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

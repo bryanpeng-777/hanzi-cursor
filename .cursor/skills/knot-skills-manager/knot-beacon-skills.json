@@ -1,0 +1,66 @@
+{
+  "_comment": "灯塔看板巡检 Knot 部署台账。Skills 用 knot_upload.py 同步；Agent Prompt 需手动粘贴到 Knot UI。",
+  "agent": "灯塔看板巡检 Agent",
+  "token_hint": "Token: https://knot.woa.com/settings/token",
+  "last_full_sync": "2026-06-23",
+  "skills": [
+    {
+      "local_path": "~/.claude/skills/beacon-inspection-pipeline",
+      "inner_name": "beacon-inspection-pipeline",
+      "display_name": "beacon-inspection-pipeline",
+      "knot_id": "48154",
+      "knot_url": "https://knot.woa.com/skills/detail/48154",
+      "description": "灯塔看板完整巡检流水线（Inspector + Synthesizer 两阶段串联）"
+    },
+    {
+      "local_path": "~/.claude/skills/beacon-dashboard-inspector",
+      "inner_name": "beacon-dashboard-inspector",
+      "display_name": "beacon-dashboard-inspector",
+      "knot_id": "48155",
+      "knot_url": "https://knot.woa.com/skills/detail/48155",
+      "description": "灯塔看板巡检 Phase 1：拉取、环比分析、iWiki、企微"
+    },
+    {
+      "local_path": "~/.claude/skills/beacon-data-fetcher",
+      "inner_name": "beacon-data-fetcher",
+      "display_name": "beacon-data-fetcher",
+      "knot_id": "48156",
+      "knot_url": "https://knot.woa.com/skills/detail/48156",
+      "description": "灯塔 DataInsight 页面抓取与登录态管理"
+    },
+    {
+      "local_path": "~/.claude/skills/camp/beacon-report-synthesizer",
+      "inner_name": "beacon-report-synthesizer",
+      "display_name": "beacon-report-synthesizer",
+      "knot_id": "48157",
+      "knot_url": "https://knot.woa.com/skills/detail/48157",
+      "description": "灯塔巡检日报二次加工为 8 章综合监测报告（Phase 2）"
+    }
+  ],
+  "agents": {
+    "beacon-inspection-pipeline": {
+      "name": "灯塔看板巡检",
+      "knot_display_name": "灯塔看板巡检",
+      "knot_id": null,
+      "knot_url": null,
+      "prompt_file": "agents/beacon-inspection-pipeline.md",
+      "skills": [
+        "beacon-inspection-pipeline",
+        "beacon-dashboard-inspector",
+        "beacon-data-fetcher",
+        "beacon-report-synthesizer"
+      ],
+      "mcp_required": ["user-iWiki", "user-wework-bot"],
+      "workspace": "营地代码仓（social-ios / flutter_module 所在 monorepo）",
+      "schedule_cron": "0 9 * * *",
+      "default_prompt": "灯塔看板巡检 10.112.0603",
+      "note": "创建 Agent 后回填 knot_id；定时任务在 Knot UI 配置 Cron",
+      "created": null
+    }
+  },
+  "knot_setup_commands": [
+    "pip install playwright requests",
+    "playwright install chromium",
+    "python3 ~/.claude/skills/beacon-data-fetcher/scripts/beacon_login.py  # 首次初始化登录态"
+  ]
+}
