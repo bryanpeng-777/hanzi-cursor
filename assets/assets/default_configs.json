@@ -1,0 +1,1206 @@
+{
+  "_comment": "离线兜底配置，网络不可用时生效",
+  "enable_spell_game": false,
+  "quiz_pass_threshold": 70,
+  "quiz_time_limit_seconds": 20,
+  "quiz_questions_count": 10,
+  "match_game_word_count": 5,
+  "listen_game_questions_count": 8,
+  "home_banner_url": "",
+  "img_splash_logo": {
+    "url": null,
+    "asset": "assets/figma_d2c/img_splash_logo.png"
+  },
+  "splash_bg_canvas_image": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_bg_canvas_image.png"
+  },
+  "splash_title_image": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_title_image.png"
+  },
+  "splash_decor_top_right_image": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_decor_top_right_image.png"
+  },
+  "splash_decor_top_left_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_decor_top_left_icon.png"
+  },
+  "splash_decor_bottom_left_image": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_decor_bottom_left_image.png"
+  },
+  "splash_decor_bottom_right_image": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_decor_bottom_right_image.png"
+  },
+  "splash_decor_dot_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_decor_dot_icon.png"
+  },
+  "splash_chip_left_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_chip_left_icon.png"
+  },
+  "splash_chip_right_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/splash_chip_right_icon.png"
+  },
+  "img_nav_pinyin": {
+    "url": null,
+    "asset": "assets/images/img_nav_pinyin.png"
+  },
+  "img_nav_learn": {
+    "url": null,
+    "asset": "assets/images/img_nav_learn.png"
+  },
+  "img_nav_game": {
+    "url": null,
+    "asset": "assets/images/img_nav_game.png"
+  },
+  "img_nav_vocab": {
+    "url": null,
+    "asset": "assets/images/img_nav_vocab.png"
+  },
+  "img_card_pinyin_learn": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/10f123dd231721d90b9eab51d4b9b64a.png"
+  },
+  "img_card_pinyin_quiz": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/3426b6a5eb99c9c06d1b50c5bad50035.png"
+  },
+  "img_card_pinyin_mistakes_active": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/0ea4132d5631fec17ec59cf6de150138.png"
+  },
+  "img_card_pinyin_mistakes_empty": {
+    "url": null,
+    "asset": "assets/images/img_card_pinyin_mistakes_empty.png"
+  },
+  "img_card_hanzi_learn": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_quiz": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_mistakes_active": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_hanzi_mistakes_empty": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_match": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_listen": {
+    "url": null,
+    "asset": null
+  },
+  "img_card_game_spell": {
+    "url": null,
+    "asset": null
+  },
+  "img_level_theme_1": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_1.jpg"
+  },
+  "img_level_theme_2": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_2.jpg"
+  },
+  "img_level_theme_3": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_3.jpg"
+  },
+  "img_level_theme_4": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_4.jpg"
+  },
+  "img_level_theme_5": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_5.jpg"
+  },
+  "img_level_theme_6": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_6.jpg"
+  },
+  "img_level_theme_7": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_7.jpg"
+  },
+  "img_level_theme_8": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_8.jpg"
+  },
+  "img_level_theme_9": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_9.jpg"
+  },
+  "img_level_theme_10": {
+    "url": null,
+    "asset": "assets/images/img_level_theme_10.jpg"
+  },
+  "img_icon_locked": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_unlocked": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_passed": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_tip": {
+    "url": null,
+    "asset": "assets/images/img_icon_tip.png"
+  },
+  "img_icon_stroke": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_examples": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorite_on": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorite_off": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_favorites_empty": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_playing": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_listen": {
+    "url": null,
+    "asset": null
+  },
+  "img_icon_refresh": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_icon_lightning": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_icon_star": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_result_excellent": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_result_good": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_result_ok": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_result_study_more": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_icon_celebration": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "img_tab_initials": {
+    "url": null,
+    "asset": "assets/images/img_nav_pinyin.png"
+  },
+  "img_tab_finals": {
+    "url": null,
+    "asset": "assets/images/img_nav_learn.png"
+  },
+  "img_section_pinyin_progress": {
+    "url": null,
+    "asset": null
+  },
+  "img_section_hanzi_progress": {
+    "url": null,
+    "asset": null
+  },
+  "img_section_favorites": {
+    "url": null,
+    "asset": null
+  },
+  "hanzi_icon_一": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yi.png"
+  },
+  "hanzi_icon_二": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_er.png"
+  },
+  "hanzi_icon_三": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
+  },
+  "hanzi_icon_人": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
+  },
+  "hanzi_icon_口": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
+  },
+  "hanzi_icon_手": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shou.png"
+  },
+  "hanzi_icon_目": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
+  },
+  "hanzi_icon_日": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ri.png"
+  },
+  "hanzi_icon_月": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yue.png"
+  },
+  "hanzi_icon_山": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
+  },
+  "hanzi_icon_大": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
+  },
+  "hanzi_icon_小": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
+  },
+  "hanzi_icon_火": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
+  },
+  "hanzi_icon_水": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shui.png"
+  },
+  "hanzi_icon_木": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
+  },
+  "hanzi_icon_土": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
+  },
+  "hanzi_icon_天": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tian.png"
+  },
+  "hanzi_icon_地": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_di.png"
+  },
+  "hanzi_icon_心": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xin.png"
+  },
+  "hanzi_icon_书": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shu.png"
+  },
+  "hanzi_icon_鱼": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
+  },
+  "hanzi_icon_花": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_hua.png"
+  },
+  "hanzi_icon_猫": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mao.png"
+  },
+  "hanzi_icon_狗": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_gou.png"
+  },
+  "hanzi_icon_鸟": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
+  },
+  "hanzi_icon_虫": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_chong.png"
+  },
+  "hanzi_icon_马": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ma.png"
+  },
+  "hanzi_icon_牛": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niu.png"
+  },
+  "hanzi_icon_羊": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yang.png"
+  },
+  "hanzi_icon_兔": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu4.png"
+  },
+  "hanzi_icon_红": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_hong.png"
+  },
+  "hanzi_icon_黄": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huang.png"
+  },
+  "hanzi_icon_蓝": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_lan.png"
+  },
+  "hanzi_icon_绿": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_lv.png"
+  },
+  "hanzi_icon_白": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_bai.png"
+  },
+  "hanzi_icon_黑": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_hei.png"
+  },
+  "hanzi_icon_饭": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fan.png"
+  },
+  "hanzi_icon_米": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mi.png"
+  },
+  "hanzi_icon_面": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mian.png"
+  },
+  "hanzi_icon_包": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_bao.png"
+  },
+  "hanzi_icon_果": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_guo.png"
+  },
+  "hanzi_icon_菜": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_cai.png"
+  },
+  "hanzi_icon_头": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tou.png"
+  },
+  "hanzi_icon_耳": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_er3.png"
+  },
+  "hanzi_icon_鼻": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_bi.png"
+  },
+  "hanzi_icon_足": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zu.png"
+  },
+  "hanzi_icon_发": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fa.png"
+  },
+  "hanzi_icon_眼": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yan.png"
+  },
+  "hanzi_icon_爸": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
+  },
+  "hanzi_icon_妈": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ma1.png"
+  },
+  "hanzi_icon_哥": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ge.png"
+  },
+  "hanzi_icon_姐": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_jie.png"
+  },
+  "hanzi_icon_弟": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_di4.png"
+  },
+  "hanzi_icon_妹": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mei.png"
+  },
+  "hanzi_icon_上": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shang.png"
+  },
+  "hanzi_icon_下": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xia.png"
+  },
+  "hanzi_icon_左": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zuo.png"
+  },
+  "hanzi_icon_右": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_you.png"
+  },
+  "hanzi_icon_前": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_qian.png"
+  },
+  "hanzi_icon_后": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_hou.png"
+  },
+  "hanzi_icon_风": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_feng.png"
+  },
+  "hanzi_icon_雨": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu3.png"
+  },
+  "hanzi_icon_雪": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xue.png"
+  },
+  "hanzi_icon_云": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yun.png"
+  },
+  "hanzi_icon_雷": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_lei.png"
+  },
+  "hanzi_icon_电": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_dian.png"
+  },
+  "pinyin_icon_b": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ba.png"
+  },
+  "pinyin_icon_p": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ping.png"
+  },
+  "pinyin_icon_m": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_mu.png"
+  },
+  "pinyin_icon_f": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fei.png"
+  },
+  "pinyin_icon_d": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_da.png"
+  },
+  "pinyin_icon_t": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_tu.png"
+  },
+  "pinyin_icon_n": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_niao.png"
+  },
+  "pinyin_icon_l": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_long.png"
+  },
+  "pinyin_icon_g": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_gua.png"
+  },
+  "pinyin_icon_k": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_kou.png"
+  },
+  "pinyin_icon_h": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_huo.png"
+  },
+  "pinyin_icon_j": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ji.png"
+  },
+  "pinyin_icon_q": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_qiu.png"
+  },
+  "pinyin_icon_x": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_xiao.png"
+  },
+  "pinyin_icon_zh": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zhu.png"
+  },
+  "pinyin_icon_ch": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_che.png"
+  },
+  "pinyin_icon_sh": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_shan.png"
+  },
+  "pinyin_icon_r": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ren.png"
+  },
+  "pinyin_icon_z": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zi.png"
+  },
+  "pinyin_icon_c": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_cao.png"
+  },
+  "pinyin_icon_s": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_san.png"
+  },
+  "pinyin_icon_y": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yu.png"
+  },
+  "pinyin_icon_w": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_wa.png"
+  },
+  "pinyin_tone_1": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "pinyin_tone_2": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "pinyin_tone_3": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "pinyin_tone_4": {
+    "url": null,
+    "asset": "assets/images/img_icon_star.png"
+  },
+  "figma_pinyin_canvas_backdrop": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/30a506d5b3d7b6823324bbc19c3dd7ff.png"
+  },
+  "figma_pinyin_hero_mascot": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/936e9cdaa1526005b53278a42014df1c.png"
+  },
+  "figma_pinyin_hero_decoration": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/4c8420bebedfc19a727d568a424d5905.png"
+  },
+  "figma_pinyin_learn_btn": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/6da95bbb2a349c5b21c68a4b25852366.png"
+  },
+  "figma_pinyin_daily_plan_bg": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/4acf237e2dd399601474705c9e76c07c.png"
+  },
+  "figma_pinyin_daily_plan_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/18f248f2cd6cb7d34a64d23611f52d63.png"
+  },
+  "figma_pinyin_daily_plan_progress": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/f330eae5332d9d981164913f2ddb491c.png"
+  },
+  "figma_pinyin_quiz_card": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/4efe1d8b762f54f52ea44f54c2d08cf1.png"
+  },
+  "figma_pinyin_mistake_card": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/af532ae09d4d093e2f3e43c4e65d0a92.png"
+  },
+  "figma_pinyin_adventure_card": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/0f25bb3719353c3ad4f5b1b0066a630a.png"
+  },
+  "figma_pinyin_checkin_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/4aeccaa100625f527df32962f2c55120.png"
+  },
+  "pinyin_hub_canvas_backdrop_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/30a506d5b3d7b6823324bbc19c3dd7ff.png"
+  },
+  "img_card_pinyin_mistakes_illus": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/7f6e179a76917897b9c171a36234e395.png"
+  },
+  "pinyin_hub_tip_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/9819dd825f942200875bd15cb0e34694.png"
+  },
+  "pinyin_hub_watermark_a_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/e3d09f2bb28739793d7491a976a01ac5.png"
+  },
+  "pinyin_hub_watermark_e_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/60f8108da4a12340e00ad0a92f350db6.png"
+  },
+  "pinyin_hub_decor_dot_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/b8a714ff50a694fd4bbe8867a1ea3709.png"
+  },
+  "pinyin_hub_header_pinyin_chip_bg_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/6bd2747bec86659a50ed3df9ae7eb030.png"
+  },
+  "pinyin_hub_header_pinyin_icon_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/31ea81c61e05492caddcdfceb0a62716.png"
+  },
+  "pinyin_hub_header_baby_chip_bg_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/39ae97f33855f4b2bdcd82ab35f64398.png"
+  },
+  "pinyin_hub_header_baby_avatar_image": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/9354735af9faa1acff6782feaa7bebde.png"
+  },
+  "pinyin_hub_header_baby_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/25d57a9b0c496b1bb6a6a9ea6d8b25d9.png"
+  },
+  "pinyin_hub_quiz_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/43dbb09ef7e96adfca238ed9da115d79.png"
+  },
+  "pinyin_hub_mistake_arrow_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/bbaebe8f3f986fc85a92b130cf5fe811.png"
+  },
+  "pinyin_hub_slogan_decor_icon": {
+    "url": null,
+    "asset": "assets/images/figma_pinyin_1_2/ca7cf75188a4ee3ad94f37cb1c63df1a.png"
+  },
+  "hanzi_icon_苹": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ping.png"
+  },
+  "hanzi_icon_飞": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_fei.png"
+  },
+  "hanzi_icon_龙": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_long.png"
+  },
+  "hanzi_icon_瓜": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_gua.png"
+  },
+  "hanzi_icon_鸡": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_ji.png"
+  },
+  "hanzi_icon_球": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_qiu.png"
+  },
+  "hanzi_icon_猪": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zhu.png"
+  },
+  "hanzi_icon_车": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_che.png"
+  },
+  "hanzi_icon_字": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_zi.png"
+  },
+  "hanzi_icon_草": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_cao.png"
+  },
+  "hanzi_icon_蛙": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_wa.png"
+  },
+  "hanzi_icon:icon_月": {
+    "url": null,
+    "asset": "assets/images/pinyin_icons/hanzi_icon_yue.png"
+  },
+  "figma_pinyin_grid_canvas_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_canvas_bg.png"
+  },
+  "figma_pinyin_grid_panel_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_panel_bg.png"
+  },
+  "figma_pinyin_grid_stats_bar": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_stats_bar.png"
+  },
+  "figma_pinyin_grid_03": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_03.png"
+  },
+  "figma_pinyin_grid_04": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_04.png"
+  },
+  "figma_pinyin_grid_05": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_05.png"
+  },
+  "figma_pinyin_grid_06": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_06.png"
+  },
+  "figma_pinyin_grid_07": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_07.png"
+  },
+  "figma_pinyin_grid_08": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_08.png"
+  },
+  "figma_pinyin_grid_09": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_09.png"
+  },
+  "figma_pinyin_grid_10": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_10.png"
+  },
+  "figma_pinyin_grid_11": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_11.png"
+  },
+  "figma_pinyin_grid_12": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_12.png"
+  },
+  "figma_pinyin_grid_13": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_13.png"
+  },
+  "figma_pinyin_grid_14": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_14.png"
+  },
+  "figma_pinyin_grid_mascot_panda": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_mascot_panda.png"
+  },
+  "figma_pinyin_grid_side_deco": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_side_deco.png"
+  },
+  "figma_pinyin_grid_17": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_17.png"
+  },
+  "figma_pinyin_grid_18": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_18.png"
+  },
+  "figma_pinyin_grid_19": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_19.png"
+  },
+  "figma_pinyin_grid_20": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_20.png"
+  },
+  "figma_pinyin_grid_21": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_21.png"
+  },
+  "figma_pinyin_grid_22": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_22.png"
+  },
+  "figma_pinyin_grid_23": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_23.png"
+  },
+  "figma_pinyin_grid_24": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_24.png"
+  },
+  "figma_pinyin_grid_25": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_25.png"
+  },
+  "figma_pinyin_grid_26": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_26.png"
+  },
+  "figma_pinyin_grid_27": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_27.png"
+  },
+  "figma_pinyin_grid_28": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_28.png"
+  },
+  "figma_pinyin_grid_29": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_29.png"
+  },
+  "figma_pinyin_grid_30": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_30.png"
+  },
+  "figma_pinyin_grid_31": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_31.png"
+  },
+  "figma_pinyin_grid_32": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_32.png"
+  },
+  "figma_pinyin_grid_33": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_33.png"
+  },
+  "figma_pinyin_grid_34": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_34.png"
+  },
+  "figma_pinyin_grid_35": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_35.png"
+  },
+  "figma_pinyin_grid_36": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_36.png"
+  },
+  "figma_pinyin_grid_37": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_37.png"
+  },
+  "figma_pinyin_grid_38": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_38.png"
+  },
+  "figma_pinyin_grid_39": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_39.png"
+  },
+  "figma_pinyin_grid_40": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_40.png"
+  },
+  "figma_pinyin_grid_41": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_41.png"
+  },
+  "figma_pinyin_grid_42": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_42.png"
+  },
+  "figma_pinyin_grid_43": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_43.png"
+  },
+  "figma_pinyin_grid_44": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_44.png"
+  },
+  "figma_pinyin_grid_45": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_45.png"
+  },
+  "figma_pinyin_grid_46": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_46.png"
+  },
+  "figma_pinyin_grid_47": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_47.png"
+  },
+  "figma_pinyin_grid_48": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_48.png"
+  },
+  "figma_pinyin_grid_back_btn": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_back_btn.png"
+  },
+  "figma_pinyin_grid_title_deco": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_title_deco.png"
+  },
+  "figma_pinyin_grid_avatar": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_grid_avatar.png"
+  },
+  "figma_pinyin_detail_modal_bg": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_modal_bg.png"
+  },
+  "figma_pinyin_detail_01": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_01.png"
+  },
+  "figma_pinyin_detail_02": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_02.png"
+  },
+  "figma_pinyin_detail_right_illustration": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_right_illustration.png"
+  },
+  "figma_pinyin_detail_04": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_04.png"
+  },
+  "figma_pinyin_detail_05": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_05.png"
+  },
+  "figma_pinyin_detail_06": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_06.png"
+  },
+  "figma_pinyin_detail_07": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_07.png"
+  },
+  "figma_pinyin_detail_08": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_08.png"
+  },
+  "figma_pinyin_detail_09": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_09.png"
+  },
+  "figma_pinyin_detail_10": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_10.png"
+  },
+  "figma_pinyin_detail_11": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_11.png"
+  },
+  "figma_pinyin_detail_12": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_12.png"
+  },
+  "figma_pinyin_detail_13": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_13.png"
+  },
+  "figma_pinyin_detail_14": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_14.png"
+  },
+  "figma_pinyin_detail_15": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_15.png"
+  },
+  "figma_pinyin_detail_letter_panel": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_letter_panel.png"
+  },
+  "figma_pinyin_detail_letter_stroke": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_letter_stroke.png"
+  },
+  "figma_pinyin_detail_learned_badge": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_learned_badge.png"
+  },
+  "figma_pinyin_detail_close_btn": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_close_btn.png"
+  },
+  "figma_pinyin_detail_drag_handle": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_drag_handle.png"
+  },
+  "figma_pinyin_detail_21": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_21.png"
+  },
+  "figma_pinyin_detail_corner_tl": {
+    "url": null,
+    "asset": "assets/figma_ui/figma_pinyin_detail_corner_tl.png"
+  },
+  "doodle_canvas_backdrop": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_canvas_backdrop.png"
+  },
+  "doodle_header_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_header_bg.png"
+  },
+  "doodle_back_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_back_icon.png"
+  },
+  "doodle_title_deco_left_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_title_deco_left_icon.png"
+  },
+  "doodle_title_deco_right_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_title_deco_right_icon.png"
+  },
+  "doodle_btn_refresh_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_btn_refresh_icon.png"
+  },
+  "doodle_panel_lineart_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_panel_lineart_bg.png"
+  },
+  "doodle_bird_lineart": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_bird_lineart.png"
+  },
+  "doodle_panel_coloring_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_panel_coloring_bg.png"
+  },
+  "doodle_label_mycoloring_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_label_mycoloring_bg.png"
+  },
+  "doodle_toolbar_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_toolbar_bg.png"
+  },
+  "doodle_color_red_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_red_icon.png"
+  },
+  "doodle_color_orange_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_orange_icon.png"
+  },
+  "doodle_color_yellow_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_yellow_icon.png"
+  },
+  "doodle_color_green_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_green_icon.png"
+  },
+  "doodle_color_blue_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_blue_icon.png"
+  },
+  "doodle_color_purple_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_purple_icon.png"
+  },
+  "doodle_color_pink_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_pink_icon.png"
+  },
+  "doodle_color_brown_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_brown_icon.png"
+  },
+  "doodle_brush_small_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_small_icon.png"
+  },
+  "doodle_brush_medium_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_medium_icon.png"
+  },
+  "doodle_brush_large_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_brush_large_icon.png"
+  },
+  "doodle_eraser_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_eraser_icon.png"
+  },
+  "doodle_clear_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_clear_icon.png"
+  },
+  "doodle_done_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_done_icon.png"
+  },
+  "doodle_save_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_blue_icon.png"
+  },
+  "img_card_game_doodle": {
+    "url": null,
+    "asset": "assets/figma_d2c/doodle_color_orange_icon.png"
+  },
+  "figma_listen_canvas_backdrop": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_canvas_backdrop.png"
+  },
+  "figma_listen_header_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_header_bg.png"
+  },
+  "figma_listen_back_btn": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_back_btn.png"
+  },
+  "figma_listen_progress_star": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_progress_star.png"
+  },
+  "figma_listen_audio_panel_bg": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_audio_panel_bg.png"
+  },
+  "figma_listen_play_btn": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_play_btn.png"
+  },
+  "figma_listen_bottom_deco": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_bottom_deco.png"
+  },
+  "figma_listen_option_check_icon": {
+    "url": null,
+    "asset": "assets/figma_d2c/listen_game_1_2/figma_listen_option_check_icon.png"
+  }
+}
